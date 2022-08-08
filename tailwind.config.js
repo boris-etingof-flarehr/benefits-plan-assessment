@@ -21,6 +21,9 @@ module.exports = {
           focus: 'var(--fl-color-secondary-focus)',
           text: 'var(--fl-color-secondary-text)'
         }
+      },
+      fontFamily: {
+        inter: ['Inter', 'sans-serif']
       }
     }
   }
