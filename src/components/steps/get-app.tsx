@@ -6,6 +6,7 @@ import StepTemplate from './step-template';
 import { BackendApi } from '../../services/backend-api';
 import AppleIcon from '../../assets/icons/apple.svg';
 import GooglePlayIcon from '../../assets/icons/google-play.svg';
+import { useEffect } from 'preact/hooks';
 
 interface Props {
   step: { current: number; total: number };
@@ -13,6 +14,12 @@ interface Props {
 }
 
 const GetApp: FunctionalComponent<Props> = (props) => {
+  useEffect(() => {
+    (async (): Promise<void> => {
+      await BackendApi.command({ name: 'ViewSummary' });
+    })();
+  }, []);
+
   return (
     <StepTemplate
       header={{ title: 'GET THE APP', step: props.step }}

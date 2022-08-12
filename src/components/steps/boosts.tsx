@@ -3,6 +3,7 @@ import { BackendApi } from '../../services/backend-api';
 import desktopImg from '../../assets/desktop/boosts.jpg';
 import mobileImg from '../../assets/mobile/boosts-mobile.jpg';
 import StepTemplate from './step-template';
+import { useEffect } from 'preact/hooks';
 
 interface Props {
   step: { current: number; total: number };
@@ -10,6 +11,12 @@ interface Props {
 }
 
 const Boosts: FunctionalComponent<Props> = (props) => {
+  useEffect(() => {
+    (async (): Promise<void> => {
+      await BackendApi.command({ name: 'StartBoosts' });
+    })();
+  }, []);
+
   return (
     <Fragment>
       <StepTemplate

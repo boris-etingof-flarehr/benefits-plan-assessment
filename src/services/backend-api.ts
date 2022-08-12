@@ -39,7 +39,14 @@ export class BackendApi {
   static async command(
     eventType:
       | {
-          name: 'Start' | 'ProgressPerks' | 'ProgressBoosts' | 'Complete';
+          name: 'Start' |
+                'StartPerks' |
+                'ProgressPerks' | 
+                'StartBoosts' | 
+                'ProgressBoosts' | 
+                'StartSalaryPackaging' | 
+                'ViewSummary' | 
+                'Complete';
         }
       | { name: 'ProgressSalaryPackaging'; accepted: boolean }
   ): Promise<void> {

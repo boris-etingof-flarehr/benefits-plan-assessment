@@ -2,7 +2,7 @@ import { FunctionalComponent } from 'preact';
 import desktopImg from '../../assets/desktop/salary-packaging.jpg';
 import mobileImg from '../../assets/mobile/salary-packaging-mobile.jpg';
 import { Switch } from '@headlessui/react';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import StepTemplate from './step-template';
 import { BackendApi } from '../../services/backend-api';
 
@@ -13,6 +13,12 @@ interface Props {
 
 const SalaryPackaging: FunctionalComponent<Props> = (props) => {
   const [isInterested, setIsInterested] = useState(true);
+
+  useEffect(() => {
+    (async (): Promise<void> => {
+      await BackendApi.command({ name: 'StartSalaryPackaging' });
+    })();
+  }, []);
 
   return (
     <StepTemplate
