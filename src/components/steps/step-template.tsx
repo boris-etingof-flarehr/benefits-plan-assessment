@@ -44,10 +44,10 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
           <Transition
             appear={true}
             show={true}
-            enter="transition duration-[700ms] ease-out md:transition-none"
-            enterFrom="-translate-y-14"
+            enter="transition duration-700 ease-out md:transition-none"
+            enterFrom="-translate-y-6"
             enterTo="translate-y-0"
-            class="-translate-y-14"
+            class="-translate-y-6"
           >
             <img
               class="mt-4 max-w-full w-full mx-auto md:hidden"
@@ -55,10 +55,10 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
               loading="lazy"
             />
             <div class="md:max-w-[27.5rem]">
-              <h3 class="mt-8 md:mt-2 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
+              <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
                 {props.title}
               </h3>
-              <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-700 break-words">
+              <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
                 {props.info}
               </p>
               {props.learnMoreText && (
@@ -83,9 +83,9 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
           appear={true}
           show={true}
           enter="transition delay-300 duration-[600ms] ease-out"
-          enterFrom="opacity-0 -translate-y-4"
+          enterFrom="opacity-0 -translate-y-6"
           enterTo="opacity-100 translate-y-0"
-          class="opacity-0 -translate-y-4"
+          class="opacity-0 -translate-y-6"
         >
           <img
             class="max-w-[30rem] w-full hidden md:block"

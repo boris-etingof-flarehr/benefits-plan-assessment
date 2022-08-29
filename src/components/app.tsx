@@ -80,7 +80,7 @@ const App: FunctionalComponent<Props> = (props) => {
   return (
     <Fragment>
       <style>{css.toString()}</style>
-      <div class="font-inter pt-6 pb-8 md:py-24 px-4">
+      <div class="font-inter pt-6 pb-8 md:py-24 px-px">
         <Step />
       </div>
     </Fragment>

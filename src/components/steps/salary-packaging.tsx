@@ -49,7 +49,7 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
             />
           </Switch>
           <Switch.Label>
-            <div class="font-medium text-sm leading-5 text-gray-900 cursor-pointer ml-3">
+            <div class="font-medium text-sm leading-5 text-gray-900 cursor-pointer ml-3 mt-px">
               I’m interested, please contact me with more information.
             </div>
           </Switch.Label>

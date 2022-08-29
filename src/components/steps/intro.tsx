@@ -14,17 +14,17 @@ const Intro: FunctionalComponent<Props> = (props) => {
     <Transition
       appear={true}
       show={true}
-      enter="transition duration-700 ease-out"
-      enterFrom="opacity-0 -translate-y-14"
+      enter="transition duration-[400ms] ease-out"
+      enterFrom="opacity-0 -translate-y-6"
       enterTo="opacity-100 translate-y-0"
-      class="opacity-0 -translate-y-14"
+      class="opacity-0 -translate-y-6"
     >
-      <div class="mt-20 md:mt-0 text-center">
-        <img class="max-w-[40rem] w-full mx-auto" src={introDesktopImg} />
-        <h3 class="mt-8 text-2xl md:text-3xl leading-9 font-bold">
+      <div class="mt-20 md:mt-0 text-center max-w-[40rem] mx-auto">
+        <img class="w-full" src={introDesktopImg} />
+        <h3 class="mt-8 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
           Introducing your workplace benefits
         </h3>
-        <p class="mt-3 text-lg leading-7 text-gray-700">
+        <p class="mt-3 text-lg leading-7 text-gray-600">
           It's time you got more out of your pay with {props.employerName} and Flare benefits
         </p>
         <Button
