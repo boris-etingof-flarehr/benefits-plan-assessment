@@ -36,7 +36,7 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
       }}
     >
       <Switch.Group>
-        <div class="mt-6 flex">
+        <div class="mt-6 flex items-center">
           <Switch
             checked={isInterested}
             onChange={setIsInterested}
@@ -49,7 +49,7 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
             />
           </Switch>
           <Switch.Label>
-            <div class="font-medium text-sm leading-5 text-gray-900 cursor-pointer ml-3 mt-px">
+            <div class="font-medium text-sm leading-5 text-gray-900 cursor-pointer ml-3">
               I’m interested, please contact me with more information.
             </div>
           </Switch.Label>
