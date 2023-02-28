@@ -30,7 +30,7 @@ const Boosts: FunctionalComponent<Props> = (props) => {
           'Post-tax health insurance and income protection',
           'Pre-tax deductions including child-care and super'
         ]}
-        button={{
+        primaryButton={{
           onClick: async (): Promise<void> => {
             await BackendApi.command({ name: 'ProgressBoosts' });
             props.onStepComplete();

@@ -19,7 +19,8 @@ interface Props {
   title: string;
   info: string;
   learnMoreText?: string[];
-  button: { text?: string; class?: string; onClick: () => Promise<void> };
+  primaryButton: { text?: string; class?: string; onClick: () => Promise<void> };
+  secondaryButton?: { text: string; class?: string; onClick: () => Promise<void> };
 }
 
 const StepTemplate: FunctionalComponent<Props> = (props) => {
@@ -71,12 +72,25 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
               <LearnMore class="mt-6 md:hidden" items={props.learnMoreText} />
             )}
             {props.children && props.children}
-            <Button
-              class={props.button.class ?? 'mt-6 md:mt-[5.75rem]'}
-              onClickPromise={props.button.onClick}
-            >
-              {props.button.text ?? 'Next'}
-            </Button>
+            <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
+              <Button
+                class={props.primaryButton.class ?? ''}
+                onClickPromise={props.primaryButton.onClick}
+              >
+                {props.primaryButton.text ?? 'Next'}
+              </Button>
+              {props.secondaryButton && (
+                <Button
+                  class={
+                    props.secondaryButton.class ??
+                    'bg-white hover:bg-gray-100 focus:ring-gray-200 text-gray-700 border-gray-300'
+                  }
+                  onClickPromise={props.secondaryButton.onClick}
+                >
+                  {props.secondaryButton.text}
+                </Button>
+              )}
+            </div>
           </Transition>
         </div>
         <Transition

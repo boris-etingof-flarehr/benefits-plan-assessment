@@ -26,7 +26,7 @@ const GetApp: FunctionalComponent<Props> = (props) => {
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
       title="Check your email"
       info={`We’ve sent an email to ${props.email} with instructions on how to download and activate the Flare App and Card.`}
-      button={{
+      primaryButton={{
         text: 'Continue',
         class: 'mt-6 md:mt-14',
         onClick: async (): Promise<void> => {

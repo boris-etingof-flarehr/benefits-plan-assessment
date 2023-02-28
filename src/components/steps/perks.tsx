@@ -30,7 +30,7 @@ const Perks: FunctionalComponent<Props> = (props) => {
         'Access to wellbeing content and resources',
         'Curated wellness events'
       ]}
-      button={{
+      primaryButton={{
         onClick: async (): Promise<void> => {
           await BackendApi.command({ name: 'ProgressPerks' });
           props.onStepComplete();

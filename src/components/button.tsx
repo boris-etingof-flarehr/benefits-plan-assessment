@@ -11,10 +11,9 @@ const Button: FunctionalComponent<Props> = (props) => {
   const [isExecutingPromise, setIsExecutingPromise] = useState(false);
 
   return (
-    <div class={props.class}>
       <button
         type="button"
-        class="inline-flex items-center justify-center px-14 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-base hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-focus w-full md:w-auto"
+        class={`${props.class} inline-flex items-center justify-center px-10 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-base hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-focus w-full md:w-auto`}
         onClick={async (): Promise<void> => {
           if (props.onClickPromise && !isExecutingPromise) {
             setIsExecutingPromise(true);
@@ -32,7 +31,6 @@ const Button: FunctionalComponent<Props> = (props) => {
           </div>
         )}
       </button>
-    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import css from '../index.css';
 import Intro from './steps/intro';
 import Perks from './steps/perks';
 import SalaryPackaging from './steps/salary-packaging';
+import HealthInsurance from './steps/health-insurance';
 import Boosts from './steps/boosts';
 import GetApp from './steps/get-app';
 import { useEffect, useState } from 'preact/hooks';
@@ -63,6 +64,8 @@ const App: FunctionalComponent<Props> = (props) => {
         return <Boosts step={stepNumber} onStepComplete={setNextStep} />;
       case 'SalaryPackaging':
         return <SalaryPackaging step={stepNumber} onStepComplete={setNextStep} />;
+      case 'HealthInsurance':
+        return <HealthInsurance step={stepNumber} onStepComplete={setNextStep} />;
       case 'GetApp':
         return <GetApp step={stepNumber} email={data.email} />;
       case 'Loading':
