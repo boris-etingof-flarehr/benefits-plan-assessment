@@ -22,7 +22,7 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
       header={{ title: 'PRIVATE HEALTH INSURANCE', step: props.step }}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
       title="Get discounted private health cover through Flare"
-      info="Get up to $800 cashback when you open a new health insurance policy with AIA."
+      info="Get up to 8 weeks free when you open a new health insurance policy with AIA, one of Australia's leading private health insurers."
       learnMoreText={[
         'Great value protection',
         'Cover for emergencies',
