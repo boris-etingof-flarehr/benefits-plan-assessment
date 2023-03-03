@@ -21,13 +21,12 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
     <StepTemplate
       header={{ title: 'PRIVATE HEALTH INSURANCE', step: props.step }}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
-      title="Get discounted private health cover through Flare"
+      title="Private Health Insurance"
       info="Get up to 8 weeks free when you open a new health insurance policy with AIA, one of Australia's leading private health insurers."
       learnMoreText={[
-        'Great value protection',
-        'Cover for emergencies',
-        'Waiting periods recognised',
-        'Unlock extra benefits with AIA Vitality'
+        'Great value protection including cover for emergencies',
+        'Waiting periods recognised when transferring your existing policy',
+        'Unlock exclusive offers with AIA Vitality Rewards'
       ]}
       primaryButton={{
         text: "Yes, I'm interested",
@@ -43,6 +42,7 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
           props.onStepComplete();
         }
       }}
+      termsAndConditions={["By expressing your interest, you consent to Flare contacting you with more information."]}
     />
   );
 };

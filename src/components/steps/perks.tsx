@@ -22,13 +22,12 @@ const Perks: FunctionalComponent<Props> = (props) => {
     <StepTemplate
       header={{ title: 'WORKPLACE PERKS', step: props.step }}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
-      title="Get perks in your pocket"
+      title="Discounts & Perks"
       info="Get easy access to your workplace benefits, plus exclusive perks, company events and wellbeing resources."
       learnMoreText={[
-        `All your ${props.employerName} benefits`,
-        'Offers and discounts from leading retailers',
-        'Access to wellbeing content and resources',
-        'Curated wellness events'
+        `Save on everyday items, including groceries and fuel, with discounts from hundreds of well-known brands`,
+        'Local discounts at over 9,000 locations nationwide',
+        'Premium perks, from discounted healthcare to phone, internet, and beyond'
       ]}
       primaryButton={{
         onClick: async (): Promise<void> => {

@@ -19,6 +19,7 @@ interface Props {
   title: string;
   info: string;
   learnMoreText?: string[];
+  termsAndConditions?: string[];
   primaryButton: { text?: string; class?: string; onClick: () => Promise<void> };
   secondaryButton?: { text: string; class?: string; onClick: () => Promise<void> };
 }
@@ -36,9 +37,8 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
       <div class="md:grid md:grid-cols-2 max-w-[59.5rem] mx-auto">
         <div>
           <div class="flex justify-between md:block text-xs tracking-wide">
-            <span class="text-gray-400 my-auto md:mr-3 font-medium">{props.header.title}</span>
             <span class="relative px-3 py-0.5 text-primary-base font-semibold">
-              STEP {props.header.step.current}/{props.header.step.total}
+              {props.header.step.current} OF {props.header.step.total}
               <span class="absolute left-0 rounded-xl bg-primary-base opacity-10 w-full h-[90%]" />
             </span>
           </div>
@@ -91,6 +91,13 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
                 </Button>
               )}
             </div>
+            {props.termsAndConditions && (
+              <div class="flex flex-col gap-3 mt-6 text-gray-600 text-xs ">
+                {props.termsAndConditions.map((tAndC) => (
+                  <div key={tAndC}>{tAndC}</div>
+                ))}
+              </div>
+            )}
           </Transition>
         </div>
         <Transition

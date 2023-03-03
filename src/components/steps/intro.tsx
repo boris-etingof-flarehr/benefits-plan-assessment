@@ -19,13 +19,13 @@ const Intro: FunctionalComponent<Props> = (props) => {
       enterTo="opacity-100 translate-y-0"
       class="opacity-0 -translate-y-6"
     >
-      <div class="mt-20 md:mt-0 text-center max-w-[40rem] mx-auto">
-        <img class="w-full" src={introDesktopImg} />
+      <div class="mt-20 md:mt-0 flex flex-col text-center items-center max-w-[40rem] mx-auto">
+        <img class="max-w-[15rem] w-full" src={introDesktopImg} />
         <h3 class="mt-8 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
-          Introducing your workplace benefits
+          Unlock thousands in savings with exclusive workplace benefits
         </h3>
         <p class="mt-3 text-lg leading-7 text-gray-600">
-          It's time you got more out of your pay with {props.employerName} and Flare benefits
+          You’ve got access to a range of exclusive benefits that can help you save thousands of dollars every year. You could save on your car, private health insurance, weekly grocery shop and more. 
         </p>
         <Button
           class="mt-8"
@@ -34,7 +34,7 @@ const Intro: FunctionalComponent<Props> = (props) => {
             props.onStepComplete();
           }}
         >
-          Get started
+          View exclusive offers
         </Button>
       </div>
     </Transition>
