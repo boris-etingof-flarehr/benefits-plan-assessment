@@ -23,7 +23,12 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
       title="Private Vehicle"
       info="Buying a car in the next 12 months? Discover a smarter way to pay for your car and running costs that can save you up to $10,000 every year."
-      learnMoreText={['Tax and GST savings', 'All-in-one budgeting through set deductions from your pay', 'New Electric Vehicle legislation can increase your savings by up to $5,000', 'No upfront deposit required']}
+      learnMoreText={[
+        'Tax and GST savings',
+        'All-in-one budgeting through set deductions from your pay',
+        'New Electric Vehicle legislation can increase your savings by up to $5,000',
+        'No upfront deposit required'
+      ]}
       primaryButton={{
         text: "Yes, I'm interested",
         onClick: async (): Promise<void> => {
@@ -38,7 +43,17 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
           props.onStepComplete();
         }
       }}
-      termsAndConditions={["By expressing your interest, you consent to Flare contacting you with more information.","* Total tax savings and cost per week per vehicle is indicative only."]}
+      termsAndConditions={
+        <>
+          <span>
+            By expressing your interest, you consent to Flare contacting you with more information.
+          </span>
+          <span>
+            * Total tax savings and cost per week per vehicle is indicative only. For more details
+            please see our <a class="text-primary-base" target='_blank' rel="noreferrer" href='https://www.flarehr.com/cars/latest-deals'>latest offers</a>.
+          </span>
+        </>
+      }
     />
   );
 };

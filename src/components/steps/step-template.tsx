@@ -1,4 +1,4 @@
-import { FunctionalComponent } from 'preact';
+import { VNode, FunctionalComponent } from 'preact';
 import Button from '../button';
 import LearnMore from '../learn-more';
 import { Transition } from '@headlessui/react';
@@ -19,7 +19,7 @@ interface Props {
   title: string;
   info: string;
   learnMoreText?: string[];
-  termsAndConditions?: string[];
+  termsAndConditions?: VNode;
   primaryButton: { text?: string; class?: string; onClick: () => Promise<void> };
   secondaryButton?: { text: string; class?: string; onClick: () => Promise<void> };
 }
@@ -93,9 +93,7 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
             </div>
             {props.termsAndConditions && (
               <div class="flex flex-col gap-3 mt-6 text-gray-600 text-xs ">
-                {props.termsAndConditions.map((tAndC) => (
-                  <div key={tAndC}>{tAndC}</div>
-                ))}
+                {props.termsAndConditions}
               </div>
             )}
           </Transition>

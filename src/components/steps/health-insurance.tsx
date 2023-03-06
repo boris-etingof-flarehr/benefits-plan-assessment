@@ -22,7 +22,7 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
       header={{ title: 'PRIVATE HEALTH INSURANCE', step: props.step }}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
       title="Private Health Insurance"
-      info="Get up to 8 weeks free when you open a new health insurance policy with AIA, one of Australia's leading private health insurers."
+      info="Get up to 8 weeks free* when you open a new health insurance policy with AIA, one of Australia's leading private health insurers."
       learnMoreText={[
         'Great value protection including cover for emergencies',
         'Waiting periods recognised when transferring your existing policy',
@@ -42,7 +42,16 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
           props.onStepComplete();
         }
       }}
-      termsAndConditions={["By expressing your interest, you consent to Flare contacting you with more information."]}
+      termsAndConditions={
+        <>
+          <span>
+            By expressing your interest, you consent to Flare contacting you with more information.
+          </span>
+          <span>
+            * Please refer to AIA <a class="text-primary-base" target='_blank' rel="noreferrer" href='https://www.aia.com.au/content/dam/au/en/terms-and-conditions/flare-march-offer.pdf'>terms and conditions</a>.
+          </span>
+        </>
+      }
     />
   );
 };
