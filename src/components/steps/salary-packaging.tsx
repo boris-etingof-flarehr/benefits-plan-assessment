@@ -21,8 +21,8 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
     <StepTemplate
       header={{ title: 'NOVATED CAR LEASING', step: props.step }}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
-      title="Private Vehicle"
-      info="Buying a car in the next 12 months? Discover a smarter way to pay for your car and running costs that can save you up to $10,000 every year."
+      title="Save tax with Salary Packaging"
+      info="Save thousands of dollars a year on a car by using your pre-tax salary with a Flare Cars novated lease"
       learnMoreText={[
         'Tax and GST savings',
         'All-in-one budgeting through set deductions from your pay',
@@ -37,7 +37,7 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
         }
       }}
       secondaryButton={{
-        text: 'Not right now',
+        text: 'No, thanks',
         onClick: async (): Promise<void> => {
           await BackendApi.command({ name: 'ProgressSalaryPackaging', accepted: false });
           props.onStepComplete();

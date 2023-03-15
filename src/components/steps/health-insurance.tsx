@@ -36,7 +36,7 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
         }
       }}
       secondaryButton={{
-        text: 'Not right now',
+        text: 'No, thanks',
         onClick: async (): Promise<void> => {
           await BackendApi.command({ name: 'ProgressHealthInsurance', accepted: false });
           props.onStepComplete();
