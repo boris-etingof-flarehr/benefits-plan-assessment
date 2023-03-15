@@ -78,7 +78,7 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
                 <Button
                   class={
                     props.secondaryButton.class ??
-                    'bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 text-gray-700 border-gray-300'
+                    'bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300'
                   }
                   onClickPromise={props.secondaryButton.onClick}
                 >
