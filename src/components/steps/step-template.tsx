@@ -50,6 +50,11 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
             enterTo="translate-y-0"
             class="-translate-y-6"
           >
+            <img
+              class="mt-4 max-w-full w-full mx-auto md:hidden"
+              src={props.image.mobileSrc}
+              loading="lazy"
+            />
             <div class="md:max-w-[27.5rem]">
               <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
                 {props.title}

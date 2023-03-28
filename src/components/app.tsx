@@ -11,6 +11,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { BackendApi, InitResponse } from '../services/backend-api';
 import Loader from './loader';
 import { useSteps } from '../hooks/useSteps';
+import AllSet from './steps/all-set';
 
 interface Props {
   ['backend-url']: string;
@@ -68,6 +69,8 @@ const App: FunctionalComponent<Props> = (props) => {
         return <HealthInsurance step={stepNumber} onStepComplete={setNextStep} />;
       case 'GetApp':
         return <GetApp step={stepNumber} email={data.email} />;
+      case 'AllSet':
+        return <AllSet step={stepNumber} />;
       case 'Loading':
       default:
         return (

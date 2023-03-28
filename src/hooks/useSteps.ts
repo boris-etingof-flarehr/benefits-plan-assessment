@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 import { Step } from 'src/services/backend-api';
 
-export type AppStep = Step | 'Loading' | 'Intro' | 'GetApp';
+export type AppStep = Step | 'Loading' | 'Intro' | 'GetApp' | 'AllSet';
 
 interface Input {
   configuredSteps: Step[];
@@ -29,6 +29,7 @@ export function useSteps(): [
       case 'Intro':
         return 0;
       case 'GetApp':
+      case 'AllSet':
         return totalNumSteps;
       default:
         return input.configuredSteps.indexOf(currentStep) + 1;
@@ -41,18 +42,21 @@ export function useSteps(): [
 function getNextStep(currentStep: AppStep, input: Input): AppStep {
   let nextStep: AppStep | undefined;
 
+  const isPerksConfigured = input.configuredSteps.includes('Perks');
+  const summaryStep = isPerksConfigured ? 'GetApp' : 'AllSet';
+
   if (currentStep === 'Intro') {
     nextStep = input.configuredSteps.at(0);
   } else if (currentStep === 'Loading') {
-    nextStep = input.isComplete ? 'GetApp' : 'Intro';
-  } else if (currentStep === 'GetApp') {
-    nextStep = 'GetApp';
+    nextStep = input.isComplete ? summaryStep : 'Intro';
+  } else if (currentStep === 'GetApp' || currentStep === 'AllSet') {
+    nextStep = currentStep;
   } else {
     const index = input.configuredSteps.indexOf(currentStep);
     if (index !== -1 && currentStep !== input.configuredSteps.at(-1)) {
       nextStep = input.configuredSteps.at(index + 1);
     } else {
-      nextStep = 'GetApp';
+      nextStep = summaryStep;
     }
   }
 
