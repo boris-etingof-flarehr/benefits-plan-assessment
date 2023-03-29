@@ -1,4 +1,5 @@
 import { FunctionalComponent } from 'preact';
+import { useEffect } from 'preact/hooks';
 import desktopImg from '../../assets/desktop/all-set.jpg';
 import mobileImg from '../../assets/mobile/all-set-mobile.jpg';
 import StepTemplate from './step-template';
@@ -10,6 +11,12 @@ interface Props {
 }
 
 const AllSet: FunctionalComponent<Props> = (props) => {
+  useEffect(() => {
+    (async (): Promise<void> => {
+      await BackendApi.command({ name: 'ViewSummary' });
+    })();
+  }, []);
+
   return (
     <StepTemplate
       header={{ title: 'ALL SET', step: props.step }}
@@ -27,7 +34,7 @@ const AllSet: FunctionalComponent<Props> = (props) => {
           await new Promise((_) => setTimeout(_, 10000));
         }
       }}
-     />
+    />
   );
 };
 
