@@ -21,12 +21,12 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
     <StepTemplate
       header={{ title: 'PRIVATE HEALTH INSURANCE', step: props.step }}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
-      title="Save on your Health Insurance!"
-      info="Think you're paying too much? Get a quote from AIA."
+      title="Want better value Health Insurance?"
+      info="Let us compare and help save on your health cover with a quick chat. Get an obligation free quote now!"
       learnMoreText={[
-        'Up to 70% back on extras and up to 80% back on dental extras',
-        'Waiting periods recognised when transferring your existing policy',
-        'Plus, AIA Health comes with AIA Vitality Rewards - earn up to $760 in gift cards every year'
+        'Compare the market and switch health cover for free, with all paperwork handled for you',
+        "Australians have saved an average of $300 when they've compared and switched health cover*",
+        'Receive one months premium free if you find an identical policy for cheaper elsewhere**'
       ]}
       primaryButton={{
         text: "Yes, I'm interested",
@@ -45,7 +45,41 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
       termsAndConditions={
         <>
           <span>
-            By expressing your interest, you consent to Flare contacting you with more information.
+            By expressing your interest, you consent to Flare contacting you with more information
+            and agree to the Compare Club{' '}
+            <a
+              class="text-primary-base"
+              target="_blank"
+              rel="noreferrer"
+              href="https://compareclub.com.au/terms-of-use/"
+            >
+              Terms Of Use
+            </a>{' '}
+            and{' '}
+            <a
+              class="text-primary-base"
+              target="_blank"
+              rel="noreferrer"
+              href="https://compareclub.com.au/privacy-policy/"
+            >
+              Privacy Policy
+            </a>
+          </span>
+          <span>
+            * Savings estimate is provided by CompareClub where on average, customers saved $300.43
+            based on 136,746 customers between 1 Jan 2018 - 23 December 2022
+          </span>
+          <span>
+            ** Lowest price guarantee provided by CompareClub.{' '}
+            <a
+              class="text-primary-base"
+              target="_blank"
+              rel="noreferrer"
+              href="https://compareclub.com.au/health-insurance/lowest-price-guarantee/"
+            >
+              Terms and conditions
+            </a>{' '}
+            apply.
           </span>
         </>
       }
