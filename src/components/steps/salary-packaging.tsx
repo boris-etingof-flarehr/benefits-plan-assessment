@@ -21,16 +21,16 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
     <StepTemplate
       header={{ title: 'NOVATED CAR LEASING', step: props.step }}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
-      title="Save tax with Salary Packaging"
-      info="Save thousands of dollars a year on a car by using your pre-tax salary with a Flare Cars novated lease. Learn more to discover how novated leasing can help you save."
+      title="Buying a car soon? Let us help you save thousands!"
+      info="Did you know you could use your pre-tax salary with a Flare Cars novated lease to purchase your car and save on running costs... Learn more about how novated leasing can help you save."
       learnMoreText={[
-        'Tax & GST savings',
-        'All-in-one budgeting through set deductions from your pay',
-        'No upfront deposit required',
-        'Plus, New Electric Vehicle legislation can increase your savings by up to $5,000'
+        "No upfront deposit required",
+        "Save on the purchase price and running costs of a new or used car.",
+        "Tax & GST savings",
+        "You could save up to $5,000 more when you purchase an electric vehicle"
       ]}
       primaryButton={{
-        text: "I'd like to learn more",
+        text: "I want to learn more",
         onClick: async (): Promise<void> => {
           await BackendApi.command({ name: 'ProgressSalaryPackaging', accepted: true });
           props.onStepComplete();
@@ -50,7 +50,7 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
           </span>
           <span>
             * Total tax savings and cost per week per vehicle is indicative only. For more details
-            please see our{' '}
+            please see our{' '} 
             <a
               class="text-primary-base"
               target="_blank"
