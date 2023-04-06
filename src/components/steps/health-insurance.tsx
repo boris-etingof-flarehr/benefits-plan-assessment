@@ -24,7 +24,7 @@ const HealthInsurance: FunctionalComponent<Props> = (props) => {
       title="Want better value Health Insurance?"
       info="Let us compare and help save on your health cover with a quick chat. Get an obligation free quote now!"
       learnMoreText={[
-        'Compare the market and switch health cover for free, with all paperwork handled for you',
+        'Compare products from trusted health insurers and switch for free, with all paperwork handled for you',
         "Australians have saved an average of $300 when they've compared and switched health cover*",
         'Receive one months premium free if you find an identical policy for cheaper elsewhere**'
       ]}
