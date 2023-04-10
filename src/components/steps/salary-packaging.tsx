@@ -28,7 +28,7 @@ const SalaryPackaging: FunctionalComponent<Props> = (props) => {
         'Customer saves an average of $6,000 per year on purchase price and running costs of a new or used car.',
         'Stress & hassle free - Flare will take care of all the paperwork with your employer.',
         'Tax & GST savings',
-        'You could save over $9,000 per year when you purchase an electric vehicle'
+        'You could save over $10,000 per year when you purchase an electric vehicle'
       ]}
       primaryButton={{
         text: 'I want to learn more',
