@@ -1,17 +1,14 @@
 import { Fragment, FunctionalComponent } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
 
 import css from '../index.css';
 import Intro from './steps/intro';
-import Perks from './steps/perks';
-import SalaryPackaging from './steps/salary-packaging';
-import HealthInsurance from './steps/health-insurance';
-import Boosts from './steps/boosts';
 import GetApp from './steps/get-app';
-import { useEffect, useState } from 'preact/hooks';
 import { BackendApi, InitResponse } from '../services/backend-api';
 import Loader from './loader';
 import { useSteps } from '../hooks/useSteps';
 import AllSet from './steps/all-set';
+import TemplateRenderer from './steps/template-renderer';
 
 interface Props {
   ['backend-url']: string;
@@ -33,7 +30,7 @@ const App: FunctionalComponent<Props> = (props) => {
   };
 
   const [data, setInitData] = useState<InitResponse>({
-    configuredSteps: [],
+    offers: [],
     employerName: '',
     email: '',
     isComplete: false
@@ -46,7 +43,7 @@ const App: FunctionalComponent<Props> = (props) => {
       BackendApi.initClient(config.backendUrl, config.accessToken, config.workflowsInstanceId);
       const response = await BackendApi.init();
       setInitData(response);
-      if (currentStep === 'Loading') {
+      if (currentStep.name === 'Loading') {
         setNextStep({ ...response });
       }
     })();
@@ -54,19 +51,21 @@ const App: FunctionalComponent<Props> = (props) => {
   }, []);
 
   const Step: FunctionalComponent = () => {
-    switch (currentStep) {
+    switch (currentStep.name) {
       case 'Intro':
         return <Intro employerName={data.employerName} onStepComplete={setNextStep} />;
+      case 'SalaryPackaging':
+      case 'HealthInsurance':
+      case 'Boosts':
       case 'Perks':
         return (
-          <Perks step={stepNumber} employerName={data.employerName} onStepComplete={setNextStep} />
+          <TemplateRenderer
+            stepNumber={stepNumber}
+            step={currentStep.name}
+            content={currentStep.content!}
+            onStepComplete={setNextStep}
+          />
         );
-      case 'Boosts':
-        return <Boosts step={stepNumber} onStepComplete={setNextStep} />;
-      case 'SalaryPackaging':
-        return <SalaryPackaging step={stepNumber} onStepComplete={setNextStep} />;
-      case 'HealthInsurance':
-        return <HealthInsurance step={stepNumber} onStepComplete={setNextStep} />;
       case 'GetApp':
         return <GetApp step={stepNumber} email={data.email} />;
       case 'AllSet':

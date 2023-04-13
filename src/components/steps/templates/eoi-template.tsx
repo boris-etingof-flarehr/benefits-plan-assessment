@@ -1,30 +1,38 @@
-import { VNode, FunctionalComponent } from 'preact';
-import Button from '../button';
-import LearnMore from '../learn-more';
+import { FunctionalComponent } from 'preact';
+import { useEffect } from 'preact/hooks';
+import DOMPurify from 'dompurify';
+
+import Button from '../../button';
+import LearnMore from '../../learn-more';
 import { Transition } from '@headlessui/react';
-import LearnMorePanel from '../learn-more-panel';
+import LearnMorePanel from '../../learn-more-panel';
+import { BackendApi, EventType, Content, Step } from '../../../services/backend-api';
 
 interface Props {
-  header: {
-    title: string;
-    step: {
-      current: number;
-      total: number;
-    };
+  stepNumber: {
+    current: number;
+    total: number;
   };
-  image: {
-    mobileSrc: string;
-    desktopSrc: string;
-  };
-  title: string;
-  info: string;
-  learnMoreText?: string[];
-  termsAndConditions?: VNode;
-  primaryButton: { text?: string; class?: string; onClick: () => Promise<void> };
-  secondaryButton?: { text: string; class?: string; onClick: () => Promise<void> };
+  step: Step;
+  content: Content;
+  primaryButton: { text?: string; class?: string; onClick: () => void };
+  secondaryButton: { text?: string; class?: string; onClick: () => void };
 }
 
-const StepTemplate: FunctionalComponent<Props> = (props) => {
+const EoiTemplate: FunctionalComponent<Props> = (props) => {
+  useEffect(() => {
+    (async (): Promise<void> => {
+      const eventName = ('Start' + props.step) as EventType;
+      await BackendApi.command({ name: eventName });
+    })();
+  }, []);
+
+  const handleButtonClick = async (accepted: boolean): Promise<void> => {
+    await BackendApi.stepProgressCommand(props.step, accepted);
+    const button = accepted ? props.primaryButton : props.secondaryButton;
+    return button.onClick();
+  };
+
   return (
     <Transition
       appear={true}
@@ -38,7 +46,7 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
         <div>
           <div class="flex justify-between md:block text-xs tracking-wide">
             <span class="relative px-3 py-0.5 text-primary-base font-semibold">
-              {props.header.step.current} OF {props.header.step.total}
+              {props.stepNumber.current} OF {props.stepNumber.total}
               <span class="absolute left-0 rounded-xl bg-primary-base opacity-10 w-full h-[90%]" />
             </span>
           </div>
@@ -52,48 +60,57 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
           >
             <img
               class="mt-4 max-w-full w-full mx-auto md:hidden"
-              src={props.image.mobileSrc}
+              src={props.content.mobileImageUrl}
               loading="lazy"
             />
             <div class="md:max-w-[27.5rem]">
               <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
-                {props.title}
+                {props.content.title}
               </h3>
               <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
-                {props.info}
+                {props.content.description}
               </p>
-              {props.learnMoreText && (
+              {props.content.details && (
                 <div class="mt-6 hidden md:block">
-                  <LearnMorePanel items={props.learnMoreText} />
+                  <LearnMorePanel items={props.content.details} />
                 </div>
               )}
             </div>
-            {props.learnMoreText && (
-              <LearnMore class="mt-6 md:hidden" items={props.learnMoreText} />
+            {props.content.details && (
+              <LearnMore class="mt-6 md:hidden" items={props.content.details} />
             )}
             {props.children && props.children}
             <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
               <Button
                 class={props.primaryButton.class ?? ''}
-                onClickPromise={props.primaryButton.onClick}
+                onClickPromise={(): Promise<void> => {
+                  return handleButtonClick(true);
+                }}
               >
                 {props.primaryButton.text ?? 'Next'}
               </Button>
-              {props.secondaryButton && (
+              {props.secondaryButton?.text && (
                 <Button
                   class={
                     props.secondaryButton.class ??
                     'bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300'
                   }
-                  onClickPromise={props.secondaryButton.onClick}
+                  onClickPromise={(): Promise<void> => {
+                    return handleButtonClick(false);
+                  }}
                 >
                   {props.secondaryButton.text}
                 </Button>
               )}
             </div>
-            {props.termsAndConditions && (
-              <div class="flex flex-col gap-3 mt-6 text-gray-600 text-xs ">
-                {props.termsAndConditions}
+            {props.content.terms && (
+              <div class="flex flex-col gap-3 mt-6 text-gray-600 text-xs">
+                {props.content.terms.map((termsAndCondition, index) => (
+                  <span
+                    key={index}
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(termsAndCondition) }}
+                  />
+                ))}
               </div>
             )}
           </Transition>
@@ -108,7 +125,7 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
         >
           <img
             class="max-w-[30rem] w-full hidden md:block"
-            src={props.image.desktopSrc}
+            src={props.content.imageUrl}
             loading="lazy"
           />
         </Transition>
@@ -117,4 +134,4 @@ const StepTemplate: FunctionalComponent<Props> = (props) => {
   );
 };
 
-export default StepTemplate;
+export default EoiTemplate;

@@ -1,7 +1,8 @@
 import { FunctionalComponent } from 'preact';
+import { Transition } from '@headlessui/react';
+
 import Button from '../button';
 import introDesktopImg from '../../assets/desktop/intro.jpg';
-import { Transition } from '@headlessui/react';
 import { BackendApi } from '../../services/backend-api';
 
 interface Props {

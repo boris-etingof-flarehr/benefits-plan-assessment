@@ -1,12 +1,13 @@
 import { FunctionalComponent } from 'preact';
+import { useEffect } from 'preact/hooks';
+
 import { BenefitsOnboardingCustomElementName } from '../../index';
 import desktopImg from '../../assets/desktop/get-app.jpg';
 import mobileImg from '../../assets/mobile/get-app-mobile.jpg';
-import StepTemplate from './step-template';
 import { BackendApi } from '../../services/backend-api';
 import AppleIcon from '../../assets/icons/apple.svg';
 import GooglePlayIcon from '../../assets/icons/google-play.svg';
-import { useEffect } from 'preact/hooks';
+import SimpleTemplate from './templates/simple-template';
 
 interface Props {
   step: { current: number; total: number };
@@ -21,8 +22,8 @@ const GetApp: FunctionalComponent<Props> = (props) => {
   }, []);
 
   return (
-    <StepTemplate
-      header={{ title: 'GET THE APP', step: props.step }}
+    <SimpleTemplate
+      stepNumber={props.step}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
       title="Check your email"
       info={`We’ve sent an email to ${props.email} with instructions on how to download and activate the Flare App and Card.`}
@@ -42,7 +43,7 @@ const GetApp: FunctionalComponent<Props> = (props) => {
         <AppleIcon />
         <GooglePlayIcon />
       </div>
-    </StepTemplate>
+    </SimpleTemplate>
   );
 };
 

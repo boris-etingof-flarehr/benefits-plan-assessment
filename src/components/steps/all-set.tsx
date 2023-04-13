@@ -1,10 +1,11 @@
 import { FunctionalComponent } from 'preact';
 import { useEffect } from 'preact/hooks';
+
 import desktopImg from '../../assets/desktop/all-set.jpg';
 import mobileImg from '../../assets/mobile/all-set-mobile.jpg';
-import StepTemplate from './step-template';
 import { BackendApi } from '../../services/backend-api';
 import { BenefitsOnboardingCustomElementName } from '../../index';
+import SimpleTemplate from './templates/simple-template';
 
 interface Props {
   step: { current: number; total: number };
@@ -18,8 +19,8 @@ const AllSet: FunctionalComponent<Props> = (props) => {
   }, []);
 
   return (
-    <StepTemplate
-      header={{ title: 'ALL SET', step: props.step }}
+    <SimpleTemplate
+      stepNumber={props.step}
       image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
       title="You're all set!"
       info="Simply continue and review the details you have provided to complete your onboarding."
