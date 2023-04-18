@@ -108,7 +108,9 @@ const EoiTemplate: FunctionalComponent<Props> = (props) => {
                 {props.content.terms.map((termsAndCondition, index) => (
                   <span
                     key={index}
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(termsAndCondition) }}
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(termsAndCondition, { ADD_ATTR: ['target'] })
+                    }}
                   />
                 ))}
               </div>

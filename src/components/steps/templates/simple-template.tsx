@@ -99,7 +99,9 @@ const SimpleTemplate: FunctionalComponent<Props> = (props) => {
                 {props.termsAndConditions.map((termsAndCondition, i) => (
                   <span
                     key={i}
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(termsAndCondition) }}
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(termsAndCondition, { ADD_ATTR: ['target'] })
+                    }}
                   />
                 ))}
               </div>
