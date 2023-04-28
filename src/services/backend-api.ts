@@ -98,6 +98,6 @@ export class BackendApi {
   }
 
   static async command(event: CommandDto): Promise<void> {
-    await this.axiosInstance.post('/command', event);
+    await this.axiosInstance.post('/command', {source: "Onboarding", sourceId: this.sourceId, ...event} );
   }
 }
