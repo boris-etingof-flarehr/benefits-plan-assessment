@@ -17,21 +17,26 @@ interface Props {
 const GetApp: FunctionalComponent<Props> = (props) => {
   useEffect(() => {
     (async (): Promise<void> => {
-      await BackendApi.command({ name: 'ViewSummary' });
+      await BackendApi.command({ eventType: 'SummaryViewed', summaryVariant: 'app' });
     })();
   }, []);
 
   return (
     <SimpleTemplate
       stepNumber={props.step}
-      image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
-      title="Check your email"
-      info={`We’ve sent an email to ${props.email} with instructions on how to download and activate the Flare App and Card.`}
+      step={{
+        content: {
+          imageUrl: desktopImg,
+          mobileImageUrl: mobileImg,
+          title: 'Check your email',
+          description: `We’ve sent an email to ${props.email} with instructions on how to download and activate the Flare App and Card.`
+        }
+      }}
       primaryButton={{
         text: 'Continue',
         class: 'mt-6 md:mt-14',
         onClick: async (): Promise<void> => {
-          await BackendApi.command({ name: 'Complete' });
+          await BackendApi.command({ eventType: 'Completed' });
           const root = document.querySelector(BenefitsOnboardingCustomElementName);
           const event = new CustomEvent('step-completion', { bubbles: true });
           root?.dispatchEvent(event);

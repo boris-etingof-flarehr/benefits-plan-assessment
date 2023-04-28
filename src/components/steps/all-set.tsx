@@ -14,21 +14,27 @@ interface Props {
 const AllSet: FunctionalComponent<Props> = (props) => {
   useEffect(() => {
     (async (): Promise<void> => {
-      await BackendApi.command({ name: 'ViewSummary' });
+      await BackendApi.command({ eventType: 'SummaryViewed', summaryVariant: 'generic' });
     })();
   }, []);
 
   return (
     <SimpleTemplate
       stepNumber={props.step}
-      image={{ mobileSrc: mobileImg, desktopSrc: desktopImg }}
-      title="You're all set!"
-      info="Simply continue and review the details you have provided to complete your onboarding."
+      step={{
+        content: {
+          imageUrl: desktopImg,
+          mobileImageUrl: mobileImg,
+          title: "You're all set!",
+          description:
+            'Simply continue and review the details you have provided to complete your onboarding.'
+        }
+      }}
       primaryButton={{
         text: 'Continue',
         class: 'mt-6 md:mt-6',
         onClick: async (): Promise<void> => {
-          await BackendApi.command({ name: 'Complete' });
+          await BackendApi.command({ eventType: 'Completed' });
           const root = document.querySelector(BenefitsOnboardingCustomElementName);
           const event = new CustomEvent('step-completion', { bubbles: true });
           root?.dispatchEvent(event);

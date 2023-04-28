@@ -6,15 +6,14 @@ import Button from '../../button';
 import LearnMore from '../../learn-more';
 import { Transition } from '@headlessui/react';
 import LearnMorePanel from '../../learn-more-panel';
-import { BackendApi, EventType, Content, Step } from '../../../services/backend-api';
+import { BackendApi, MarketplaceOffer } from '../../../services/backend-api';
 
 interface Props {
   stepNumber: {
     current: number;
     total: number;
   };
-  step: Step;
-  content: Content;
+  step: MarketplaceOffer;
   primaryButton: { text?: string; class?: string; onClick: () => void };
   secondaryButton: { text?: string; class?: string; onClick: () => void };
 }
@@ -22,13 +21,27 @@ interface Props {
 const EoiTemplate: FunctionalComponent<Props> = (props) => {
   useEffect(() => {
     (async (): Promise<void> => {
-      const eventName = ('Start' + props.step) as EventType;
-      await BackendApi.command({ name: eventName });
+      await BackendApi.command({
+        offerName: props.step.name,
+        eventType: 'OfferViewed',
+        data: {
+          ...props.step.metadata
+        }
+      });
     })();
-  }, []);
+  }, [props.step.name]);
 
   const handleButtonClick = async (accepted: boolean): Promise<void> => {
-    await BackendApi.stepProgressCommand(props.step, accepted);
+    await BackendApi.command({
+      offerName: props.step.name,
+      eventType: 'OfferProgressed',
+      data: {
+        ...props.step.metadata,
+        template: 'Eoi',
+        accepted: accepted
+      }
+    });
+
     const button = accepted ? props.primaryButton : props.secondaryButton;
     return button.onClick();
   };
@@ -60,24 +73,24 @@ const EoiTemplate: FunctionalComponent<Props> = (props) => {
           >
             <img
               class="mt-4 max-w-full w-full mx-auto md:hidden"
-              src={props.content.mobileImageUrl}
+              src={props.step.content.mobileImageUrl}
               loading="lazy"
             />
             <div class="md:max-w-[27.5rem]">
               <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
-                {props.content.title}
+                {props.step.content.title}
               </h3>
               <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
-                {props.content.description}
+                {props.step.content.description}
               </p>
-              {props.content.details && (
+              {props.step.content.details && (
                 <div class="mt-6 hidden md:block">
-                  <LearnMorePanel items={props.content.details} />
+                  <LearnMorePanel items={props.step.content.details} />
                 </div>
               )}
             </div>
-            {props.content.details && (
-              <LearnMore class="mt-6 md:hidden" items={props.content.details} />
+            {props.step.content.details && (
+              <LearnMore class="mt-6 md:hidden" items={props.step.content.details} />
             )}
             {props.children && props.children}
             <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
@@ -103,9 +116,9 @@ const EoiTemplate: FunctionalComponent<Props> = (props) => {
                 </Button>
               )}
             </div>
-            {props.content.terms && (
+            {props.step.content.terms && (
               <div class="flex flex-col gap-3 mt-6 text-gray-600 text-xs">
-                {props.content.terms.map((termsAndCondition, index) => (
+                {props.step.content.terms.map((termsAndCondition, index) => (
                   <span
                     key={index}
                     dangerouslySetInnerHTML={{
@@ -127,7 +140,7 @@ const EoiTemplate: FunctionalComponent<Props> = (props) => {
         >
           <img
             class="max-w-[30rem] w-full hidden md:block"
-            src={props.content.imageUrl}
+            src={props.step.content.imageUrl}
             loading="lazy"
           />
         </Transition>

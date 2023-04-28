@@ -6,38 +6,53 @@ import Button from '../../button';
 import LearnMore from '../../learn-more';
 import { Transition } from '@headlessui/react';
 import LearnMorePanel from '../../learn-more-panel';
-import { BackendApi, Step, EventType } from '../../../services/backend-api';
+import { BackendApi, MarketplaceOffer } from '../../../services/backend-api';
+
+interface SimpleTemplateData {
+  content: {
+    imageUrl: string;
+    mobileImageUrl: string;
+    title: string;
+    description: string;
+    details?: string[];
+    terms?: string[];
+  };
+}
 
 interface Props {
   stepNumber: {
     current: number;
     total: number;
   };
-  step?: Step;
-  image: {
-    mobileSrc: string;
-    desktopSrc: string;
-  };
-  title: string;
-  info: string;
-  learnMoreText?: string[];
-  termsAndConditions?: string[];
+  step: SimpleTemplateData | MarketplaceOffer;
   primaryButton: { text?: string; class?: string; onClick: () => void };
 }
 
 const SimpleTemplate: FunctionalComponent<Props> = (props) => {
   useEffect(() => {
-    if (props.step) {
-      (async (): Promise<void> => {
-        const eventName = ('Start' + props.step) as EventType;
-        await BackendApi.command({ name: eventName });
-      })();
-    }
+    (async (): Promise<void> => {
+      if ('name' in props.step) {
+        await BackendApi.command({
+          offerName: props.step.name!,
+          eventType: 'OfferViewed',
+          data: {
+            ...props.step.metadata!
+          }
+        });
+      }
+    })();
   }, [props.step]);
 
   const handleButtonClick = async (): Promise<void> => {
-    if (props.step) {
-      await BackendApi.stepProgressCommand(props.step, false);
+    if ('name' in props.step) {
+      await BackendApi.command({
+        offerName: props.step.name,
+        eventType: 'OfferProgressed',
+        data: {
+          ...props.step.metadata!,
+          template: 'Simple'
+        }
+      });
     }
     props.primaryButton.onClick();
   };
@@ -69,24 +84,24 @@ const SimpleTemplate: FunctionalComponent<Props> = (props) => {
           >
             <img
               class="mt-4 max-w-full w-full mx-auto md:hidden"
-              src={props.image.mobileSrc}
+              src={props.step.content.mobileImageUrl}
               loading="lazy"
             />
             <div class="md:max-w-[27.5rem]">
               <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
-                {props.title}
+                {props.step.content.title}
               </h3>
               <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
-                {props.info}
+                {props.step.content.description}
               </p>
-              {props.learnMoreText && (
+              {props.step.content.details && (
                 <div class="mt-6 hidden md:block">
-                  <LearnMorePanel items={props.learnMoreText} />
+                  <LearnMorePanel items={props.step.content.details} />
                 </div>
               )}
             </div>
-            {props.learnMoreText && (
-              <LearnMore class="mt-6 md:hidden" items={props.learnMoreText} />
+            {props.step.content.details && (
+              <LearnMore class="mt-6 md:hidden" items={props.step.content.details} />
             )}
             {props.children && props.children}
             <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
@@ -94,9 +109,9 @@ const SimpleTemplate: FunctionalComponent<Props> = (props) => {
                 {props.primaryButton.text ?? 'Next'}
               </Button>
             </div>
-            {props.termsAndConditions && (
+            {props.step.content.terms && (
               <div class="flex flex-col gap-3 mt-6 text-gray-600 text-xs ">
-                {props.termsAndConditions.map((termsAndCondition, i) => (
+                {props.step.content.terms.map((termsAndCondition, i) => (
                   <span
                     key={i}
                     dangerouslySetInnerHTML={{
@@ -118,7 +133,7 @@ const SimpleTemplate: FunctionalComponent<Props> = (props) => {
         >
           <img
             class="max-w-[30rem] w-full hidden md:block"
-            src={props.image.desktopSrc}
+            src={props.step.content.imageUrl}
             loading="lazy"
           />
         </Transition>

@@ -33,7 +33,7 @@ const Intro: FunctionalComponent<Props> = (props) => {
         <Button
           class="mt-8"
           onClickPromise={async (): Promise<void> => {
-            await BackendApi.command({ name: 'Start' });
+            await BackendApi.command({ eventType: 'Started' });
             props.onStepComplete();
           }}
         >

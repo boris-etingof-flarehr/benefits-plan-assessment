@@ -61,8 +61,7 @@ const App: FunctionalComponent<Props> = (props) => {
         return (
           <TemplateRenderer
             stepNumber={stepNumber}
-            step={currentStep.name}
-            content={currentStep.content!}
+            marketPlaceOffer={currentStep.offer!}
             onStepComplete={setNextStep}
           />
         );

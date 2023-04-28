@@ -1,6 +1,6 @@
 import { FunctionalComponent } from 'preact';
 
-import { Content, Step } from 'src/services/backend-api';
+import { MarketplaceOffer } from 'src/services/backend-api';
 import SimpleTemplate from './templates/simple-template';
 import EoiTemplate from './templates/eoi-template';
 
@@ -9,8 +9,7 @@ interface Props {
     current: number;
     total: number;
   };
-  step: Step;
-  content: Content;
+  marketPlaceOffer: MarketplaceOffer;
   onStepComplete: () => void;
 }
 
@@ -21,19 +20,18 @@ function exhaustiveGuard(_value: never): never {
 }
 
 const TemplateRenderer: FunctionalComponent<Props> = (props) => {
-  switch (props.content.template) {
+  switch (props.marketPlaceOffer.content.template) {
     case 'Eoi':
       return (
         <EoiTemplate
           stepNumber={props.stepNumber}
-          step={props.step}
-          content={props.content}
+          step={props.marketPlaceOffer}
           primaryButton={{
-            text: props.content.acceptButton,
+            text: props.marketPlaceOffer.content.acceptButton,
             onClick: props.onStepComplete
           }}
           secondaryButton={{
-            text: props.content.declineButton,
+            text: props.marketPlaceOffer.content.declineButton,
             onClick: props.onStepComplete
           }}
         />
@@ -42,23 +40,15 @@ const TemplateRenderer: FunctionalComponent<Props> = (props) => {
       return (
         <SimpleTemplate
           stepNumber={props.stepNumber}
-          step={props.step}
-          image={{
-            mobileSrc: props.content.imageUrl,
-            desktopSrc: props.content.mobileImageUrl
-          }}
-          title={props.content.title}
-          info={props.content.description}
-          learnMoreText={props.content.details}
-          termsAndConditions={props.content.terms}
+          step={props.marketPlaceOffer}
           primaryButton={{
-            text: props.content.acceptButton,
+            text: props.marketPlaceOffer.content.acceptButton,
             onClick: props.onStepComplete
           }}
         />
       );
     default:
-      return exhaustiveGuard(props.content.template);
+      return exhaustiveGuard(props.marketPlaceOffer.content.template);
   }
 };
 

@@ -2,25 +2,23 @@ import axios, { AxiosInstance } from 'axios';
 
 export type Step = 'Perks' | 'SalaryPackaging' | 'HealthInsurance' | 'Boosts';
 
-export type EventType =
-  | 'Start'
-  | 'StartPerks'
-  | 'StartBoosts'
-  | 'StartSalaryPackaging'
-  | 'StartHealthInsurance'
-  | 'ViewSummary'
-  | 'Complete';
+export interface MarketplaceOffer {
+  name: Step;
+  content: Content;
+  metadata: OfferMetadata;
+}
 
-type StepProgressEventType =
-  | { name: 'ProgressSalaryPackaging'; accepted: boolean }
-  | { name: 'ProgressHealthInsurance'; accepted: boolean }
-  | { name: 'ProgressPerks'; accepted: boolean }
-  | { name: 'ProgressBoosts'; accepted: boolean };
+export type InitResponse = {
+  offers: MarketplaceOffer[];
+  employerName: string;
+  email: string;
+  isComplete: boolean;
+};
 
-export type CommandEventType = { name: EventType } | StepProgressEventType;
+type Template = 'Eoi' | 'Simple';
 
-export interface Content {
-  template: 'Eoi' | 'Simple';
+export type Content = {
+  template: Template;
   title: string;
   description: string;
   details: string[];
@@ -29,25 +27,48 @@ export interface Content {
   acceptButton: string;
   declineButton?: string;
   terms: string[];
-}
+};
 
-interface OfferMetadata {
+export type OfferMetadata = {
   featureName: string;
   treatmentName: string;
-}
+};
 
-export interface MarketplaceOffer {
-  name: Step;
-  content: Content;
-  metadata: OfferMetadata;
-}
+type OfferTemplateData =
+  | {
+      template: 'Simple';
+    }
+  | {
+      template: 'Eoi';
+      accepted: boolean;
+    };
 
-export interface InitResponse {
-  offers: MarketplaceOffer[];
-  employerName: string;
-  email: string;
-  isComplete: boolean;
-}
+type OfferViewed = {
+  offerName: Step;
+  eventType: 'OfferViewed';
+  data: OfferMetadata;
+};
+
+type OfferProgressed = {
+  offerName: Step;
+  eventType: 'OfferProgressed';
+  data: OfferMetadata & OfferTemplateData;
+};
+
+type Started = {
+  eventType: 'Started';
+};
+
+type Completed = {
+  eventType: 'Completed';
+};
+
+type SummaryViewed = {
+  eventType: 'SummaryViewed';
+  summaryVariant: 'app' | 'generic';
+};
+
+type CommandDto = Started | OfferViewed | OfferProgressed | SummaryViewed | Completed;
 
 export class BackendApi {
   private static sourceId: string;
@@ -76,33 +97,7 @@ export class BackendApi {
     return response.data as InitResponse;
   }
 
-  static async command(eventType: CommandEventType): Promise<void> {
-    function isStepProgressEventType(
-      eventType: CommandEventType
-    ): eventType is StepProgressEventType {
-      return 'accepted' in eventType;
-    }
-
-    await this.axiosInstance.post('/command', {
-      source: 'Onboarding',
-      sourceId: this.sourceId,
-      eventType: eventType.name,
-      accepted: isStepProgressEventType(eventType) && eventType.accepted
-    });
-  }
-
-  static async stepProgressCommand(step: Step, accepted: boolean): Promise<void> {
-    const stepCommands: Record<Step, CommandEventType> = {
-      Perks: { name: 'ProgressPerks', accepted },
-      SalaryPackaging: { name: 'ProgressSalaryPackaging', accepted },
-      HealthInsurance: { name: 'ProgressHealthInsurance', accepted },
-      Boosts: { name: 'ProgressBoosts', accepted }
-    };
-
-    const command = stepCommands[step];
-    if (command) {
-      await this.command(command);
-    }
-    return;
+  static async command(event: CommandDto): Promise<void> {
+    await this.axiosInstance.post('/command', event);
   }
 }

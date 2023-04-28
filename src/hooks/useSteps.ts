@@ -1,18 +1,18 @@
 import { useState } from 'preact/hooks';
 
-import { Step, MarketplaceOffer, Content } from 'src/services/backend-api';
+import { Step, MarketplaceOffer } from 'src/services/backend-api';
 
 export type AppStep = Step | 'Loading' | 'Intro' | 'GetApp' | 'AllSet';
 
-export interface StepInfo {
+type StepInfo = {
   name: AppStep;
-  content?: Content;
-}
+  offer?: MarketplaceOffer;
+};
 
-interface Input {
+type Input = {
   offers: MarketplaceOffer[];
   isComplete: boolean;
-}
+};
 
 type UseStepsReturnType = [
   StepInfo,
@@ -23,7 +23,9 @@ type UseStepsReturnType = [
 
 export function useSteps(): UseStepsReturnType {
   const [input, setInput] = useState<Input>({ offers: [], isComplete: false });
-  const [currentStep, setCurrentStep] = useState<StepInfo>({ name: 'Loading', content: undefined });
+  const [currentStep, setCurrentStep] = useState<StepInfo>({
+    name: 'Loading'
+  });
 
   const setNextStep = (initialInput?: Input): void => {
     if (initialInput) setInput(initialInput);
@@ -78,7 +80,10 @@ function getMarketplaceOffer(
   isFirstStep: boolean
 ): StepInfo {
   if (isFirstStep) {
-    return { name: marketplaceOffers[0].name, content: marketplaceOffers[0].content };
+    return {
+      name: marketplaceOffers[0].name,
+      offer: marketplaceOffers[0]
+    };
   }
 
   const currentStepIndex = marketplaceOffers.findIndex((offer) => offer.name === currentStepName);
@@ -89,12 +94,12 @@ function getMarketplaceOffer(
   }
 
   const nextStep = marketplaceOffers[currentStepIndex + 1];
-  return { name: nextStep.name, content: nextStep.content };
+  return { name: nextStep.name, offer: nextStep };
 }
 
 function validateStepInfo(stepInfo: StepInfo, input: Input): void {
   if (!stepInfo.name) throw new Error('nextStep was not set');
-  if (input.offers.some((step) => step.name === stepInfo.name) && !stepInfo.content) {
+  if (input.offers.some((step) => step.name === stepInfo.name) && !stepInfo.offer) {
     throw new Error('Configured step does not have any content');
   }
 }
