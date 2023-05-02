@@ -58,6 +58,7 @@ const App: FunctionalComponent<Props> = (props) => {
       case 'HealthInsurance':
       case 'Boosts':
       case 'Perks':
+      case 'Utilities':
         return (
           <TemplateRenderer
             stepNumber={stepNumber}

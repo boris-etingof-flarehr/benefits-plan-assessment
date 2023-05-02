@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-export type Step = 'Perks' | 'SalaryPackaging' | 'HealthInsurance' | 'Boosts';
+export type Step = 'Perks' | 'SalaryPackaging' | 'HealthInsurance' | 'Boosts' | 'Utilities';
 
 export interface MarketplaceOffer {
   name: Step;
