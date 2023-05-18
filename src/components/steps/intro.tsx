@@ -4,6 +4,8 @@ import { Transition } from '@headlessui/react';
 import Button from '../button';
 import introDesktopImg from '../../assets/desktop/intro.jpg';
 import { BackendApi } from '../../services/backend-api';
+import CheckBox from '../checkbox';
+import { useEffect, useState } from 'preact/hooks';
 
 interface Props {
   employerName: string;
@@ -11,6 +13,21 @@ interface Props {
 }
 
 const Intro: FunctionalComponent<Props> = (props) => {
+  const [membership, setMembership] = useState(true);
+
+  useEffect(() => {
+    (async (): Promise<void> => {
+      await BackendApi.command({
+        eventType: 'OfferViewed',
+        offerName: 'Membership',
+        data:{
+          featureName:"",
+          treatmentName:""
+        }
+      });
+    })();
+  }, []);
+
   return (
     <Transition
       appear={true}
@@ -30,10 +47,24 @@ const Intro: FunctionalComponent<Props> = (props) => {
           can save you thousands of dollars every year on your car, private health insurance, weekly
           grocery shop and more.
         </p>
+        <CheckBox
+          className= "mt-6"
+          label="I would like to be updated on the latest benefits from Flare"
+          value={membership}
+          onChange={setMembership}
+        />
         <Button
           class="mt-8"
           onClickPromise={async (): Promise<void> => {
             await BackendApi.command({ eventType: 'Started' });
+            await BackendApi.command({ eventType: 'OfferProgressed',
+            offerName:"Membership",
+            data: { 
+              accepted: membership,
+              featureName:"",
+              treatmentName:"",
+              template:"Eoi"
+            } });
             props.onStepComplete();
           }}
         >
