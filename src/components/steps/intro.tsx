@@ -4,7 +4,6 @@ import { Transition } from '@headlessui/react';
 import Button from '../button';
 import introDesktopImg from '../../assets/desktop/intro.jpg';
 import { BackendApi } from '../../services/backend-api';
-import CheckBox from '../checkbox';
 import { useEffect, useState } from 'preact/hooks';
 
 interface Props {
@@ -47,12 +46,27 @@ const Intro: FunctionalComponent<Props> = (props) => {
           can save you thousands of dollars every year on your car, private health insurance, weekly
           grocery shop and more.
         </p>
-        <CheckBox
-          className= "mt-6"
-          label="I would like to be updated on the latest benefits from Flare"
-          value={membership}
-          onChange={setMembership}
-        />
+        <div class="flex items-center text-left mt-6">
+          <input
+            class="accent-primary-base h-4 w-4"
+            type="checkbox"
+            name="membership"
+            checked={membership}
+            onChange={(e): void => setMembership((e.target as any)?.checked)}
+          />
+          <label
+            class="font-medium text-sm text-gray-900 ml-3"
+            for="membership"
+          >
+            <span>
+              I would like to be contacted about the latest benefits from Flare and agree to the{' '}
+              <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
+                privacy policy
+              </a>
+              .
+            </span>
+          </label>
+        </div>
         <Button
           class="mt-8"
           onClickPromise={async (): Promise<void> => {
