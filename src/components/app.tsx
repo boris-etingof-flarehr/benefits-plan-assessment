@@ -55,6 +55,7 @@ const App: FunctionalComponent<Props> = (props) => {
       case 'Intro':
         return <Intro employerName={data.employerName} onStepComplete={setNextStep} />;
       case 'SalaryPackaging':
+      case 'SalaryPackagingDevices':
       case 'HealthInsurance':
       case 'Boosts':
       case 'Perks':
