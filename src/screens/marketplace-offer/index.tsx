@@ -1,8 +1,8 @@
 import { FunctionalComponent } from 'preact';
 
-import { MarketplaceOffer } from 'src/services/backend-api';
-import SimpleTemplate from './templates/simple-template';
+import { MarketplaceOffer } from '../../app.model';
 import EoiTemplate from './templates/eoi-template';
+import SimpleTemplate from './templates/simple-template';
 
 interface Props {
   stepNumber: {
@@ -19,7 +19,7 @@ function exhaustiveGuard(_value: never): never {
   );
 }
 
-const TemplateRenderer: FunctionalComponent<Props> = (props) => {
+const Index: FunctionalComponent<Props> = (props) => {
   switch (props.marketPlaceOffer.content.template) {
     case 'Eoi':
       return (
@@ -52,4 +52,4 @@ const TemplateRenderer: FunctionalComponent<Props> = (props) => {
   }
 };
 
-export default TemplateRenderer;
+export default Index;

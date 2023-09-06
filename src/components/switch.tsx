@@ -1,5 +1,5 @@
-import { FunctionalComponent } from 'preact';
 import { Switch } from '@headlessui/react';
+import { FunctionalComponent } from 'preact';
 import { useCallback, useState } from 'preact/hooks';
 
 type Props = {

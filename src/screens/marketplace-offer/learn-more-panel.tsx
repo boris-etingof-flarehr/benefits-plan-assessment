@@ -1,6 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { FunctionalComponent } from 'preact';
-import CheckIcon from '../assets/icons/check.svg';
+
+import CheckIcon from '../../assets/icons/check.svg';
 
 interface Props {
   items: string[];

@@ -1,37 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
 
-export type Step = 'Membership' | 'Perks' | 'SalaryPackaging' | 'SalaryPackagingDevices' | 'HealthInsurance' | 'Boosts' | 'Energy';
+import { MarketplaceOffer, MarketplaceOfferName, OfferMetadata } from '../app.model';
 
-export interface MarketplaceOffer {
-  name: Step;
-  content: Content;
-  metadata: OfferMetadata;
-}
-
-export type InitResponse = {
+type InitResponse = {
   offers: MarketplaceOffer[];
   employerName: string;
   email: string;
   isComplete: boolean;
-};
-
-type Template = 'Eoi' | 'Simple';
-
-export type Content = {
-  template: Template;
-  title: string;
-  description: string;
-  details: string[];
-  imageUrl: string;
-  mobileImageUrl: string;
-  acceptButton: string;
-  declineButton?: string;
-  terms: string[];
-};
-
-export type OfferMetadata = {
-  featureName: string;
-  treatmentName: string;
 };
 
 type OfferTemplateData =
@@ -44,13 +19,13 @@ type OfferTemplateData =
     };
 
 type OfferViewed = {
-  offerName: Step;
+  offerName: MarketplaceOfferName;
   eventType: 'OfferViewed';
   data: OfferMetadata;
 };
 
 type OfferProgressed = {
-  offerName: Step;
+  offerName: MarketplaceOfferName;
   eventType: 'OfferProgressed';
   data: OfferMetadata & OfferTemplateData;
 };
@@ -78,7 +53,7 @@ export class BackendApi {
     this.axiosInstance = axios.create({
       baseURL: `${baseUrl}/benefits-onboarding/backend`,
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
         // Uncomment below for local dev against local backend
         // 'x-partner-id': '123',
         // 'x-account-id': '83A9F426-8E73-4781-B6CA-ABC374510C54',
@@ -98,6 +73,10 @@ export class BackendApi {
   }
 
   static async command(event: CommandDto): Promise<void> {
-    await this.axiosInstance.post('/command', {source: "Onboarding", sourceId: this.sourceId, ...event} );
+    await this.axiosInstance.post('/command', {
+      source: 'Onboarding',
+      sourceId: this.sourceId,
+      ...event
+    });
   }
 }

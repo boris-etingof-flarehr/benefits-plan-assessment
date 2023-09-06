@@ -1,7 +1,8 @@
 import { FunctionalComponent } from 'preact';
 import { useState } from 'preact/hooks';
+
+import ChevronDownIcon from '../../assets/icons/chevron-down.svg';
 import LearnMorePanel from './learn-more-panel';
-import ChevronDownIcon from '../assets/icons/chevron-down.svg';
 
 interface Props {
   class: string;

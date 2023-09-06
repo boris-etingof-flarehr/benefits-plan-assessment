@@ -1,12 +1,14 @@
+import { Transition } from '@headlessui/react';
+import DOMPurify from 'dompurify';
 import { FunctionalComponent } from 'preact';
 import { useEffect } from 'preact/hooks';
-import DOMPurify from 'dompurify';
 
-import Button from '../../button';
-import LearnMore from '../../learn-more';
-import { Transition } from '@headlessui/react';
-import LearnMorePanel from '../../learn-more-panel';
-import { BackendApi, MarketplaceOffer } from '../../../services/backend-api';
+import { MarketplaceOffer } from '../../../app.model';
+import Button from '../../../components/button';
+import LeftRightLayout from '../../../layouts/left-right-layout';
+import { BackendApi } from '../../../services/backend-api';
+import LearnMore from '../learn-more';
+import LearnMorePanel from '../learn-more-panel';
 
 interface SimpleTemplateData {
   content: {
@@ -58,15 +60,8 @@ const SimpleTemplate: FunctionalComponent<Props> = (props) => {
   };
 
   return (
-    <Transition
-      appear={true}
-      show={true}
-      enter="transition duration-700 ease-out"
-      enterFrom="opacity-0"
-      enterTo="opacity-100"
-      class="opacity-0"
-    >
-      <div class="md:grid md:grid-cols-2 max-w-[59.5rem] mx-auto">
+    <LeftRightLayout>
+      <LeftRightLayout.Left>
         <div>
           <div class="flex justify-between md:block text-xs tracking-wide">
             <span class="relative px-3 py-0.5 text-primary-base font-semibold">
@@ -123,22 +118,15 @@ const SimpleTemplate: FunctionalComponent<Props> = (props) => {
             )}
           </Transition>
         </div>
-        <Transition
-          appear={true}
-          show={true}
-          enter="transition delay-300 duration-[600ms] ease-out"
-          enterFrom="opacity-0 -translate-y-6"
-          enterTo="opacity-100 translate-y-0"
-          class="opacity-0 -translate-y-6"
-        >
-          <img
-            class="max-w-[30rem] w-full hidden md:block"
-            src={props.step.content.imageUrl}
-            loading="lazy"
-          />
-        </Transition>
-      </div>
-    </Transition>
+      </LeftRightLayout.Left>
+      <LeftRightLayout.Right>
+        <img
+          class="max-w-[30rem] w-full hidden md:block"
+          src={props.step.content.imageUrl}
+          loading="lazy"
+        />
+      </LeftRightLayout.Right>
+    </LeftRightLayout>
   );
 };
 
