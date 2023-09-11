@@ -1,9 +1,10 @@
 import { FunctionalComponent } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useContext, useEffect } from 'preact/hooks';
 
 import desktopImg from '../assets/desktop/all-set.jpg';
 import mobileImg from '../assets/mobile/all-set-mobile.jpg';
 import Button from '../components/button';
+import { AppContext } from '../context/app-context';
 import { BenefitsOnboardingCustomElementName } from '../index';
 import LeftRightLayout from '../layouts/left-right-layout';
 import { BackendApi } from '../services/backend-api';
@@ -15,12 +16,16 @@ const SummaryGeneric: FunctionalComponent = () => {
     })();
   }, []);
 
+  const { flareAppIdentity } = useContext(AppContext);
+
   const content = {
     imageUrl: desktopImg,
     mobileImageUrl: mobileImg,
     title: "You're all set!",
     description:
-      'Simply continue and review the details you have provided to complete your onboarding.'
+      flareAppIdentity.status === 'RegisteredAndWorkplaceLinked'
+        ? 'You’ve already connected this employer with your Flare Benefits account. Simply continue and review the details you have provided to complete your onboarding.'
+        : 'Simply continue and review the details you have provided to complete your onboarding.'
   };
 
   const primaryButton = {

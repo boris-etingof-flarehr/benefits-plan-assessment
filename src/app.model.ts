@@ -3,7 +3,21 @@ export type AppContextData = {
   employerName: string;
   email: string;
   isComplete: boolean;
+  isAppEnabled: boolean;
+  flareAppIdentity: FlareAppIdentity;
 };
+
+export type FlareAppIdentity =
+  | {
+      status: 'Unregistered';
+    }
+  | {
+      status: 'RegisteredButNotWorkplaceLinked';
+      maskedPhoneNumber: string;
+    }
+  | {
+      status: 'RegisteredAndWorkplaceLinked';
+    };
 
 export type MarketplaceOfferName =
   | 'Membership'

@@ -2,11 +2,15 @@ import axios, { AxiosInstance } from 'axios';
 
 import { MarketplaceOffer, MarketplaceOfferName, OfferMetadata } from '../app.model';
 
-type InitResponse = {
+export type InitResponse = {
   offers: MarketplaceOffer[];
   employerName: string;
   email: string;
   isComplete: boolean;
+  flareAppIdentity?: {
+    maskedPhoneNumber: string;
+    apolloProfileLinked: boolean;
+  };
 };
 
 type OfferTemplateData =

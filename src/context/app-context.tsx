@@ -6,7 +6,11 @@ const defaultAppContext: AppContextData = {
   offers: [],
   employerName: '',
   email: '',
-  isComplete: false
+  isComplete: false,
+  isAppEnabled: false,
+  flareAppIdentity: {
+    status: 'Unregistered'
+  }
 };
 
 export const AppContext = createContext<AppContextData>(defaultAppContext);
