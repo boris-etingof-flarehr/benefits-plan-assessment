@@ -1,8 +1,21 @@
-import { useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
 
 import { FlareAppIdentity, MarketplaceOffer, MarketplaceOfferName } from '../app.model';
 
-export type AppScreen = 'Introduction' | MarketplaceOfferName | 'SummaryApp' | 'SummaryGeneric';
+type AppScreen =
+  | {
+      screenName: 'Introduction' | 'SummaryApp' | 'SummaryGeneric';
+    }
+  | {
+      screenName: 'MarketplaceOffer';
+      offerName: MarketplaceOfferName;
+    };
+
+type InternalAppScreenName =
+  | 'Introduction'
+  | MarketplaceOfferName
+  | 'SummaryApp'
+  | 'SummaryGeneric';
 
 export function useNavigation(
   offers: MarketplaceOffer[],
@@ -10,11 +23,23 @@ export function useNavigation(
   isAppEnabled: boolean,
   flareAppIdentity: FlareAppIdentity
 ): {
-  currentScreen: AppScreen;
+  current: AppScreen;
   goNext: () => void;
 } {
   const screenNames = getScreenNames(offers, isComplete, isAppEnabled, flareAppIdentity);
-  const [currentScreen, setCurrentScreen] = useState<AppScreen>(screenNames[0]);
+  const [currentScreen, setCurrentScreen] = useState<InternalAppScreenName>(screenNames[0]);
+  const current = useMemo<AppScreen>(() => {
+    const offer = offers.find((o) => o.name === currentScreen);
+
+    return offer
+      ? {
+          screenName: 'MarketplaceOffer',
+          offerName: offer.name
+        }
+      : ({
+          screenName: currentScreen
+        } as AppScreen);
+  }, [currentScreen, offers]);
 
   const goNext = (): void => {
     try {
@@ -27,7 +52,7 @@ export function useNavigation(
   };
 
   return {
-    currentScreen,
+    current,
     goNext
   };
 }
@@ -37,8 +62,8 @@ function getScreenNames(
   isComplete: boolean,
   isAppEnabled: boolean,
   flareAppIdentity: FlareAppIdentity
-): AppScreen[] {
-  const finalScreen: AppScreen = isAppEnabled ? 'SummaryApp' : 'SummaryGeneric';
+): InternalAppScreenName[] {
+  const finalScreen: InternalAppScreenName = isAppEnabled ? 'SummaryApp' : 'SummaryGeneric';
 
   switch (true) {
     case isComplete:

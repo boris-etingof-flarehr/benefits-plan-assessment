@@ -19,14 +19,7 @@ export type FlareAppIdentity =
       status: 'RegisteredAndWorkplaceLinked';
     };
 
-export type MarketplaceOfferName =
-  | 'Membership'
-  | 'Perks'
-  | 'SalaryPackaging'
-  | 'SalaryPackagingDevices'
-  | 'HealthInsurance'
-  | 'Boosts'
-  | 'Energy';
+export type MarketplaceOfferName = string;
 
 export interface MarketplaceOffer {
   name: MarketplaceOfferName;

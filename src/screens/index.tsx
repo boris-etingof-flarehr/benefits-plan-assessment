@@ -11,29 +11,24 @@ import SummaryGeneric from './summary-generic';
 const Screen: FunctionalComponent = () => {
   const { employerName, email, offers, isComplete, isAppEnabled, flareAppIdentity } =
     useContext(AppContext);
-  const { currentScreen, goNext } = useNavigation(
+  const { current, goNext } = useNavigation(
     offers,
     isComplete,
     isAppEnabled,
     flareAppIdentity
   );
 
-  switch (currentScreen) {
+  switch (current.screenName) {
     case 'Introduction':
       return <Introduction employerName={employerName} onStepComplete={goNext} />;
-    case 'SalaryPackaging':
-    case 'SalaryPackagingDevices':
-    case 'HealthInsurance':
-    case 'Boosts':
-    case 'Perks':
-    case 'Energy':
+    case 'MarketplaceOffer':
       return (
         <MarketPlaceOffer
           stepNumber={{
-            current: offers.findIndex((o) => o.name === currentScreen) + 1,
+            current: offers.findIndex((o) => o.name === current.offerName) + 1,
             total: offers.length
           }}
-          marketPlaceOffer={offers.find((o) => o.name === currentScreen)!}
+          marketPlaceOffer={offers.find((o) => o.name === current.offerName)!}
           onStepComplete={goNext}
         />
       );
