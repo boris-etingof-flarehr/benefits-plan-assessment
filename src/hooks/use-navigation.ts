@@ -4,7 +4,7 @@ import { FlareAppIdentity, MarketplaceOffer, MarketplaceOfferName } from '../app
 
 type AppScreen =
   | {
-      screenName: 'Introduction' | 'SummaryApp' | 'SummaryGeneric';
+      screenName: 'Introduction' | 'FlareAppIdentity' | 'SummaryApp' | 'SummaryGeneric';
     }
   | {
       screenName: 'MarketplaceOffer';
@@ -13,6 +13,7 @@ type AppScreen =
 
 type InternalAppScreenName =
   | 'Introduction'
+  | 'FlareAppIdentity'
   | MarketplaceOfferName
   | 'SummaryApp'
   | 'SummaryGeneric';
@@ -70,6 +71,8 @@ function getScreenNames(
       return [finalScreen];
     case flareAppIdentity.status === 'RegisteredAndWorkplaceLinked':
       return ['Introduction', 'SummaryGeneric'];
+    case flareAppIdentity.status === 'RegisteredButNotWorkplaceLinked':
+      return ['Introduction', 'FlareAppIdentity', finalScreen];
     default:
       return ['Introduction', ...offers.map((o) => o.name), finalScreen];
   }

@@ -57,7 +57,7 @@ const getAppContextFromInitResponse = (initResponse: InitResponse): AppContextDa
     ? {
         status: 'Unregistered'
       }
-    : initResponse.flareAppIdentity.apolloProfileLinked
+    : initResponse.flareAppIdentity.workplaceLinked
     ? {
         status: 'RegisteredAndWorkplaceLinked'
       }

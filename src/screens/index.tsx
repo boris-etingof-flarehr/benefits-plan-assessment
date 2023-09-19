@@ -3,6 +3,7 @@ import { useContext } from 'preact/hooks';
 
 import { AppContext } from '../context/app-context';
 import { useNavigation } from '../hooks/use-navigation';
+import FlareAppIdentity from './flare-app-identity';
 import Introduction from './introduction';
 import MarketPlaceOffer from './marketplace-offer';
 import SummaryApp from './summary-app';
@@ -21,6 +22,8 @@ const Screen: FunctionalComponent = () => {
   switch (current.screenName) {
     case 'Introduction':
       return <Introduction employerName={employerName} onStepComplete={goNext} />;
+    case 'FlareAppIdentity':
+      return <FlareAppIdentity onComplete={goNext} />
     case 'MarketplaceOffer':
       return (
         <MarketPlaceOffer

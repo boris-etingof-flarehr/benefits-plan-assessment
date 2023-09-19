@@ -9,7 +9,7 @@ export type InitResponse = {
   isComplete: boolean;
   flareAppIdentity?: {
     maskedPhoneNumber: string;
-    apolloProfileLinked: boolean;
+    workplaceLinked: boolean;
   };
 };
 
@@ -66,6 +66,8 @@ export class BackendApi {
     });
     this.sourceId = sourceId;
   }
+
+  static GetClient = (): AxiosInstance => BackendApi.axiosInstance;
 
   static async init(): Promise<InitResponse> {
     const response = await this.axiosInstance.post('/init', {
