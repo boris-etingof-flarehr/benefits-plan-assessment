@@ -1,6 +1,11 @@
 import { useMemo, useState } from 'preact/hooks';
 
-import { FlareAppIdentity, MarketplaceOffer, MarketplaceOfferName } from '../app.model';
+import {
+  FeatureFlags,
+  FlareAppIdentity,
+  MarketplaceOffer,
+  MarketplaceOfferName
+} from '../app.model';
 
 type AppScreen =
   | {
@@ -22,12 +27,19 @@ export function useNavigation(
   offers: MarketplaceOffer[],
   isComplete: boolean,
   isAppEnabled: boolean,
-  flareAppIdentity: FlareAppIdentity
+  flareAppIdentity: FlareAppIdentity,
+  featureFlags: FeatureFlags
 ): {
   current: AppScreen;
   goNext: () => void;
 } {
-  const screenNames = getScreenNames(offers, isComplete, isAppEnabled, flareAppIdentity);
+  const screenNames = getScreenNames(
+    offers,
+    isComplete,
+    isAppEnabled,
+    flareAppIdentity,
+    featureFlags
+  );
   const [currentScreen, setCurrentScreen] = useState<InternalAppScreenName>(screenNames[0]);
   const current = useMemo<AppScreen>(() => {
     const offer = offers.find((o) => o.name === currentScreen);
@@ -62,16 +74,21 @@ function getScreenNames(
   offers: MarketplaceOffer[],
   isComplete: boolean,
   isAppEnabled: boolean,
-  flareAppIdentity: FlareAppIdentity
+  flareAppIdentity: FlareAppIdentity,
+  featureFlags: FeatureFlags
 ): InternalAppScreenName[] {
   const finalScreen: InternalAppScreenName = isAppEnabled ? 'SummaryApp' : 'SummaryGeneric';
 
   switch (true) {
     case isComplete:
       return [finalScreen];
-    case flareAppIdentity.status === 'RegisteredAndWorkplaceLinked':
+    case featureFlags.flareAppIdentity &&
+      flareAppIdentity.status === 'RegisteredAndWorkplaceLinked':
       return ['Introduction', 'SummaryGeneric'];
-    case flareAppIdentity.status === 'RegisteredButNotWorkplaceLinked':
+    case featureFlags.flareAppIdentity && flareAppIdentity.status === 'Unregistered':
+      return ['Introduction', 'FlareAppIdentity', ...offers.map((o) => o.name), finalScreen];
+    case featureFlags.flareAppIdentity &&
+      flareAppIdentity.status === 'RegisteredButNotWorkplaceLinked':
       return ['Introduction', 'FlareAppIdentity', finalScreen];
     default:
       return ['Introduction', ...offers.map((o) => o.name), finalScreen];

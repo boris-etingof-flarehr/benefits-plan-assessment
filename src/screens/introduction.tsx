@@ -1,8 +1,9 @@
 import { FunctionalComponent } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useContext, useEffect, useState } from 'preact/hooks';
 
 import introDesktopImg from '../assets/desktop/intro.jpg';
 import Button from '../components/button';
+import { AppContext } from '../context/app-context';
 import TopBottomLayout from '../layouts/top-bottom-layout';
 import { BackendApi } from '../services/backend-api';
 
@@ -12,19 +13,22 @@ interface Props {
 }
 
 const Introduction: FunctionalComponent<Props> = (props) => {
+  const { featureFlags } = useContext(AppContext);
   const [membership, setMembership] = useState(true);
 
   useEffect(() => {
-    (async (): Promise<void> => {
-      await BackendApi.command({
-        eventType: 'OfferViewed',
-        offerName: 'Membership',
-        data: {
-          featureName: '',
-          treatmentName: ''
-        }
-      });
-    })();
+    if (!featureFlags.flareAppIdentity) {
+      (async (): Promise<void> => {
+        await BackendApi.command({
+          eventType: 'OfferViewed',
+          offerName: 'Membership',
+          data: {
+            featureName: '',
+            treatmentName: ''
+          }
+        });
+      })();
+    }
   }, []);
 
   return (
@@ -42,38 +46,49 @@ const Introduction: FunctionalComponent<Props> = (props) => {
             can save you thousands of dollars every year on your car, private health insurance,
             weekly grocery shop and more.
           </p>
-          <div class="flex items-center text-left mt-6">
-            <input
-              class="accent-primary-base h-4 w-4"
-              type="checkbox"
-              name="membership"
-              checked={membership}
-              onChange={(e): void => setMembership((e.target as any)?.checked)}
-            />
-            <label class="font-medium text-sm text-gray-900 ml-3" for="membership">
-              <span>
-                I would like to be contacted about the latest benefits from Flare and agree to the{' '}
-                <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
-                  privacy policy
-                </a>
-                .
-              </span>
-            </label>
-          </div>
+
+          {!featureFlags.flareAppIdentity && (
+            <div class="flex items-center text-left mt-6">
+              <input
+                class="accent-primary-base h-4 w-4"
+                type="checkbox"
+                name="membership"
+                checked={membership}
+                onChange={(e): void => setMembership((e.target as any)?.checked)}
+              />
+              <label class="font-medium text-sm text-gray-900 ml-3" for="membership">
+                <span>
+                  I would like to be contacted about the latest benefits from Flare and agree to the{' '}
+                  <a
+                    href="https://www.flarehr.com/privacy-policy/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    privacy policy
+                  </a>
+                  .
+                </span>
+              </label>
+            </div>
+          )}
+
           <Button
             class="mt-8"
             onClickPromise={async (): Promise<void> => {
               await BackendApi.command({ eventType: 'Started' });
-              await BackendApi.command({
-                eventType: 'OfferProgressed',
-                offerName: 'Membership',
-                data: {
-                  accepted: membership,
-                  featureName: '',
-                  treatmentName: '',
-                  template: 'Eoi'
-                }
-              });
+              if (!featureFlags.flareAppIdentity) {
+                await BackendApi.command({
+                  eventType: 'OfferProgressed',
+                  offerName: 'Membership',
+                  data: {
+                    accepted: membership,
+                    featureName: '',
+                    treatmentName: '',
+                    template: 'Eoi'
+                  }
+                });
+              }
+
               props.onStepComplete();
             }}
           >

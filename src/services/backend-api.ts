@@ -11,6 +11,9 @@ export type InitResponse = {
     maskedPhoneNumber: string;
     workplaceLinked: boolean;
   };
+  featureFlags: {
+    flareAppIdentity: boolean;
+  };
 };
 
 type OfferTemplateData =
@@ -75,7 +78,12 @@ export class BackendApi {
       sourceId: this.sourceId
     });
 
-    return response.data as InitResponse;
+    return {
+      ...response.data,
+      featureFlags: {
+        flareAppIdentity: false
+      }
+    } as InitResponse;
   }
 
   static async command(event: CommandDto): Promise<void> {

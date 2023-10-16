@@ -1,6 +1,7 @@
 import { FunctionalComponent } from 'preact';
 import { useCallback, useState } from 'preact/hooks';
 
+import LeftArrow from '../../../assets/icons/left-arrow.svg';
 import Button from '../../../components/button';
 import TextButton from '../../../components/text-button';
 import TextField from '../../../components/text-field';
@@ -8,17 +9,22 @@ import Heading from '../../../components/typography/heading';
 import Title from '../../../components/typography/title';
 import TopBottomLayout from '../../../layouts/top-bottom-layout';
 import useOtp, { OTP_LENGTH } from '../use-otp';
-import SigningInDialog from './signing-in-dialog';
+import SigningUpDialog from './signing-up-dialog';
 
 type Props = {
   phoneNumber: string;
   // eslint-disable-next-line no-unused-vars
   onVerify: (otp: string) => Promise<void>;
   onResendOtp: () => Promise<void>;
-  onSuccess: () => void;
+  onGoBack: () => void;
 };
 
-const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp, onSuccess }) => {
+const VerifyOtp: FunctionalComponent<Props> = ({
+  phoneNumber,
+  onVerify,
+  onResendOtp,
+  onGoBack
+}) => {
   const { otp, setOtp } = useOtp();
   const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState('');
@@ -28,16 +34,13 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
     setError('');
 
     return onVerify(otp.code)
-      .then(() => {
-        onSuccess();
-      })
       .catch(() => {
         setError('Verification failed.');
       })
       .finally(() => {
         setVerifying(false);
       });
-  }, [onSuccess, onVerify, otp.code]);
+  }, [onVerify, otp.code]);
 
   const handleOnResendOtp = useCallback(() => {
     setError('');
@@ -49,11 +52,11 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
 
   return (
     <>
-      <SigningInDialog open={verifying} />
+      <SigningUpDialog open={verifying} />
       <TopBottomLayout>
         <TopBottomLayout.Top>
           <div className="flex flex-col gap-5">
-            <Heading>Looks like you already have a Flare Benefits account</Heading>
+            <Heading>Verify your mobile number</Heading>
             <Title>An SMS verification code has been sent to the number {phoneNumber}.</Title>
           </div>
         </TopBottomLayout.Top>
@@ -61,9 +64,9 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
           <div className="mt-5 md:w-[240px] text-left">
             <TextField
               allowedKeyPattern={/[0-9]/}
+              inputMode="numeric"
               minLength={OTP_LENGTH}
               maxLength={OTP_LENGTH}
-              inputMode="numeric"
               className="mt-1 mb-1 w-full"
               label="Enter your verification code"
               onChange={setOtp}
@@ -80,6 +83,17 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
             <Button class="mt-5 md:w-full" disabled={!otp.valid} onClickPromise={handleOnVerify}>
               Continue
             </Button>
+            <Button
+              class="mt-5 md:w-full bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300"
+              onClickPromise={async (): Promise<void> => {
+                onGoBack();
+              }}
+            >
+              <span className="flex gap-3">
+                <LeftArrow />
+                Back
+              </span>
+            </Button>
           </div>
         </TopBottomLayout.Bottom>
       </TopBottomLayout>
@@ -87,4 +101,4 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
   );
 };
 
-export default SignIn;
+export default VerifyOtp;

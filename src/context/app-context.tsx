@@ -10,6 +10,9 @@ const defaultAppContext: AppContextData = {
   isAppEnabled: false,
   flareAppIdentity: {
     status: 'Unregistered'
+  },
+  featureFlags: {
+    flareAppIdentity: false
   }
 };
 

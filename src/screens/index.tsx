@@ -10,20 +10,28 @@ import SummaryApp from './summary-app';
 import SummaryGeneric from './summary-generic';
 
 const Screen: FunctionalComponent = () => {
-  const { employerName, email, offers, isComplete, isAppEnabled, flareAppIdentity } =
+  const { employerName, email, offers, isComplete, isAppEnabled, flareAppIdentity, featureFlags } =
     useContext(AppContext);
   const { current, goNext } = useNavigation(
     offers,
     isComplete,
     isAppEnabled,
-    flareAppIdentity
+    flareAppIdentity,
+    featureFlags
   );
 
   switch (current.screenName) {
     case 'Introduction':
       return <Introduction employerName={employerName} onStepComplete={goNext} />;
     case 'FlareAppIdentity':
-      return <FlareAppIdentity onComplete={goNext} />
+      return (
+        <FlareAppIdentity
+          onComplete={goNext}
+          onAbandon={(): void => {
+            // TODO: What to do if user declined the join
+          }}
+        />
+      );
     case 'MarketplaceOffer':
       return (
         <MarketPlaceOffer

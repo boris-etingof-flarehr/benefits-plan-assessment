@@ -5,6 +5,11 @@ export type AppContextData = {
   isComplete: boolean;
   isAppEnabled: boolean;
   flareAppIdentity: FlareAppIdentity;
+  featureFlags: FeatureFlags;
+};
+
+export type FeatureFlags = {
+  flareAppIdentity: boolean;
 };
 
 export type FlareAppIdentity =
