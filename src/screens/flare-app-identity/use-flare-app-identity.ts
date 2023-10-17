@@ -28,12 +28,12 @@ const useFlareAppIdentity = (): {
 };
 
 enum FlareAppIdentityErrorCode {
-  Auth_AccountDisabled = 'Mobile number associated account has been disabled.',
-  Auth_AccountLocked = 'Too many attempts, please try later.',
-  Auth_Registered = 'An error occurred when registering your mobile number. Please refresh the screen and try again.',
-  Auth_Unregistered = 'No record found that matches your mobile number.',
-  Auth_InvalidVerificationCode = 'Invalid verification code.',
-  Validation_InvalidPhoneNumber = "Invalid mobile number. Please ensure it's an Australian mobile number starting with \"04\"."
+  Auth_AccountDisabled = 'Sorry, your account has been deactivated. Please contact Flare if there are any issues.',
+  Auth_AccountLocked = 'Sorry, your account is currently locked due to too many attempts. Please try again later.',
+  Auth_Registered = 'Sorry, we are currently experiencing some issues. Please try again later.',
+  Auth_Unregistered = 'Sorry, we are currently experiencing some issues. Please try again later.',
+  Auth_InvalidVerificationCode = "Your one time passcode doesn't look right. Please try again with a new one time passcode.",
+  Validation_InvalidPhoneNumber = 'Please enter a valid Australian mobile number beginning with 04.'
 }
 
 const handleError = (ex: any): Promise<void> => {
