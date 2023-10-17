@@ -63,7 +63,7 @@ const getAppContextFromInitResponse = (initResponse: InitResponse): AppContextDa
       }
     : {
         status: 'RegisteredButNotWorkplaceLinked',
-        maskedPhoneNumber: initResponse.flareAppIdentity.maskedPhoneNumber
+        maskedPhoneNumber: initResponse.flareAppIdentity.maskedMobileNumber
       };
   return { ...initResponse, isAppEnabled, flareAppIdentity };
 };

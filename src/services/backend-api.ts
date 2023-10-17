@@ -8,7 +8,7 @@ export type InitResponse = {
   email: string;
   isComplete: boolean;
   flareAppIdentity?: {
-    maskedPhoneNumber: string;
+    maskedMobileNumber: string;
     workplaceLinked: boolean;
   };
   featureFlags: {
@@ -78,12 +78,7 @@ export class BackendApi {
       sourceId: this.sourceId
     });
 
-    return {
-      ...response.data,
-      featureFlags: {
-        flareAppIdentity: false
-      }
-    } as InitResponse;
+    return response.data as InitResponse;
   }
 
   static async command(event: CommandDto): Promise<void> {

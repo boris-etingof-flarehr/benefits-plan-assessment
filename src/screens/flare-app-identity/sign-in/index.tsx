@@ -31,9 +31,7 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
       .then(() => {
         onSuccess();
       })
-      .catch(() => {
-        setError('Verification failed.');
-      })
+      .catch(setError)
       .finally(() => {
         setVerifying(false);
       });
@@ -42,9 +40,7 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
   const handleOnResendOtp = useCallback(() => {
     setError('');
 
-    return onResendOtp().catch(() => {
-      setError('Resending verification code failed.');
-    });
+    return onResendOtp().catch(setError);
   }, [onResendOtp]);
 
   return (
@@ -70,7 +66,7 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
             />
             {error && <span className="text-xs text-rose-500">{error}</span>}
 
-            <p class="mt-2 text-center text-xs text-gray-600">
+            <p hidden class="mt-2 text-center text-xs text-gray-600">
               Didn't get the code?
               <TextButton className="underline ml-2" onClick={handleOnResendOtp}>
                 Resend SMS

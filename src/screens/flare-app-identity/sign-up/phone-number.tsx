@@ -18,7 +18,7 @@ type Props = {
 
 const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
   const { trace } = useTrace();
-  const [membership, setMembership] = useState(false);
+  const [membership, setMembership] = useState(true);
   const [error, setError] = useState('');
   const { setPhoneNumber, phoneNumber } = usePhoneNumber();
 
@@ -31,9 +31,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
 
     return onSubmit(phoneNumber)
       .then(() => trace('sign-up-completed'))
-      .catch(() => {
-        setError('Creating account failed.');
-      });
+      .catch(setError);
   }, [phoneNumber, onSubmit, trace]);
 
   return (
@@ -81,7 +79,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
           </Button>
 
           <Button
-            class="mt-5 md:w-full bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300"
+            class="invisible mt-5 md:w-full bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300"
             onClickPromise={async (): Promise<void> => {
               onDecline();
             }}

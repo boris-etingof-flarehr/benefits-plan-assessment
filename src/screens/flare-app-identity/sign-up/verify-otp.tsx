@@ -34,9 +34,7 @@ const VerifyOtp: FunctionalComponent<Props> = ({
     setError('');
 
     return onVerify(otp.code)
-      .catch(() => {
-        setError('Verification failed.');
-      })
+      .catch(setError)
       .finally(() => {
         setVerifying(false);
       });
@@ -45,9 +43,7 @@ const VerifyOtp: FunctionalComponent<Props> = ({
   const handleOnResendOtp = useCallback(() => {
     setError('');
 
-    return onResendOtp().catch(() => {
-      setError('Resending verification code failed.');
-    });
+    return onResendOtp().catch(setError);
   }, [onResendOtp]);
 
   return (
