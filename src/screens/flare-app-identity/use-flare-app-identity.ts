@@ -30,9 +30,9 @@ const useFlareAppIdentity = (): {
 enum FlareAppIdentityErrorCode {
   Auth_AccountDisabled = 'Sorry, your account has been deactivated. Please contact Flare if there are any issues.',
   Auth_AccountLocked = 'Sorry, your account is currently locked due to too many attempts. Please try again later.',
-  Auth_Registered = 'Sorry, we are currently experiencing some issues. Please try again later.',
   Auth_Unregistered = 'Sorry, we are currently experiencing some issues. Please try again later.',
   Auth_InvalidVerificationCode = "Your one time passcode doesn't look right. Please try again with a new one time passcode.",
+  Auth_SessionExpired = 'Sorry, looks like your session has expired. Please try again.',
   Validation_InvalidPhoneNumber = 'Please enter a valid Australian mobile number beginning with 04.'
 }
 
@@ -43,7 +43,10 @@ const handleError = (ex: any): Promise<void> => {
 
   const errorStr = FlareAppIdentityErrorCode[response?.error];
 
-  throw errorStr ?? 'Unexpected error occurred.';
+  throw (
+    errorStr ??
+    'Sorry, your account is currently locked due to too many attempts. Please try again later.'
+  );
 };
 
 export default useFlareAppIdentity;

@@ -7,6 +7,7 @@ import { AppContext } from './context/app-context';
 import css from './index.css';
 import Screen from './screens';
 import { BackendApi, InitResponse } from './services/backend-api';
+import reloadHelper from './utils/reload-event';
 
 interface Props {
   ['backend-url']: string;
@@ -16,24 +17,34 @@ interface Props {
 
 const App: FunctionalComponent<Props> = (props) => {
   const [appContext, setAppContext] = useState<AppContextData>();
+  const [renderKey, setRenderKey] = useState(0);
 
   useEffect(() => {
-    (async (): Promise<void> => {
-      const config = {
-        backendUrl: props['backend-url'],
-        accessToken: props['access-token'],
-        workflowsInstanceId: props['workflows-instance-id']
-      };
-      BackendApi.initClient(config.backendUrl, config.accessToken, config.workflowsInstanceId);
-      const response = await BackendApi.init();
-      setAppContext(getAppContextFromInitResponse(response));
-    })();
-  }, [props]);
+    const unsubscribe = reloadHelper.subscribe(() => {
+      init().then(() => setRenderKey(renderKey + 1));
+    });
+    return unsubscribe;
+  }, [renderKey]);
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = async (): Promise<void> => {
+    const config = {
+      backendUrl: props['backend-url'],
+      accessToken: props['access-token'],
+      workflowsInstanceId: props['workflows-instance-id']
+    };
+    BackendApi.initClient(config.backendUrl, config.accessToken, config.workflowsInstanceId);
+    const response = await BackendApi.init();
+    setAppContext(getAppContextFromInitResponse(response));
+  };
 
   return (
     <>
       <style>{css.toString()}</style>
-      <div class="font-inter pt-6 pb-8 md:py-24 px-px">
+      <div key={renderKey} class="font-inter pt-6 pb-8 md:py-24 px-px">
         {appContext ? (
           <AppContext.Provider value={appContext}>
             <Screen />

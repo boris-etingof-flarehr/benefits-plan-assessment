@@ -1,6 +1,7 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 
 import { MarketplaceOffer, MarketplaceOfferName, OfferMetadata } from '../app.model';
+import reloadEvent from '../utils/reload-event';
 
 export type InitResponse = {
   offers: MarketplaceOffer[];
@@ -52,6 +53,19 @@ type SummaryViewed = {
 
 type CommandDto = Started | OfferViewed | OfferProgressed | SummaryViewed | Completed;
 
+// eslint-disable-next-line no-unused-vars
+enum ErrorCode {
+  // eslint-disable-next-line no-unused-vars
+  Auth_SessionExpired
+}
+
+const onError = (ex: AxiosError): void => {
+  if ((ex.response?.data as { error: keyof typeof ErrorCode })?.error === 'Auth_SessionExpired') {
+    reloadEvent.dispatch();
+  }
+  throw ex;
+};
+
 export class BackendApi {
   private static sourceId: string;
   private static axiosInstance: AxiosInstance;
@@ -67,6 +81,7 @@ export class BackendApi {
         // 'x-profile-id': 'AP-C14DF031-A764-40B2-87C0-77884F4BD303'
       }
     });
+    this.axiosInstance.interceptors.response.use((res) => res, onError);
     this.sourceId = sourceId;
   }
 

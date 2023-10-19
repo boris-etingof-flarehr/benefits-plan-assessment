@@ -66,7 +66,7 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
             />
             {error && <span className="text-xs text-rose-500">{error}</span>}
 
-            <p hidden class="mt-2 text-center text-xs text-gray-600">
+            <p class="mt-2 text-center text-xs text-gray-600">
               Didn't get the code?
               <TextButton className="underline ml-2" onClick={handleOnResendOtp}>
                 Resend SMS
