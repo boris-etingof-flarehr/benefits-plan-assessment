@@ -28,7 +28,7 @@ const usePhoneNumber = (): {
   const valid = useMemo((): boolean => isIntlFormat(trimmed) || isAuFormat(trimmed), [trimmed]);
 
   const formatted = useMemo(
-    () => (isIntlFormat(trimmed) ? trimmed : `+${COUNTRY_CODE_AU}${trimmed}`),
+    () => (isIntlFormat(trimmed) ? trimmed : `+${COUNTRY_CODE_AU}${trimmed.replace(/^0+/, '')}`),
     [trimmed]
   );
 
