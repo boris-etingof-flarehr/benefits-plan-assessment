@@ -8,9 +8,8 @@ import useFlareAppIdentity from './use-flare-app-identity';
 
 type Props = {
   onComplete: () => void;
-  onAbandon: () => void;
 };
-const Index: FunctionalComponent<Props> = ({ onComplete, onAbandon }) => {
+const Index: FunctionalComponent<Props> = ({ onComplete }) => {
   const { flareAppIdentity } = useContext(AppContext);
   const { signUp, verifyOtp, resendOtp } = useFlareAppIdentity();
 
@@ -30,7 +29,7 @@ const Index: FunctionalComponent<Props> = ({ onComplete, onAbandon }) => {
           onVerify={verifyOtp}
           onResendOtp={resendOtp}
           onSuccess={onComplete}
-          onDecline={onAbandon}
+          onDecline={onComplete}
         />
       )}
     </>

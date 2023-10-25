@@ -27,9 +27,6 @@ const Screen: FunctionalComponent = () => {
       return (
         <FlareAppIdentity
           onComplete={goNext}
-          onAbandon={(): void => {
-            // TODO: What to do if user declined the join
-          }}
         />
       );
     case 'MarketplaceOffer':

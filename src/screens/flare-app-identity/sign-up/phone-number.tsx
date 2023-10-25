@@ -34,6 +34,10 @@ const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
       .catch(setError);
   }, [phoneNumber, onSubmit, trace]);
 
+  const handleDecline = useCallback(() => {
+    return trace('sign-up-declined').then(onDecline);
+  }, [onDecline, trace]);
+
   return (
     <TopBottomLayout>
       <TopBottomLayout.Top>
@@ -79,10 +83,8 @@ const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
           </Button>
 
           <Button
-            class="invisible mt-5 md:w-full bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300"
-            onClickPromise={async (): Promise<void> => {
-              onDecline();
-            }}
+            class="mt-5 md:w-full bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300"
+            onClickPromise={handleDecline}
           >
             No thanks
           </Button>

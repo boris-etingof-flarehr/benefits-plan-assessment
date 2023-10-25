@@ -1,6 +1,6 @@
 import { BackendApi } from '../services/backend-api';
 
-type EventType = 'sign-up-viewed' | 'sign-up-completed';
+type EventType = 'sign-up-viewed' | 'sign-up-completed' | 'sign-up-declined';
 
 const traceSignUpViewed = (): Promise<void> =>
   BackendApi.command({
@@ -24,12 +24,26 @@ const traceSignUpCompleted = (): Promise<void> =>
     }
   });
 
+const traceSignUpDeclined = (): Promise<void> =>
+  BackendApi.command({
+    eventType: 'OfferProgressed',
+    offerName: 'Membership',
+    data: {
+      accepted: false,
+      featureName: '',
+      treatmentName: '',
+      template: 'Eoi'
+    }
+  });
+
 const trace = (event: EventType): Promise<void> => {
   switch (event) {
     case 'sign-up-viewed':
       return traceSignUpViewed();
     case 'sign-up-completed':
       return traceSignUpCompleted();
+    case 'sign-up-declined':
+      return traceSignUpDeclined();
   }
 };
 
