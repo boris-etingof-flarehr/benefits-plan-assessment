@@ -42,11 +42,7 @@ const handleError = (ex: any): Promise<void> => {
   };
 
   const errorStr = FlareAppIdentityErrorCode[response?.error];
-
-  throw (
-    errorStr ??
-    'Sorry, your account is currently locked due to too many attempts. Please try again later.'
-  );
+  throw errorStr ?? 'Sorry, we are currently experiencing some issues. Please try again later.';
 };
 
 export default useFlareAppIdentity;
