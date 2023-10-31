@@ -2,7 +2,6 @@ import { FunctionalComponent } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 
 import Button from '../../../components/button';
-import CheckBox from '../../../components/check-box';
 import TextField from '../../../components/text-field';
 import Heading from '../../../components/typography/heading';
 import Title from '../../../components/typography/title';
@@ -18,7 +17,6 @@ type Props = {
 
 const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
   const { trace } = useTrace();
-  const [membership, setMembership] = useState(true);
   const [error, setError] = useState('');
   const { setPhoneNumber, phoneNumber } = usePhoneNumber();
 
@@ -58,25 +56,21 @@ const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
           />
           {error && <span className="text-xs text-rose-500">{error}</span>}
 
-          <CheckBox className="mt-5" value={membership} onChange={setMembership}>
-            <CheckBox.Label>
-              <span>
-                I have read and agree to Flare Benefits
-                <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
-                  {' Terms of Use '}
-                </a>
-                and
-                <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
-                  {' Privacy Policy'}
-                </a>
-                .
-              </span>
-            </CheckBox.Label>
-          </CheckBox>
+          <div className="mt-5 font-medium text-sm text-gray-900 text-center">
+            By creating your account you confirm you have read and agree to Flare Benefits{' '}
+            <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
+              {' Terms of Use '}
+            </a>
+            and
+            <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
+              {' Privacy Policy'}
+            </a>
+            .{' '}
+          </div>
 
           <Button
             class="mt-5 md:w-full"
-            disabled={!phoneNumber.valid || !membership}
+            disabled={!phoneNumber.valid}
             onClickPromise={handleSubmit}
           >
             Create account

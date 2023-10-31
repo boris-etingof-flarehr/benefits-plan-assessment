@@ -15,15 +15,15 @@ const Success: FunctionalComponent<Props> = ({ onContinue }) => {
     <TopBottomLayout>
       <TopBottomLayout.Top>
         <div className="h-16 w-16 flex items-center justify-center rounded-full bg-blue-50 text-primary-base">
-          <Check className= "h-7 w-7"/>
+          <Check className="h-7 w-7" />
         </div>
       </TopBottomLayout.Top>
       <TopBottomLayout.Bottom>
         <div className="mt-5 flex flex-col items-center gap-5 text-center">
           <Heading>You now have access to Flare Benefits</Heading>
           <Title>
-            We’ve sent an email with further instructions including how to download the Flare
-            Benefits app to your phone.
+            With your benefits account, you now have access to a range of exclusive benefits through
+            your workplace.
           </Title>
           <Button
             class="mt-5 w-full md:w-[240px]"
@@ -31,7 +31,7 @@ const Success: FunctionalComponent<Props> = ({ onContinue }) => {
               onContinue();
             }}
           >
-            Continue to Benefits
+            Set up your benefits
           </Button>
         </div>
       </TopBottomLayout.Bottom>

@@ -1,7 +1,7 @@
 import { FunctionalComponent } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 
-import introDesktopImg from '../assets/desktop/intro.jpg';
+import introDesktopImg from '../assets/desktop/intro.png';
 import Button from '../components/button';
 import { AppContext } from '../context/app-context';
 import TopBottomLayout from '../layouts/top-bottom-layout';
@@ -34,7 +34,7 @@ const Introduction: FunctionalComponent<Props> = (props) => {
   return (
     <TopBottomLayout>
       <TopBottomLayout.Top>
-        <img class="max-w-[15rem] w-full" src={introDesktopImg} />
+        <img class="max-w-[30rem] w-full" src={introDesktopImg} />
       </TopBottomLayout.Top>
       <TopBottomLayout.Bottom>
         <div>
@@ -92,7 +92,7 @@ const Introduction: FunctionalComponent<Props> = (props) => {
               props.onStepComplete();
             }}
           >
-            Set up your benefits
+            Continue
           </Button>
         </div>
       </TopBottomLayout.Bottom>
