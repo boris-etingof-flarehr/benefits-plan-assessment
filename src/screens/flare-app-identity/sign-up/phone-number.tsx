@@ -56,7 +56,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
           />
           {error && <span className="text-xs text-rose-500">{error}</span>}
 
-          <div className="mt-5 font-medium text-sm text-gray-900 text-center">
+          <span className="mt-5 font-medium text-sm text-gray-900 text-center">
             By creating your account you confirm you have read and agree to Flare Benefits{' '}
             <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
               {' Terms of Use '}
@@ -66,7 +66,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
               {' Privacy Policy'}
             </a>
             .{' '}
-          </div>
+          </span>
 
           <Button
             class="mt-5 md:w-full"
