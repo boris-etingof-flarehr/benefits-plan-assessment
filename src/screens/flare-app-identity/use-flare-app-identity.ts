@@ -38,10 +38,10 @@ enum FlareAppIdentityErrorCode {
 
 const handleError = (ex: any): Promise<void> => {
   const response = (ex as AxiosError)?.response?.data as {
-    error: keyof typeof FlareAppIdentityErrorCode;
+    code: keyof typeof FlareAppIdentityErrorCode;
   };
 
-  const errorStr = FlareAppIdentityErrorCode[response?.error];
+  const errorStr = FlareAppIdentityErrorCode[response?.code];
   throw errorStr ?? 'Sorry, we are currently experiencing some issues. Please try again later.';
 };
 

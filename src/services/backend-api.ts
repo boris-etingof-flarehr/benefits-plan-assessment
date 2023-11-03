@@ -60,7 +60,7 @@ enum ErrorCode {
 }
 
 const onError = (ex: AxiosError): void => {
-  if ((ex.response?.data as { error: keyof typeof ErrorCode })?.error === 'Auth_SessionExpired') {
+  if ((ex.response?.data as { code: keyof typeof ErrorCode })?.code === 'Auth_SessionExpired') {
     reloadEvent.dispatch();
   }
   throw ex;
