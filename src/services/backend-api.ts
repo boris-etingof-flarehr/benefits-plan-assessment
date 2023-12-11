@@ -5,15 +5,19 @@ import reloadEvent from '../utils/reload-event';
 
 export type InitResponse = {
   offers: MarketplaceOffer[];
-  employerName: string;
-  email: string;
   isComplete: boolean;
-  flareAppIdentity?: {
-    maskedMobileNumber: string;
-    workplaceLinked: boolean;
+  identity: {
+    email: string;
+    phoneNumber?: string;
+    maskedPhoneNumber?: string;
+    isRegistered: boolean;
+  };
+  workplace: {
+    employerName: string;
+    isLinkedWithIdentity: boolean;
   };
   featureFlags: {
-    flareAppIdentity: boolean;
+    unifiedCustomerRegistration: boolean;
   };
 };
 

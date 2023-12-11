@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'preact/hooks';
 
 import {
+  CustomerIdentity,
   FeatureFlags,
-  FlareAppIdentity,
   MarketplaceOffer,
-  MarketplaceOfferName
+  MarketplaceOfferName,
+  Workplace
 } from '../app.model';
 
 type AppScreen =
@@ -27,7 +28,8 @@ export function useNavigation(
   offers: MarketplaceOffer[],
   isComplete: boolean,
   isAppEnabled: boolean,
-  flareAppIdentity: FlareAppIdentity,
+  identity: CustomerIdentity,
+  workplace: Workplace,
   featureFlags: FeatureFlags
 ): {
   current: AppScreen;
@@ -37,7 +39,8 @@ export function useNavigation(
     offers,
     isComplete,
     isAppEnabled,
-    flareAppIdentity,
+    identity,
+    workplace,
     featureFlags
   );
   const [currentScreen, setCurrentScreen] = useState<InternalAppScreenName>(screenNames[0]);
@@ -64,6 +67,10 @@ export function useNavigation(
     }
   };
 
+  if (!screenNames.some((o) => o === currentScreen)) {
+    setCurrentScreen(screenNames[0]);
+  }
+
   return {
     current,
     goNext
@@ -74,23 +81,38 @@ function getScreenNames(
   offers: MarketplaceOffer[],
   isComplete: boolean,
   isAppEnabled: boolean,
-  flareAppIdentity: FlareAppIdentity,
+  identity: CustomerIdentity,
+  workplace: Workplace,
   featureFlags: FeatureFlags
 ): InternalAppScreenName[] {
+  const { unifiedCustomerRegistration: isUnifiedCustomerRegistrationEnabled } = featureFlags;
+
   const finalScreen: InternalAppScreenName = isAppEnabled ? 'SummaryApp' : 'SummaryGeneric';
 
+  if (isComplete) {
+    return [finalScreen];
+  }
+
+  if (!isUnifiedCustomerRegistrationEnabled) {
+    return ['Introduction', ...offers.map((o) => o.name), finalScreen];
+  }
+
   switch (true) {
-    case isComplete:
-      return [finalScreen];
-    case featureFlags.flareAppIdentity &&
-      flareAppIdentity.status === 'RegisteredAndWorkplaceLinked':
+    case workplace.linkingStatus === 'PreviouslyLinked':
       return ['Introduction', 'SummaryGeneric'];
-    case featureFlags.flareAppIdentity && flareAppIdentity.status === 'Unregistered':
-      return ['Introduction', 'FlareAppIdentity', ...offers.map((o) => o.name), finalScreen];
-    case featureFlags.flareAppIdentity &&
-      flareAppIdentity.status === 'RegisteredButNotWorkplaceLinked':
-      return ['Introduction', 'FlareAppIdentity', finalScreen];
+    case identity.registrationStatus === 'Unregistered':
+      return ['Introduction', 'FlareAppIdentity'];
+    case identity.registrationStatus === 'PreviouslyRegistered' &&
+      workplace.linkingStatus === 'Unlinked':
+      return ['Introduction', 'FlareAppIdentity'];
+    case identity.registrationStatus === 'PreviouslyRegistered' &&
+      workplace.linkingStatus === 'NewlyLinked':
+      return [finalScreen];
+    case identity.registrationStatus === 'NewlyRegistered':
+      return [...offers.map((o) => o.name), finalScreen];
+    case identity.registrationStatus === 'RegistrationAbandoned':
+      return [finalScreen];
     default:
-      return ['Introduction', ...offers.map((o) => o.name), finalScreen];
+      return [];
   }
 }

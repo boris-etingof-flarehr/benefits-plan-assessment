@@ -1,5 +1,5 @@
 import { FunctionalComponent } from 'preact';
-import { useContext } from 'preact/hooks';
+import { useCallback, useContext } from 'preact/hooks';
 
 import { AppContext } from '../context/app-context';
 import { useNavigation } from '../hooks/use-navigation';
@@ -10,25 +10,37 @@ import SummaryApp from './summary-app';
 import SummaryGeneric from './summary-generic';
 
 const Screen: FunctionalComponent = () => {
-  const { employerName, email, offers, isComplete, isAppEnabled, flareAppIdentity, featureFlags } =
-    useContext(AppContext);
+  const {
+    offers,
+    isComplete,
+    isAppEnabled,
+    identity,
+    workplace,
+    featureFlags,
+    updateIdentity
+  } = useContext(AppContext);
   const { current, goNext } = useNavigation(
     offers,
     isComplete,
     isAppEnabled,
-    flareAppIdentity,
+    identity,
+    workplace,
     featureFlags
   );
 
+  const onSuccess = useCallback((): void => {
+    updateIdentity(true);
+  }, [updateIdentity]);
+
+  const onDecline = useCallback((): void => {
+    updateIdentity(false);
+  }, [updateIdentity]);
+
   switch (current.screenName) {
     case 'Introduction':
-      return <Introduction employerName={employerName} onStepComplete={goNext} />;
+      return <Introduction employerName={workplace.employerName} onStepComplete={goNext} />;
     case 'FlareAppIdentity':
-      return (
-        <FlareAppIdentity
-          onComplete={goNext}
-        />
-      );
+      return <FlareAppIdentity onSuccess={onSuccess} onDecline={onDecline} />;
     case 'MarketplaceOffer':
       return (
         <MarketPlaceOffer
@@ -41,7 +53,7 @@ const Screen: FunctionalComponent = () => {
         />
       );
     case 'SummaryApp':
-      return <SummaryApp email={email} />;
+      return <SummaryApp />;
     case 'SummaryGeneric':
       return <SummaryGeneric />;
     default:

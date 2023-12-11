@@ -1,28 +1,35 @@
 export type AppContextData = {
   offers: MarketplaceOffer[];
-  employerName: string;
-  email: string;
   isComplete: boolean;
   isAppEnabled: boolean;
-  flareAppIdentity: FlareAppIdentity;
+  identity: CustomerIdentity;
+  workplace: Workplace;
   featureFlags: FeatureFlags;
+  updateIdentity: (_authenticated: boolean) => void;
 };
 
 export type FeatureFlags = {
-  flareAppIdentity: boolean;
+  unifiedCustomerRegistration: boolean;
 };
 
-export type FlareAppIdentity =
-  | {
-      status: 'Unregistered';
-    }
-  | {
-      status: 'RegisteredButNotWorkplaceLinked';
-      maskedPhoneNumber: string;
-    }
-  | {
-      status: 'RegisteredAndWorkplaceLinked';
-    };
+export type WorkplaceLinkingStatus = 'Unlinked' | 'PreviouslyLinked' | 'NewlyLinked';
+
+export type Workplace = {
+  employerName: string;
+  linkingStatus: WorkplaceLinkingStatus;
+};
+
+export type CustomerRegistrationStatus =
+  | 'Unregistered'
+  | 'PreviouslyRegistered'
+  | 'NewlyRegistered'
+  | 'RegistrationAbandoned';
+
+export type CustomerIdentity = {
+  email: string;
+  phoneNumber: string;
+  registrationStatus: CustomerRegistrationStatus;
+};
 
 export type MarketplaceOfferName = string;
 

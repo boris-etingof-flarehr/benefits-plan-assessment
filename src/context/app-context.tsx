@@ -2,18 +2,23 @@ import { createContext } from 'preact';
 
 import { AppContextData } from '../app.model';
 
-const defaultAppContext: AppContextData = {
+export const defaultAppContext: AppContextData = {
   offers: [],
-  employerName: '',
-  email: '',
   isComplete: false,
   isAppEnabled: false,
-  flareAppIdentity: {
-    status: 'Unregistered'
+  identity: {
+    email: '',
+    phoneNumber: '',
+    registrationStatus: 'Unregistered'
+  },
+  workplace:{
+    employerName: '',
+    linkingStatus: 'Unlinked'
   },
   featureFlags: {
-    flareAppIdentity: false
-  }
+    unifiedCustomerRegistration: false
+  },
+  updateIdentity: (_authenticated: boolean) => ({})
 };
 
 export const AppContext = createContext<AppContextData>(defaultAppContext);

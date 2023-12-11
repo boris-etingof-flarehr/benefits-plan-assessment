@@ -12,16 +12,15 @@ const maskString = (str: string): string => {
   return mask.replace(/#/g, () => str[i++] ?? '').trim();
 };
 
-const usePhoneNumber = (): {
+const usePhoneNumber = (initialPhoneNumber?: string): {
   phoneNumber: {
     valid: boolean;
     formatted: string;
     masked: string;
   };
-  // eslint-disable-next-line no-unused-vars
-  setPhoneNumber: (phoneNumber: string) => void;
+  setPhoneNumber: (_phoneNumber: string) => void;
 } => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber??'');
 
   const trimmed = useMemo(() => trim(phoneNumber), [phoneNumber]);
 

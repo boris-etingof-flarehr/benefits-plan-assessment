@@ -2,36 +2,29 @@ import { FunctionalComponent } from 'preact';
 import { useContext } from 'preact/hooks';
 
 import { AppContext } from '../../context/app-context';
-import SignIn from './sign-in';
-import SignUp from './sign-up';
+import SignInOrSignUp from './sign-up';
 import useFlareAppIdentity from './use-flare-app-identity';
 
 type Props = {
-  onComplete: () => void;
+  onSuccess: () => void;
+  onDecline: () => void;
 };
-const Index: FunctionalComponent<Props> = ({ onComplete }) => {
-  const { flareAppIdentity } = useContext(AppContext);
+const Index: FunctionalComponent<Props> = ({ onSuccess, onDecline }) => {
+  const {
+    identity: { phoneNumber }
+  } = useContext(AppContext);
   const { signUp, verifyOtp, resendOtp } = useFlareAppIdentity();
 
   return (
     <>
-      {flareAppIdentity?.status === 'RegisteredButNotWorkplaceLinked' && (
-        <SignIn
-          phoneNumber={flareAppIdentity.maskedPhoneNumber}
-          onVerify={verifyOtp}
-          onResendOtp={resendOtp}
-          onSuccess={onComplete}
-        />
-      )}
-      {flareAppIdentity?.status === 'Unregistered' && (
-        <SignUp
-          onSignUp={signUp}
-          onVerify={verifyOtp}
-          onResendOtp={resendOtp}
-          onSuccess={onComplete}
-          onDecline={onComplete}
-        />
-      )}
+      <SignInOrSignUp
+        phoneNumber={phoneNumber}
+        onSignUp={signUp}
+        onVerify={verifyOtp}
+        onResendOtp={resendOtp}
+        onSuccess={onSuccess}
+        onDecline={onDecline}
+      />
     </>
   );
 };

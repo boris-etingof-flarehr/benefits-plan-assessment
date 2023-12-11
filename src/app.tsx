@@ -1,9 +1,15 @@
 import { FunctionalComponent } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'preact/hooks';
 
-import { AppContextData, FlareAppIdentity } from './app.model';
+import {
+  AppContextData,
+  CustomerIdentity,
+  CustomerRegistrationStatus,
+  Workplace,
+  WorkplaceLinkingStatus
+} from './app.model';
 import Loader from './components/loader';
-import { AppContext } from './context/app-context';
+import { AppContext, defaultAppContext } from './context/app-context';
 import css from './index.css';
 import Screen from './screens';
 import { BackendApi, InitResponse } from './services/backend-api';
@@ -41,12 +47,47 @@ const App: FunctionalComponent<Props> = (props) => {
     setAppContext(getAppContextFromInitResponse(response));
   };
 
+  const updateIdentity = useCallback(
+    (authenticated: boolean): void => {
+      if (!appContext) {
+        return;
+      }
+
+      const { identity, workplace } = appContext;
+
+      const newRegistrationStatus = authenticated
+        ? identity.registrationStatus === 'Unregistered'
+          ? 'NewlyRegistered'
+          : identity.registrationStatus
+        : 'RegistrationAbandoned';
+
+      const newWorkplaceLinkingStatus = authenticated
+        ? workplace.linkingStatus === 'Unlinked'
+          ? 'NewlyLinked'
+          : workplace.linkingStatus
+        : 'Unlinked';
+
+      setAppContext({
+        ...appContext,
+        identity: {
+          ...identity,
+          registrationStatus: newRegistrationStatus
+        },
+        workplace: {
+          ...workplace,
+          linkingStatus: newWorkplaceLinkingStatus
+        }
+      });
+    },
+    [appContext]
+  );
+
   return (
     <>
       <style>{css.toString()}</style>
       <div key={renderKey} class="font-inter pt-6 pb-8 md:py-24 px-px">
         {appContext ? (
-          <AppContext.Provider value={appContext}>
+          <AppContext.Provider value={{ ...appContext, updateIdentity }}>
             <Screen />
           </AppContext.Provider>
         ) : (
@@ -64,19 +105,31 @@ const App: FunctionalComponent<Props> = (props) => {
 const getAppContextFromInitResponse = (initResponse: InitResponse): AppContextData => {
   const isAppEnabled = initResponse.offers.some((offer) => offer.name === 'Perks');
 
-  const flareAppIdentity: FlareAppIdentity = !initResponse.flareAppIdentity
-    ? {
-        status: 'Unregistered'
-      }
-    : initResponse.flareAppIdentity.workplaceLinked
-    ? {
-        status: 'RegisteredAndWorkplaceLinked'
-      }
-    : {
-        status: 'RegisteredButNotWorkplaceLinked',
-        maskedPhoneNumber: initResponse.flareAppIdentity.maskedMobileNumber
-      };
-  return { ...initResponse, isAppEnabled, flareAppIdentity };
+  const registrationStatus: CustomerRegistrationStatus = initResponse.identity.isRegistered
+    ? 'PreviouslyRegistered'
+    : 'Unregistered';
+
+  const identity: CustomerIdentity = {
+    email: initResponse.identity.email,
+    phoneNumber: initResponse.identity.phoneNumber ?? '',
+    registrationStatus
+  };
+
+  const workplaceLinkingStatus: WorkplaceLinkingStatus = initResponse.workplace.isLinkedWithIdentity
+    ? 'PreviouslyLinked'
+    : 'Unlinked';
+
+  const workplace: Workplace = {
+    employerName: initResponse.workplace.employerName,
+    linkingStatus: workplaceLinkingStatus
+  };
+  return {
+    ...defaultAppContext,
+    ...initResponse,
+    isAppEnabled,
+    identity,
+    workplace
+  };
 };
 
 export default App;

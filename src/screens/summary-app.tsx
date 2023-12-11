@@ -1,31 +1,30 @@
 import { FunctionalComponent } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useContext, useEffect } from 'preact/hooks';
 
+import { CustomerIdentity } from '../app.model';
 import desktopImg from '../assets/desktop/get-app.jpg';
 import AppleIcon from '../assets/icons/apple.svg';
 import GooglePlayIcon from '../assets/icons/google-play.svg';
 import mobileImg from '../assets/mobile/get-app-mobile.jpg';
 import Button from '../components/button';
+import { AppContext } from '../context/app-context';
 import { BenefitsOnboardingCustomElementName } from '../index';
 import LeftRightLayout from '../layouts/left-right-layout';
 import { BackendApi } from '../services/backend-api';
 
-interface Props {
-  email: string;
-}
-
-const SummaryApp: FunctionalComponent<Props> = (props) => {
+const SummaryApp: FunctionalComponent = () => {
   useEffect(() => {
     (async (): Promise<void> => {
       await BackendApi.command({ eventType: 'SummaryViewed', summaryVariant: 'app' });
     })();
   }, []);
 
+  const { identity } = useContext(AppContext);
+
   const content = {
+    ...getContentTitleAndDescription(identity),
     imageUrl: desktopImg,
-    mobileImageUrl: mobileImg,
-    title: 'Check your email',
-    description: `We’ve sent an email to ${props.email} with instructions on how to download and activate the Flare App and Card.`
+    mobileImageUrl: mobileImg
   };
 
   const primaryButton = {
@@ -74,6 +73,29 @@ const SummaryApp: FunctionalComponent<Props> = (props) => {
       </LeftRightLayout.Right>
     </LeftRightLayout>
   );
+};
+
+const getContentTitleAndDescription = (
+  identity: CustomerIdentity
+): { title: string; description: string } => {
+  
+  switch (identity.registrationStatus) {
+    case 'RegistrationAbandoned':
+      return {
+        title: 'Join your workplace',
+        description: `We’ve sent an email to ${identity.email} with instructions on how join your workplace. This will enable you to access all your workplace benefits through the Flare app in the future.`
+      };
+    case 'NewlyRegistered':
+      return {
+        title: 'Join your workplace’s benefits program',
+        description: `We’ve sent an email to ${identity.email} with instructions on how to download the Flare app - where your company’s benefits live.`
+      };
+    default:
+      return {
+        title: 'Check your email',
+        description: `We’ve sent an email to ${identity.email} with instructions on how to download and activate the Flare App and Card.`
+      };
+  }
 };
 
 export default SummaryApp;

@@ -10,15 +10,15 @@ import TopBottomLayout from '../../../layouts/top-bottom-layout';
 import usePhoneNumber from '../use-phone-number';
 
 type Props = {
-  // eslint-disable-next-line no-unused-vars
-  onSubmit: (phoneNumber: { formatted: string; masked: string }) => Promise<void>;
+  phoneNumber?: string;
+  onSubmit: (_phoneNumber: { formatted: string; masked: string }) => Promise<void>;
   onDecline: () => void;
 };
 
-const PhoneNumber: FunctionalComponent<Props> = ({ onSubmit, onDecline }) => {
+const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNumber, onSubmit, onDecline }) => {
   const { trace } = useTrace();
   const [error, setError] = useState('');
-  const { setPhoneNumber, phoneNumber } = usePhoneNumber();
+  const { setPhoneNumber, phoneNumber } = usePhoneNumber(prefilledPhoneNumber);
 
   useEffect(() => {
     trace('sign-up-viewed');

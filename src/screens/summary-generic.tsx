@@ -16,14 +16,14 @@ const SummaryGeneric: FunctionalComponent = () => {
     })();
   }, []);
 
-  const { flareAppIdentity } = useContext(AppContext);
+  const { workplace } = useContext(AppContext);
 
   const content = {
     imageUrl: desktopImg,
     mobileImageUrl: mobileImg,
     title: "You're all set!",
     description:
-      flareAppIdentity.status === 'RegisteredAndWorkplaceLinked'
+      workplace.linkingStatus === 'PreviouslyLinked'
         ? 'You’ve already connected this employer with your Flare Benefits account. Simply continue and review the details you have provided to complete your onboarding.'
         : 'Simply continue and review the details you have provided to complete your onboarding.'
   };

@@ -17,7 +17,7 @@ const Introduction: FunctionalComponent<Props> = (props) => {
   const [membership, setMembership] = useState(true);
 
   useEffect(() => {
-    if (!featureFlags.flareAppIdentity) {
+    if (!featureFlags.unifiedCustomerRegistration) {
       (async (): Promise<void> => {
         await BackendApi.command({
           eventType: 'OfferViewed',
@@ -47,7 +47,7 @@ const Introduction: FunctionalComponent<Props> = (props) => {
             weekly grocery shop and more.
           </p>
 
-          {!featureFlags.flareAppIdentity && (
+          {!featureFlags.unifiedCustomerRegistration && (
             <div class="flex items-center text-left mt-6">
               <input
                 class="accent-primary-base h-4 w-4"
@@ -76,7 +76,7 @@ const Introduction: FunctionalComponent<Props> = (props) => {
             class="mt-8"
             onClickPromise={async (): Promise<void> => {
               await BackendApi.command({ eventType: 'Started' });
-              if (!featureFlags.flareAppIdentity) {
+              if (!featureFlags.unifiedCustomerRegistration) {
                 await BackendApi.command({
                   eventType: 'OfferProgressed',
                   offerName: 'Membership',
