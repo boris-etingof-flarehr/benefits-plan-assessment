@@ -59,7 +59,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
           <div>
             <span className="mt-5 font-medium text-sm text-gray-900 text-center">
               By creating your account you confirm you have read and agree to Flare Benefits{' '}
-              <a href="https://www.flarehr.com/privacy-policy/" target="_blank" rel="noreferrer">
+              <a href="https://www.flarehr.com/flare-app-terms-and-conditions/" target="_blank" rel="noreferrer">
                 {' Terms of Use '}
               </a>
               and
