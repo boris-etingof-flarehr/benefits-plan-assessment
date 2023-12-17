@@ -9,7 +9,6 @@ export type InitResponse = {
   identity: {
     email: string;
     phoneNumber?: string;
-    maskedPhoneNumber?: string;
     isRegistered: boolean;
   };
   workplace: {
@@ -46,6 +45,11 @@ type Started = {
   eventType: 'Started';
 };
 
+type CustomerRegistrationCompleted = {
+  eventType: 'CustomerRegistrationCompleted';
+  isRegistered: boolean;
+}
+
 type Completed = {
   eventType: 'Completed';
 };
@@ -55,7 +59,7 @@ type SummaryViewed = {
   summaryVariant: 'app' | 'generic';
 };
 
-type CommandDto = Started | OfferViewed | OfferProgressed | SummaryViewed | Completed;
+type CommandDto = Started | CustomerRegistrationCompleted | OfferViewed | OfferProgressed | SummaryViewed | Completed;
 
 // eslint-disable-next-line no-unused-vars
 enum ErrorCode {
@@ -80,9 +84,9 @@ export class BackendApi {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         // Uncomment below for local dev against local backend
-        // 'x-partner-id': '123',
-        // 'x-account-id': '83A9F426-8E73-4781-B6CA-ABC374510C54',
-        // 'x-profile-id': 'AP-C14DF031-A764-40B2-87C0-77884F4BD303'
+          // 'x-partner-id': '123',
+          // 'x-account-id': '83A9F426-8E73-4781-B6CA-ABC374510C54',
+          // 'x-profile-id': 'AP-C14DF031-A764-40B2-87C0-77884F4BD303'
       }
     });
     this.axiosInstance.interceptors.response.use((res) => res, onError);

@@ -12,8 +12,8 @@ const traceSignUpViewed = (): Promise<void> =>
     }
   });
 
-const traceSignUpCompleted = (): Promise<void> =>
-  BackendApi.command({
+const traceSignUpCompleted = async (): Promise<void> => {
+  await BackendApi.command({
     eventType: 'OfferProgressed',
     offerName: 'Membership',
     data: {
@@ -24,8 +24,19 @@ const traceSignUpCompleted = (): Promise<void> =>
     }
   });
 
-const traceSignUpDeclined = (): Promise<void> =>
-  BackendApi.command({
+  await BackendApi.command({
+    eventType: 'CustomerRegistrationCompleted',
+    isRegistered: true
+  });
+};
+
+const traceSignUpDeclined = async (): Promise<void> => {
+  await BackendApi.command({
+    eventType: 'CustomerRegistrationCompleted',
+    isRegistered: false
+  });
+
+  await BackendApi.command({
     eventType: 'OfferProgressed',
     offerName: 'Membership',
     data: {
@@ -35,6 +46,7 @@ const traceSignUpDeclined = (): Promise<void> =>
       template: 'Eoi'
     }
   });
+};
 
 const trace = (event: EventType): Promise<void> => {
   switch (event) {
