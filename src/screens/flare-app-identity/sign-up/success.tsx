@@ -20,10 +20,9 @@ const Success: FunctionalComponent<Props> = ({ onContinue }) => {
       </TopBottomLayout.Top>
       <TopBottomLayout.Bottom>
         <div className="mt-5 flex flex-col items-center gap-5 text-center">
-          <Heading>You now have access to Flare Benefits</Heading>
+          <Heading>You’ve joined your workplace benefits program</Heading>
           <Title>
-            With your benefits account, you now have access to a range of exclusive benefits through
-            your workplace.
+          With your new Flare Benefits account, you now have access to a range of exclusive benefits available through your workplace.
           </Title>
           <Button
             class="mt-5 w-full md:w-[240px]"

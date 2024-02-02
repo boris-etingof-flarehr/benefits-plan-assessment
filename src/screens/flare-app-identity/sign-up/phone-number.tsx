@@ -40,8 +40,10 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
     <TopBottomLayout>
       <TopBottomLayout.Top>
         <div className="flex flex-col gap-5">
-          <Heading>Create your Flare Benefits account</Heading>
-          <Title>Confirm your mobile number below to create your Flare Benefits account</Title>
+          <Heading>Join your workplace benefits program</Heading>
+          <Title>
+            Enter your <b>personal</b> mobile number to finish setting up your Flare Benefits account linked to your workplace
+          </Title>
         </div>
       </TopBottomLayout.Top>
       <TopBottomLayout.Bottom>
@@ -56,8 +58,8 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
           />
           {error && <span className="text-xs text-rose-500">{error}</span>}
 
-          <div>
-            <span className="mt-5 font-medium text-sm text-gray-900 text-center">
+          <div className='mt-5'>
+            <span className="font-medium text-sm text-gray-900 text-center">
               By creating your account you confirm you have read and agree to Flare Benefits{' '}
               <a href="https://www.flarehr.com/flare-app-terms-and-conditions/" target="_blank" rel="noreferrer">
                 {' Terms of Use '}
@@ -74,14 +76,14 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
             disabled={!phoneNumber.valid}
             onClickPromise={handleSubmit}
           >
-            Create account
+            Join your workplace
           </Button>
 
           <Button
             class="mt-5 md:w-full bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300"
             onClickPromise={handleDecline}
           >
-            No thanks
+            Not now
           </Button>
         </div>
       </TopBottomLayout.Bottom>
