@@ -24,10 +24,23 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
     trace('sign-up-viewed');
   }, []);
 
-  const handleSubmit = useCallback(() => {
+  const handleFocusIn = useCallback(() => {
     setError('');
+  }, []);
 
-    return onSubmit(phoneNumber)
+  const handleFocusOut = useCallback(() => {
+    const errorString = phoneNumber.valid
+      ? ''
+      : 'Please enter a valid Australian mobile number beginning with 04.';
+    setError(errorString);
+  }, [phoneNumber.valid]);
+
+  const handleSubmit = useCallback(async () => {
+    if (!phoneNumber.valid) {
+      return;
+    }
+
+    await onSubmit(phoneNumber)
       .then(() => trace('sign-up-completed'))
       .catch(setError);
   }, [phoneNumber, onSubmit, trace]);
@@ -53,12 +66,14 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
             inputMode="numeric"
             className="mt-1 mb-1 w-full"
             label="Australian Mobile Number"
-            value={phoneNumber.masked}
             onChange={setPhoneNumber}
+            onfocusin={handleFocusIn}
+            onfocusout={handleFocusOut}
           />
-          {error && <span className="text-xs text-rose-500">{error}</span>}
-
-          <div className='mt-5'>
+          <div className="h-8 leading-none">
+            <span className="text-xs text-rose-500">{error}</span>
+          </div>
+          <div>
             <span className="font-medium text-sm text-gray-900 text-center">
               By creating your account you confirm you have read and agree to Flare Benefits{' '}
               <a href="https://www.flarehr.com/flare-app-terms-and-conditions/" target="_blank" rel="noreferrer">
@@ -71,11 +86,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
               .{' '}
             </span>
           </div>
-          <Button
-            class="mt-5 md:w-full"
-            disabled={!phoneNumber.valid}
-            onClickPromise={handleSubmit}
-          >
+          <Button class="mt-5 md:w-full" onClickPromise={handleSubmit}>
             Join your workplace
           </Button>
 

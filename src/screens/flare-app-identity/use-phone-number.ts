@@ -1,11 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
 
-const AuNumberPattern = /^04\d{1,14}/;
-const IntlNumberPattern = /^\+[1-9]\d{1,14}/;
-const COUNTRY_CODE_AU = '61';
 const mask = '#### ### ### ### ### ### ###';
-const isIntlFormat = (str: string): boolean => IntlNumberPattern.test(str);
-const isAuFormat = (str: string): boolean => AuNumberPattern.test(str);
 const trim = (str: string): string => str.replace(/ /g, '');
 const maskString = (str: string): string => {
   let i = 0;
@@ -24,12 +19,24 @@ const usePhoneNumber = (initialPhoneNumber?: string): {
 
   const trimmed = useMemo(() => trim(phoneNumber), [phoneNumber]);
 
-  const valid = useMemo((): boolean => isIntlFormat(trimmed) || isAuFormat(trimmed), [trimmed]);
-
-  const formatted = useMemo(
-    () => (isIntlFormat(trimmed) ? trimmed : `+${COUNTRY_CODE_AU}${trimmed.replace(/^0+/, '')}`),
+  const valid = useMemo(
+    (): boolean =>
+      (trimmed.startsWith('04') && trimmed.length === 10) ||
+      (trimmed.startsWith('614') && trimmed.length === 11) ||
+      (trimmed.startsWith('+614') && trimmed.length === 12) ||
+      /^\+642\d{7,9}$/.test(trimmed),
     [trimmed]
   );
+
+  const formatted = useMemo(() => {
+    if (trimmed.startsWith('04')) {
+      return `+61${trimmed.replace(/^0+/, '')}`;
+    }
+    if (trimmed.startsWith('614')) {
+      return `+${trimmed}`;
+    }
+    return trimmed;
+  }, [trimmed]);
 
   const masked = useMemo(() => maskString(trimmed), [trimmed]);
 
