@@ -10,6 +10,7 @@ const maskString = (str: string): string => {
 const usePhoneNumber = (initialPhoneNumber?: string): {
   phoneNumber: {
     valid: boolean;
+    original: string;
     formatted: string;
     masked: string;
   };
@@ -44,6 +45,7 @@ const usePhoneNumber = (initialPhoneNumber?: string): {
     setPhoneNumber,
     phoneNumber: {
       valid,
+      original: phoneNumber,
       formatted,
       masked
     }

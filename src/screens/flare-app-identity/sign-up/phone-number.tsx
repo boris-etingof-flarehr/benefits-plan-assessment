@@ -66,6 +66,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
             inputMode="numeric"
             className="mt-1 mb-1 w-full"
             label="Australian Mobile Number"
+            value={phoneNumber.original}
             onChange={setPhoneNumber}
             onfocusin={handleFocusIn}
             onfocusout={handleFocusOut}
