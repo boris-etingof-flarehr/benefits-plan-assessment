@@ -3,17 +3,22 @@ import { AxiosError } from 'axios';
 
 import { BackendApi } from '../../services/backend-api';
 
+const source = 'Onboarding';
+const channel = 'onboarding';
+
 const useFlareAppIdentity = (): {
   signUp: (mobileNumber: string) => Promise<void>;
   verifyOtp: (otp: string) => Promise<void>;
   resendOtp: () => Promise<void>;
 } => {
   const signUp = async (mobileNumber: string): Promise<void> => {
-    await BackendApi.GetClient().post('auth/signUp', { mobileNumber }).catch(handleError);
+    await BackendApi.GetClient()
+      .post('auth/signUp', { mobileNumber, source, channel })
+      .catch(handleError);
   };
 
   const verifyOtp = async (otp: string): Promise<void> => {
-    await BackendApi.GetClient().post('auth/verify', { otp }).catch(handleError);
+    await BackendApi.GetClient().post('auth/verify', { otp, source, channel }).catch(handleError);
   };
 
   const resendOtp = async (): Promise<void> => {
