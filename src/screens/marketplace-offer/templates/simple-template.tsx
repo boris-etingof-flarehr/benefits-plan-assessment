@@ -75,7 +75,6 @@ const SimpleTemplate: FunctionalComponent<Props> = (props) => {
             enter="transition duration-700 ease-out md:transition-none"
             enterFrom="-translate-y-6"
             enterTo="translate-y-0"
-            class="-translate-y-6"
           >
             <img
               class="mt-4 max-w-full w-full mx-auto md:hidden"

@@ -10,7 +10,7 @@ import {
 } from './app.model';
 import Loader from './components/loader';
 import { AppContext, defaultAppContext } from './context/app-context';
-import css from './index.css';
+import css from './index.css?inline';
 import Screen from './screens';
 import { BackendApi, InitResponse } from './services/backend-api';
 import reloadHelper from './utils/reload-event';

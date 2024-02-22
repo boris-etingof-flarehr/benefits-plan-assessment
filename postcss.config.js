@@ -1,12 +1,16 @@
+import autoprefixer from 'autoprefixer'
+import cssnano from 'cssnano'
+import tailwindcss from 'tailwindcss'
+
 const plugins = [
-  require('tailwindcss'),
-  require('autoprefixer')
+  tailwindcss,
+  autoprefixer
 ];
 
 if (process.env.NODE_ENV === 'production') {
-  plugins.push(require('cssnano'));
+  plugins.push(cssnano);
 }
 
-module.exports = {
+export default {
   plugins
 };

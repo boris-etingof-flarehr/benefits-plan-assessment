@@ -54,7 +54,7 @@ const Introduction: FunctionalComponent<Props> = (props) => {
                 type="checkbox"
                 name="membership"
                 checked={membership}
-                onChange={(e): void => setMembership((e.target as any)?.checked)}
+                onChange={(e): void => setMembership((e.target as HTMLInputElement)?.checked)}
               />
               <label class="font-medium text-sm text-gray-900 ml-3" for="membership">
                 <span>

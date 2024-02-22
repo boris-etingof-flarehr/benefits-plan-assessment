@@ -64,7 +64,6 @@ const EoiTemplate: FunctionalComponent<Props> = (props) => {
             enter="transition duration-700 ease-out md:transition-none"
             enterFrom="-translate-y-6"
             enterTo="translate-y-0"
-            class="-translate-y-6"
           >
             <img
               class="mt-4 max-w-full w-full mx-auto md:hidden"
@@ -101,7 +100,7 @@ const EoiTemplate: FunctionalComponent<Props> = (props) => {
                 <Button
                   class={
                     props.secondaryButton.class ??
-                    'bg-white hover:bg-gray-100 focus:ring-gray-200 border-0 shadow-none text-gray-700 border-gray-300'
+                    'bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300'
                   }
                   onClickPromise={(): Promise<void> => {
                     return handleButtonClick(false);

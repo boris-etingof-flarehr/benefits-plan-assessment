@@ -41,7 +41,7 @@ enum FlareAppIdentityErrorCode {
   Validation_InvalidPhoneNumber = 'Please enter a valid Australian mobile number beginning with 04.'
 }
 
-const handleError = (ex: any): Promise<void> => {
+const handleError = (ex: unknown): Promise<void> => {
   const response = (ex as AxiosError)?.response?.data as {
     code: keyof typeof FlareAppIdentityErrorCode;
   };

@@ -15,7 +15,6 @@ const LearnMorePanel: FunctionalComponent<Props> = (props) => {
       enter="transition duration-300 ease-out"
       enterFrom="opacity-0"
       enterTo="opacity-100"
-      class="opacity-0"
     >
       <div class="w-full border border-gray-200 rounded-lg shadow-sm p-4 pl-3 md:p-6 space-y-2">
         {props.items.map((item, index) => (

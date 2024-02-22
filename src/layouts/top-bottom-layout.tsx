@@ -17,7 +17,6 @@ const TopBottomLayout = ({ children }: Props) => {
       enter="transition duration-700 ease-out"
       enterFrom="opacity-0"
       enterTo="opacity-100"
-      class="opacity-0"
     >
       <div class="mt-20 md:mt-0 flex flex-col text-center items-center max-w-[40rem] mx-auto">
         <Transition
@@ -26,7 +25,6 @@ const TopBottomLayout = ({ children }: Props) => {
           enter="transition duration-700 ease-out md:transition-none"
           enterFrom="-translate-y-6"
           enterTo="translate-y-0"
-          class="-translate-y-6"
         >
           {top && <div class="flex items-center h-full">{top}</div>}
         </Transition>
@@ -36,7 +34,6 @@ const TopBottomLayout = ({ children }: Props) => {
           enter="transition delay-300 duration-[600ms] ease-out"
           enterFrom="opacity-0 -translate-y-6"
           enterTo="opacity-100 translate-y-0"
-          class="opacity-0 -translate-y-6"
         >
           {bottom && <div class="flex items-center h-full">{bottom}</div>}
         </Transition>
