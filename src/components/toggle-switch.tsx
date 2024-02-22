@@ -10,7 +10,7 @@ type Props = {
   className: string;
 };
 
-const SwitchComponent: FunctionalComponent<Props> = (props) => {
+const ToggleSwitch: FunctionalComponent<Props> = (props) => {
   const [checked, setChecked] = useState(props.value);
 
   const handleOnChange = useCallback(
@@ -45,4 +45,4 @@ const SwitchComponent: FunctionalComponent<Props> = (props) => {
   );
 };
 
-export default SwitchComponent;
+export default ToggleSwitch;
