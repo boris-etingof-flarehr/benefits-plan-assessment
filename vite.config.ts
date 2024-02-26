@@ -18,10 +18,9 @@ export default defineConfig({
     rollupOptions: {
       input: resolve(__dirname, 'src/index.ts'),
       output: {
-        format: 'es',
+        format: 'umd',
         dir: 'dist',
-        entryFileNames: 'benefits-onboarding.js',
-        manualChunks: {}
+        entryFileNames: 'benefits-onboarding.js'
       }
     }
   }
