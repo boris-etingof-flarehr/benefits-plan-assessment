@@ -1,4 +1,4 @@
-const eventName = crypto.randomUUID();
+const eventName = crypto.randomUUID ? crypto.randomUUID(): crypto.getRandomValues(new Uint32Array(5)).join('-');
 
 type UnsubscribeFunction = () => void;
 
