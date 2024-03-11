@@ -1,5 +1,5 @@
 import preact from '@preact/preset-vite';
-import { resolve } from 'path';
+import path, { resolve } from 'path';
 import { defineConfig } from 'vite';
 import svgr from "vite-plugin-svgr";
 
@@ -9,9 +9,15 @@ export default defineConfig({
   server: {
     port: 8090
   },
-  plugins: [preact(), svgr({
-    include: '**/*.svg'
-  })],
+  plugins: [
+    preact(),
+    svgr({
+      include: '**/*.svg'
+    })
+  ],
+  resolve: {
+    alias: [{ find: '@app', replacement: path.resolve(__dirname, './src') }]
+  },
   build: {
     minify: 'terser',
     cssMinify: true,
