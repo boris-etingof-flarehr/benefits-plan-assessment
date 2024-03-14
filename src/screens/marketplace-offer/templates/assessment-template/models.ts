@@ -25,7 +25,5 @@ export type Option = {
 export type Question = SingleSelectQuestion;
 
 export type SubmissionResult = {
-  title: string;
-  description: string;
   imageUrl: string;
 };

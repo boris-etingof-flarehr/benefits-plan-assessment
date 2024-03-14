@@ -1,6 +1,42 @@
 import { BackendApi } from '../services/backend-api';
-
-type EventType = 'sign-up-viewed' | 'sign-up-completed' | 'sign-up-declined';
+type Event =
+  | 'sign-up-viewed'
+  | 'sign-up-completed'
+  | 'sign-up-declined'
+  | {
+      type: 'offer-viewed';
+      offerName: string;
+      data: {
+        featureName: string;
+        treatmentName: string;
+      };
+    }
+  | {
+      type: 'offer-accepted';
+      offerName: string;
+      data: { featureName: string; treatmentName: string } & (
+        | {
+            template: 'Eoi' | 'Simple';
+          }
+        | {
+            template: 'Assessment';
+            assessmentId: string;
+          }
+      );
+    }
+  | {
+      type: 'offer-declined';
+      offerName: string;
+      data: { featureName: string; treatmentName: string } & (
+        | {
+            template: 'Eoi' | 'Simple';
+          }
+        | {
+            template: 'Assessment';
+            assessmentId: string;
+          }
+      );
+    };
 
 const traceSignUpViewed = (): Promise<void> =>
   BackendApi.command({
@@ -48,15 +84,40 @@ const traceSignUpDeclined = async (): Promise<void> => {
   });
 };
 
-const trace = (event: EventType): Promise<void> => {
-  switch (event) {
-    case 'sign-up-viewed':
+const trace = (event: Event): Promise<void> => {
+  switch (true) {
+    case event === 'sign-up-viewed':
       return traceSignUpViewed();
-    case 'sign-up-completed':
+    case event === 'sign-up-completed':
       return traceSignUpCompleted();
-    case 'sign-up-declined':
+    case event === 'sign-up-declined':
       return traceSignUpDeclined();
+    case typeof event === 'object' && event.type === 'offer-viewed':
+      return BackendApi.command({
+        ...event,
+        eventType: 'OfferViewed'
+      });
+    case typeof event === 'object' && event.type === 'offer-accepted':
+      return BackendApi.command({
+        eventType: 'OfferProgressed',
+        offerName: event.offerName,
+        data: {
+          ...event.data,
+          accepted: true
+        }
+      });
+    case typeof event === 'object' && event.type === 'offer-declined':
+      return BackendApi.command({
+        eventType: 'OfferProgressed',
+        offerName: event.offerName,
+        data: {
+          ...event.data,
+          accepted: false
+        }
+      });
   }
+
+  return Promise.resolve();
 };
 
 const useTrace = (): { trace: typeof trace } => {

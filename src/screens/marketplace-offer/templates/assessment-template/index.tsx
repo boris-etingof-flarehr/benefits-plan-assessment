@@ -1,5 +1,6 @@
-import { MarketplaceOffer } from '@app/app.model';
+import { AssessmentContent, MarketplaceOffer, MarketplaceOfferT } from '@app/app.model';
 import Button from '@app/components/button';
+import useTrace from '@app/hooks/use-trace';
 import LeftRightLayout from '@app/layouts/left-right-layout';
 import { Transition } from '@headlessui/react';
 import DOMPurify from 'dompurify';
@@ -7,7 +8,7 @@ import { FunctionalComponent } from 'preact';
 import { FC, useCallback, useEffect } from 'preact/compat';
 
 import LearnMorePanel from '../../learn-more-panel';
-import type { AssessmentId, Question, QuestionAnswer, SubmissionResult } from './models';
+import type { Question, QuestionAnswer, SubmissionResult } from './models';
 import Questions from './questions';
 import useTemplate, { Slide } from './use-template';
 
@@ -16,11 +17,7 @@ type Props = {
     current: number;
     total: number;
   };
-  step: MarketplaceOffer & {
-    content: {
-      activityId: AssessmentId;
-    };
-  };
+  step: MarketplaceOfferT<AssessmentContent>;
   acceptButton: { text?: string; class?: string };
   declineButton: { text?: string; class?: string; onClick: () => void };
   onComplete: () => void;
@@ -65,9 +62,7 @@ const ContentSlide: FC<ContentProps> = (props) => {
         className={`w-full flex-none ${getSlidingTransitionCssClasses(Slide.Questions, props.currentSlide)}`}
       >
         {props.questions && (
-          <form>
           <Questions questions={props.questions} onChange={props.onQuestionsAnswered} />
-          </form>
         )}
       </div>
       <div
@@ -97,29 +92,83 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     submissionResult
   } = useTemplate(props.step, props.acceptButton.text, props.declineButton.text);
 
+  const { trace } = useTrace();
+
   useEffect(() => {
-    // TODO: SEND OFFER VIEWED EVENT
+    trace({
+      type: 'offer-viewed',
+      offerName: props.step.name,
+      data: props.step.metadata
+    });
   }, []);
+
+  useEffect(() => {
+    if (currentSlide === Slide.Questions) {
+      // TODO #45437: SEND ASSESSMENT VIEWED EVENT
+      console.log('Assessment Viewed');
+    }
+
+    if (currentSlide === Slide.SubmissionResult) {
+      // TODO #45437: SEND ASSESSMENTSUMMARY VIEWED EVENT
+      console.log('AssessmentSummary Viewed');
+    }
+  }, [currentSlide]);
 
   const handlePrimaryButtonClick = useCallback(async (): Promise<void> => {
     if (currentSlide === Slide.BriefIntroduction) {
-      // TODO: SEND OFFER ACCEPTED EVENT
+      trace({
+        type: 'offer-accepted',
+        offerName: props.step.name,
+        data: {
+          ...props.step.metadata,
+          template: props.step.content.template,
+          assessmentId: props.step.content.activityId
+        }
+      });
+
+      await goToNextSlide();
     }
 
-    if (currentSlide !== Slide.SubmissionResult) {
-      goToNextSlide();
+    if (currentSlide === Slide.Questions) {
+      // TODO #45437: SEND ASSESSMENT SUBMITTED EVENT
+      console.log('Assessment Submitted');
+
+      await goToNextSlide();
     }
 
     if (currentSlide === Slide.SubmissionResult) {
       props.onComplete();
     }
-  }, [currentSlide, goToNextSlide, props]);
+  }, [currentSlide, goToNextSlide, props, trace]);
 
   const handleSecondaryButtonClick = useCallback(async (): Promise<void> => {
-    // TODO: SEND DECLINED EVENT
+    if (currentSlide === Slide.BriefIntroduction) {
+      trace({
+        type: 'offer-declined',
+        offerName: props.step.name,
+        data: {
+          ...props.step.metadata,
+          template: props.step.content.template,
+          assessmentId: props.step.content.activityId
+        }
+      });
+    }
+
+    if (currentSlide === Slide.Questions) {
+      // TODO #45437: SEND ASSESSMENT SKIPPED EVENT
+      console.log('Assessment Skipped');
+    }
 
     props.declineButton.onClick();
-  }, [props.declineButton]);
+  }, [
+    currentSlide,
+    props.declineButton,
+    props.step.content.activityId,
+    props.step.content.template,
+    props.step.metadata,
+    props.step.name,
+    trace
+  ]);
 
   return (
     <LeftRightLayout>

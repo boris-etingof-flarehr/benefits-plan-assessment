@@ -1,6 +1,7 @@
 import { FunctionalComponent } from 'preact';
 
-import { MarketplaceOffer } from '../../app.model';
+import { AssessmentContent, MarketplaceOffer, MarketplaceOfferT } from '../../app.model';
+import AssessmentTemplate from './templates/assessment-template';
 import EoiTemplate from './templates/eoi-template';
 import SimpleTemplate from './templates/simple-template';
 
@@ -11,12 +12,6 @@ interface Props {
   };
   marketPlaceOffer: MarketplaceOffer;
   onStepComplete: () => void;
-}
-
-function exhaustiveGuard(_value: never): never {
-  throw new Error(
-    `ERROR! Reached forbidden guard function with unexpected value: ${JSON.stringify(_value)}`
-  );
 }
 
 const Index: FunctionalComponent<Props> = (props) => {
@@ -47,8 +42,21 @@ const Index: FunctionalComponent<Props> = (props) => {
           }}
         />
       );
-    default:
-      return exhaustiveGuard(props.marketPlaceOffer.content.template);
+    case 'Assessment':
+      return (
+        <AssessmentTemplate
+          stepNumber={props.stepNumber}
+          step={props.marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}
+          acceptButton={{
+            text: props.marketPlaceOffer.content.acceptButton
+          }}
+          declineButton={{
+            text: props.marketPlaceOffer.content.declineButton,
+            onClick: props.onStepComplete
+          }}
+          onComplete={props.onStepComplete}
+        />
+      );
   }
 };
 

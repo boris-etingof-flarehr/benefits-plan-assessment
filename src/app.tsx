@@ -12,6 +12,7 @@ import Loader from './components/loader';
 import { AppContext, defaultAppContext } from './context/app-context';
 import css from './index.css?inline';
 import Screen from './screens';
+import { initApi } from './services';
 import { BackendApi, InitResponse } from './services/backend-api';
 import reloadHelper from './utils/reload-event';
 
@@ -42,7 +43,7 @@ const App: FunctionalComponent<Props> = (props) => {
       accessToken: props['access-token'],
       workflowsInstanceId: props['workflows-instance-id']
     };
-    BackendApi.initClient(config.backendUrl, config.accessToken, config.workflowsInstanceId);
+    initApi(config.backendUrl, config.accessToken, config.workflowsInstanceId);
     const response = await BackendApi.init();
     setAppContext(getAppContextFromInitResponse(response));
   };

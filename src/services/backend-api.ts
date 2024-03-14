@@ -27,6 +27,11 @@ type OfferTemplateData =
   | {
       template: 'Eoi';
       accepted: boolean;
+    }
+  | {
+      template: 'Assessment';
+      accepted: boolean;
+      assessmentId: string;
     };
 
 type OfferViewed = {
@@ -78,16 +83,10 @@ export class BackendApi {
   private static sourceId: string;
   private static axiosInstance: AxiosInstance;
 
-  static initClient(baseUrl: string, accessToken: string, sourceId: string): void {
+  static initClient(baseUrl: string, headers: Record<string, string>, sourceId: string): void {
     this.axiosInstance = axios.create({
       baseURL: `${baseUrl}/benefits-onboarding/backend`,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        // Uncomment below for local dev against local backend
-          // 'x-partner-id': '123',
-          // 'x-account-id': '83A9F426-8E73-4781-B6CA-ABC374510C54',
-          // 'x-profile-id': 'AP-C14DF031-A764-40B2-87C0-77884F4BD303'
-      }
+      headers
     });
     this.axiosInstance.interceptors.response.use((res) => res, onError);
     this.sourceId = sourceId;

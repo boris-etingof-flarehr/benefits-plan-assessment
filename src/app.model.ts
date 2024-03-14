@@ -33,25 +33,38 @@ export type CustomerIdentity = {
 
 export type MarketplaceOfferName = string;
 
-export interface MarketplaceOffer {
+export type MarketplaceOfferT<TContent extends SimpleContent | EoiContent | AssessmentContent> = {
   name: MarketplaceOfferName;
-  content: Content;
+  content: TContent;
   metadata: OfferMetadata;
-}
+};
 
-type Template = 'Eoi' | 'Simple';
+export type MarketplaceOffer = MarketplaceOfferT<SimpleContent | EoiContent | AssessmentContent>;
 
-export type Content = {
-  template: Template;
+interface IContent {
   title: string;
   description: string;
   details: string[];
   imageUrl: string;
   mobileImageUrl: string;
   acceptButton: string;
-  declineButton?: string;
   terms: string[];
-};
+}
+
+interface SimpleContent extends IContent {
+  template: 'Simple';
+}
+
+interface EoiContent extends IContent {
+  template: 'Eoi';
+  declineButton: string;
+}
+
+export interface AssessmentContent extends IContent {
+  template: 'Assessment';
+  activityId: string;
+  declineButton: string;
+}
 
 export type OfferMetadata = {
   featureName: string;

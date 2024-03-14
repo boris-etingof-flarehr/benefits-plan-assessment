@@ -1,7 +1,7 @@
-import { MarketplaceOffer } from '@app/app.model';
+import { AssessmentContent, MarketplaceOfferT } from '@app/app.model';
 import { useCallback, useMemo, useRef, useState } from 'preact/hooks';
 
-import { AssessmentAnswers, AssessmentId, Question, SubmissionResult } from './models';
+import { AssessmentAnswers, Question, SubmissionResult } from './models';
 import useBenefitsPlanApi, { getQuestionsFromSteps } from './use-benefits-plan-api';
 
 export enum Slide {
@@ -11,11 +11,7 @@ export enum Slide {
 }
 
 const useTemplate = (
-  offer: MarketplaceOffer & {
-    content: {
-      activityId: AssessmentId;
-    };
-  },
+  offer: MarketplaceOfferT<AssessmentContent>,
   acceptButtonText: string | undefined,
   declineButtonText: string | undefined
 ): {
@@ -69,11 +65,11 @@ const useTemplate = (
       case Slide.Questions:
         return offer.content.title;
       case Slide.SubmissionResult:
-        return calculation?.title;
+        return calculation?.estimates.primary.title;
       default:
         return undefined;
     }
-  }, [calculation?.title, currentSlide, offer.content.title]);
+  }, [calculation?.estimates.primary.title, currentSlide, offer.content.title]);
 
   const description = useMemo(() => {
     switch (currentSlide) {
@@ -81,11 +77,11 @@ const useTemplate = (
       case Slide.Questions:
         return offer.content.description;
       case Slide.SubmissionResult:
-        return calculation?.description;
+        return calculation?.estimates.blurb.text;
       default:
         return undefined;
     }
-  }, [calculation?.description, currentSlide, offer.content.description]);
+  }, [calculation?.estimates.blurb.text, currentSlide, offer.content.description]);
 
   const [primaryButtonEnabled, setPrimaryButtonEnabled] = useState(true);
 
@@ -125,7 +121,7 @@ const useTemplate = (
     goToNextSlide,
     questions,
     updateAnswers,
-    submissionResult: calculation
+    submissionResult: calculation ? { imageUrl: calculation.estimates.blurb.imageUrl } : undefined
   };
 };
 
