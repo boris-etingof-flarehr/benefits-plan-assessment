@@ -62,7 +62,7 @@ interface EoiContent extends IContent {
 
 export interface AssessmentContent extends IContent {
   template: 'Assessment';
-  activityId: string;
+  assessmentId: string;
   declineButton: string;
 }
 

@@ -1,3 +1,4 @@
+import useTrace from '@app/hooks/use-trace';
 import { FunctionalComponent } from 'preact';
 import { useContext, useEffect } from 'preact/hooks';
 
@@ -7,12 +8,13 @@ import Button from '../components/button';
 import { AppContext } from '../context/app-context';
 import { BenefitsOnboardingCustomElementName } from '../index';
 import LeftRightLayout from '../layouts/left-right-layout';
-import { BackendApi } from '../services/backend-api';
 
 const SummaryGeneric: FunctionalComponent = () => {
+  const { trace } = useTrace();
+
   useEffect(() => {
     (async (): Promise<void> => {
-      await BackendApi.command({ eventType: 'SummaryViewed', summaryVariant: 'generic' });
+      await trace({ type: 'summary-viewed', data: { summaryVariant: 'generic' } });
     })();
   }, []);
 
@@ -32,7 +34,7 @@ const SummaryGeneric: FunctionalComponent = () => {
     text: 'Continue',
     class: 'mt-6 md:mt-6',
     onClick: async (): Promise<void> => {
-      await BackendApi.command({ eventType: 'Completed' });
+      await trace('completed')
       const root = document.querySelector(BenefitsOnboardingCustomElementName);
       const event = new CustomEvent('step-completion', { bubbles: true });
       root?.dispatchEvent(event);

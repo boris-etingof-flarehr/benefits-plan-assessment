@@ -1,3 +1,4 @@
+import useTrace from '@app/hooks/use-trace';
 import { FunctionalComponent } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 
@@ -5,7 +6,6 @@ import introDesktopImg from '../assets/desktop/intro.png';
 import Button from '../components/button';
 import { AppContext } from '../context/app-context';
 import TopBottomLayout from '../layouts/top-bottom-layout';
-import { BackendApi } from '../services/backend-api';
 
 interface Props {
   employerName: string;
@@ -15,18 +15,12 @@ interface Props {
 const Introduction: FunctionalComponent<Props> = (props) => {
   const { featureFlags } = useContext(AppContext);
   const [membership, setMembership] = useState(true);
+  const { trace } = useTrace();
 
   useEffect(() => {
     if (!featureFlags.unifiedCustomerRegistration) {
       (async (): Promise<void> => {
-        await BackendApi.command({
-          eventType: 'OfferViewed',
-          offerName: 'Membership',
-          data: {
-            featureName: '',
-            treatmentName: ''
-          }
-        });
+        await trace('sign-up-viewed');
       })();
     }
   }, []);
@@ -75,18 +69,9 @@ const Introduction: FunctionalComponent<Props> = (props) => {
           <Button
             class="mt-8"
             onClickPromise={async (): Promise<void> => {
-              await BackendApi.command({ eventType: 'Started' });
+              await trace('started');
               if (!featureFlags.unifiedCustomerRegistration) {
-                await BackendApi.command({
-                  eventType: 'OfferProgressed',
-                  offerName: 'Membership',
-                  data: {
-                    accepted: membership,
-                    featureName: '',
-                    treatmentName: '',
-                    template: 'Eoi'
-                  }
-                });
+                await trace(membership ? 'membership-accepted' : 'membership-declined');
               }
 
               props.onStepComplete();

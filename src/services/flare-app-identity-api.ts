@@ -1,25 +1,16 @@
-import axios, { AxiosInstance } from 'axios';
+import { BackendApiBase } from './backend-api';
 
-const backend = {
-  client: undefined as AxiosInstance | undefined,
-  initClient: (baseUrl: string, headers: Record<string, string>): void => {
-    backend.client = axios.create({
-      baseURL: import.meta.env.DEV
-        ? 'http://localhost:7074/backend'
-        : `${baseUrl}/flare-app-identity/backend`,
-      headers
-    });
-  },
-  getClient: (): AxiosInstance => backend.client!
+class Backend extends BackendApiBase {
+  url(baseUrl: string): string {
+    return import.meta.env.DEV ? 'http://localhost:7074' : `${baseUrl}/flare-app-identity`;
+  }
+
+  getIdToken = (): Promise<string> =>
+    this.getClient()
+      .get<{ token: string }>('v1.0/auth/token')
+      .then((res) => res.data.token);
+}
+
+export const flareAppIdentityApi = {
+  backend: new Backend()
 };
-
-export const backendApi: Readonly<{
-  initClient: (baseUrl: string, headers: Record<string, string>) => void;
-  getClient: () => AxiosInstance;
-}> = backend;
-
-export const getIdToken = (): Promise<string> =>
-  backend
-    .getClient()
-    .get<{ token: string }>('v1.0/auth/token')
-    .then((res) => res.data.token);

@@ -12,8 +12,7 @@ import Loader from './components/loader';
 import { AppContext, defaultAppContext } from './context/app-context';
 import css from './index.css?inline';
 import Screen from './screens';
-import { initApi } from './services';
-import { BackendApi, InitResponse } from './services/backend-api';
+import {benefitsOnboardingApi, initApi, InitResponse} from './services';
 import reloadHelper from './utils/reload-event';
 
 interface Props {
@@ -44,7 +43,7 @@ const App: FunctionalComponent<Props> = (props) => {
       workflowsInstanceId: props['workflows-instance-id']
     };
     initApi(config.backendUrl, config.accessToken, config.workflowsInstanceId);
-    const response = await BackendApi.init();
+    const response = await benefitsOnboardingApi.backend.init();
     setAppContext(getAppContextFromInitResponse(response));
   };
 

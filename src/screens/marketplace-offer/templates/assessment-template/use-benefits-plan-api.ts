@@ -1,4 +1,4 @@
-import { workplaceBackendApi } from '@app/services/benefits-plan-api';
+import { benefitsPlanApi } from '@app/services';
 import { useState } from 'preact/hooks';
 
 import { AssessmentAnswers, Question } from './models';
@@ -17,6 +17,7 @@ type StepDto = {
   template?: 'SingleSelect';
   options?: OptionDto[];
   defaultValue?: string;
+  customerAttribute?: string;
 };
 
 type OptionDto = {
@@ -90,7 +91,7 @@ const useBenefitsPlanApi = (
   const [calculationResponse, setCalculationResponse] = useState<GetCalculationResponse>();
 
   const getActivity = (): Promise<void> =>
-    workplaceBackendApi
+    benefitsPlanApi.workplaceBackend
       .getClient()
       .get<GetActivityStepsResponse>(`v2.0/activities/${activityId}/steps`)
       .then((res) => {
@@ -99,14 +100,17 @@ const useBenefitsPlanApi = (
 
   const progressActivity = (answers: AssessmentAnswers): Promise<void> => {
     const data = {
+      activityAction: 'ProgressStartToComplete',
       progressEvents: Object.entries(answers).map(([key, value]) => ({ stepId: key, value }))
     };
 
-    return workplaceBackendApi.getClient().post(`v1.0/activities/${activityId}/progress`, data);
+    return benefitsPlanApi.workplaceBackend
+      .getClient()
+      .put(`v1.0/customer/activities/${activityId}`, data);
   };
 
   const getCalculation = async (): Promise<void> =>
-    workplaceBackendApi
+    benefitsPlanApi.workplaceBackend
       .getClient()
       .get<GetCalculationResponse>(`v1.0/activities/${activityId}/calculate`)
       .then((res) => setCalculationResponse(res.data));

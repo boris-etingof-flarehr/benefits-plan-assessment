@@ -1,3 +1,4 @@
+import useTrace from '@app/hooks/use-trace';
 import { Transition } from '@headlessui/react';
 import DOMPurify from 'dompurify';
 import { FunctionalComponent } from 'preact';
@@ -6,7 +7,6 @@ import { useEffect } from 'preact/hooks';
 import { MarketplaceOffer } from '../../../app.model';
 import Button from '../../../components/button';
 import LeftRightLayout from '../../../layouts/left-right-layout';
-import { BackendApi } from '../../../services/backend-api';
 import LearnMore from '../learn-more';
 import LearnMorePanel from '../learn-more-panel';
 
@@ -21,28 +21,34 @@ interface Props {
 }
 
 const EoiTemplate: FunctionalComponent<Props> = (props) => {
+  const { trace } = useTrace();
+
   useEffect(() => {
     (async (): Promise<void> => {
-      await BackendApi.command({
-        offerName: props.step.name,
-        eventType: 'OfferViewed',
-        data: {
-          ...props.step.metadata
-        }
-      });
+      await trace({ type: 'offer-viewed', offerName: props.step.name, data: props.step.metadata });
     })();
-  }, [props.step.name]);
+  }, [props.step.metadata, props.step.name, trace]);
 
   const handleButtonClick = async (accepted: boolean): Promise<void> => {
-    await BackendApi.command({
-      offerName: props.step.name,
-      eventType: 'OfferProgressed',
-      data: {
-        ...props.step.metadata,
-        template: 'Eoi',
-        accepted: accepted
-      }
-    });
+    if (accepted) {
+      await trace({
+        type: 'offer-accepted',
+        offerName: props.step.name,
+        data: {
+          ...props.step.metadata,
+          template: 'Eoi'
+        }
+      });
+    } else {
+      await trace({
+        type: 'offer-declined',
+        offerName: props.step.name,
+        data: {
+          ...props.step.metadata,
+          template: 'Eoi'
+        }
+      });
+    }
 
     const button = accepted ? props.primaryButton : props.secondaryButton;
     return button.onClick();

@@ -1,7 +1,7 @@
 import { AssessmentContent, MarketplaceOfferT } from '@app/app.model';
 import { useCallback, useMemo, useRef, useState } from 'preact/hooks';
 
-import { AssessmentAnswers, Question, SubmissionResult } from './models';
+import { AssessmentAnswers, Question, QuestionId, QuestionValue, SubmissionResult } from './models';
 import useBenefitsPlanApi, { getQuestionsFromSteps } from './use-benefits-plan-api';
 
 export enum Slide {
@@ -23,11 +23,16 @@ const useTemplate = (
   currentSlide: Slide;
   goToNextSlide: () => Promise<void>;
   questions: ReadonlyArray<Question> | undefined;
+  calculateUpdatedAnswers: (newAnswers: AssessmentAnswers) => ReadonlyArray<{
+    questionId: QuestionId;
+    answer: QuestionValue | undefined;
+    customerAttribute: string;
+  }>;
   updateAnswers: (_value: AssessmentAnswers) => void;
   submissionResult: SubmissionResult | undefined;
 } => {
   const { activity, getActivity, progressActivity, calculation, getCalculation } =
-    useBenefitsPlanApi(offer.content.activityId);
+    useBenefitsPlanApi(offer.content.assessmentId);
 
   const questions = useMemo(
     () => (activity ? getQuestionsFromSteps(activity.firstStepId, activity.steps) : undefined),
@@ -36,10 +41,38 @@ const useTemplate = (
 
   const [currentSlide, setSlide] = useState<Slide>(Slide.BriefIntroduction);
 
+  const allAnswersIncludingHidden = useRef<AssessmentAnswers | undefined>();
+
   const activityAnswers = useRef<AssessmentAnswers>({});
+
+  const calculateUpdatedAnswers = useCallback(
+    (
+      newAnswers: AssessmentAnswers
+    ): ReadonlyArray<{
+      questionId: QuestionId;
+      answer: QuestionValue | undefined;
+      customerAttribute: string;
+    }> => {
+      const currentAnswers = allAnswersIncludingHidden.current;
+
+      if (!currentAnswers) {
+        return [];
+      }
+
+      return Object.entries(newAnswers)
+        .filter(([key, value]) => currentAnswers[key] !== value)
+        .map(([key, value]) => ({
+          questionId: key,
+          answer: value,
+          customerAttribute: activity?.steps.find((o) => o.id === key)?.customerAttribute ?? ''
+        }));
+    },
+    [activity?.steps]
+  );
 
   const updateAnswers = (value: AssessmentAnswers): void => {
     activityAnswers.current = value;
+    allAnswersIncludingHidden.current = { ...allAnswersIncludingHidden.current, ...value };
     setPrimaryButtonEnabled(!Object.values(value).some((o) => !o));
   };
 
@@ -120,6 +153,7 @@ const useTemplate = (
     currentSlide,
     goToNextSlide,
     questions,
+    calculateUpdatedAnswers,
     updateAnswers,
     submissionResult: calculation ? { imageUrl: calculation.estimates.blurb.imageUrl } : undefined
   };

@@ -27,7 +27,7 @@ const Button: FunctionalComponent<Props> = (props) => {
         }
       }}
     >
-      <div class={`relative ${isExecutingPromise ? 'invisible' : ''}`}>{props.children}</div>
+      <div class={`${isExecutingPromise ? 'invisible' : ''}`}>{props.children}</div>
       {isExecutingPromise && (
         <div class="absolute animate-spin">
           <Loader theme="light" />

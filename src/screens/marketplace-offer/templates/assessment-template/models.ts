@@ -14,6 +14,7 @@ export type SingleSelectQuestion = {
   defaultValue?: QuestionValue;
   template: 'SingleSelect';
   options: Option[];
+  customerAttribute: string;
 };
 
 export type Option = {

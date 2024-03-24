@@ -80,6 +80,13 @@ const ContentSlide: FC<ContentProps> = (props) => {
 
 const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
   const {
+    step: {
+      name: assessmentTitle,
+      content: { assessmentId }
+    }
+  } = props;
+
+  const {
     title,
     description,
     currentSlide,
@@ -88,6 +95,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     primaryButtonText,
     secondaryButtonText,
     questions,
+    calculateUpdatedAnswers,
     updateAnswers,
     submissionResult
   } = useTemplate(props.step, props.acceptButton.text, props.declineButton.text);
@@ -104,15 +112,45 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
 
   useEffect(() => {
     if (currentSlide === Slide.Questions) {
-      // TODO #45437: SEND ASSESSMENT VIEWED EVENT
-      console.log('Assessment Viewed');
+      trace({
+        type: 'assessment-viewed',
+        data: {
+          assessmentId,
+          assessmentTitle
+        }
+      });
     }
 
     if (currentSlide === Slide.SubmissionResult) {
-      // TODO #45437: SEND ASSESSMENTSUMMARY VIEWED EVENT
-      console.log('AssessmentSummary Viewed');
+      trace({
+        type: 'assessment-summary-viewed',
+        data: {
+          assessmentId,
+          assessmentTitle
+        }
+      });
     }
-  }, [currentSlide]);
+  }, [assessmentId, assessmentTitle, currentSlide, trace]);
+
+  const handleQuestionsAnswered = useCallback(
+    (answer: QuestionAnswer) => {
+      const updatedAnswers = calculateUpdatedAnswers(answer);
+
+      updatedAnswers.forEach(({ customerAttribute }) => {
+        trace({
+          type: 'assessment-field-updated',
+          data: {
+            assessmentId,
+            assessmentTitle,
+            customerAttribute
+          }
+        });
+      });
+
+      updateAnswers(answer);
+    },
+    [assessmentId, assessmentTitle, calculateUpdatedAnswers, trace, updateAnswers]
+  );
 
   const handlePrimaryButtonClick = useCallback(async (): Promise<void> => {
     if (currentSlide === Slide.BriefIntroduction) {
@@ -122,7 +160,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
         data: {
           ...props.step.metadata,
           template: props.step.content.template,
-          assessmentId: props.step.content.activityId
+          assessmentId
         }
       });
 
@@ -130,8 +168,13 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     }
 
     if (currentSlide === Slide.Questions) {
-      // TODO #45437: SEND ASSESSMENT SUBMITTED EVENT
-      console.log('Assessment Submitted');
+      trace({
+        type: 'assessment-submitted',
+        data: {
+          assessmentId,
+          assessmentTitle
+        }
+      });
 
       await goToNextSlide();
     }
@@ -139,7 +182,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     if (currentSlide === Slide.SubmissionResult) {
       props.onComplete();
     }
-  }, [currentSlide, goToNextSlide, props, trace]);
+  }, [assessmentId, assessmentTitle, currentSlide, goToNextSlide, props, trace]);
 
   const handleSecondaryButtonClick = useCallback(async (): Promise<void> => {
     if (currentSlide === Slide.BriefIntroduction) {
@@ -149,21 +192,27 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
         data: {
           ...props.step.metadata,
           template: props.step.content.template,
-          assessmentId: props.step.content.activityId
+          assessmentId
         }
       });
     }
 
     if (currentSlide === Slide.Questions) {
-      // TODO #45437: SEND ASSESSMENT SKIPPED EVENT
-      console.log('Assessment Skipped');
+      trace({
+        type: 'assessment-skipped',
+        data: {
+          assessmentId,
+          assessmentTitle
+        }
+      });
     }
 
     props.declineButton.onClick();
   }, [
+    assessmentId,
+    assessmentTitle,
     currentSlide,
     props.declineButton,
-    props.step.content.activityId,
     props.step.content.template,
     props.step.metadata,
     props.step.name,
@@ -202,7 +251,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
                   currentSlide={currentSlide}
                   offer={props.step}
                   questions={questions}
-                  onQuestionsAnswered={updateAnswers}
+                  onQuestionsAnswered={handleQuestionsAnswered}
                   submissionResult={submissionResult}
                 />
               </div>

@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
+import { benefitsOnboardingApi } from '@app/services';
 import { AxiosError } from 'axios';
-
-import { BackendApi } from '../../services/backend-api';
 
 const source = 'Onboarding';
 const channel = 'onboarding';
@@ -12,17 +10,21 @@ const useFlareAppIdentity = (): {
   resendOtp: () => Promise<void>;
 } => {
   const signUp = async (mobileNumber: string): Promise<void> => {
-    await BackendApi.GetClient()
+    await benefitsOnboardingApi.backend
+      .getClient()
       .post('auth/signUp', { mobileNumber, source, channel })
       .catch(handleError);
   };
 
   const verifyOtp = async (otp: string): Promise<void> => {
-    await BackendApi.GetClient().post('auth/verify', { otp, source, channel }).catch(handleError);
+    await benefitsOnboardingApi.backend
+      .getClient()
+      .post('auth/verify', { otp, source, channel })
+      .catch(handleError);
   };
 
   const resendOtp = async (): Promise<void> => {
-    await BackendApi.GetClient().post('auth/resend').catch(handleError);
+    await benefitsOnboardingApi.backend.getClient().post('auth/resend').catch(handleError);
   };
 
   return {

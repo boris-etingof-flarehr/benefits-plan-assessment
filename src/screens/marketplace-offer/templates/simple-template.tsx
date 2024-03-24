@@ -1,3 +1,4 @@
+import useTrace from '@app/hooks/use-trace';
 import { Transition } from '@headlessui/react';
 import DOMPurify from 'dompurify';
 import { FunctionalComponent } from 'preact';
@@ -6,7 +7,6 @@ import { useEffect } from 'preact/hooks';
 import { MarketplaceOffer } from '../../../app.model';
 import Button from '../../../components/button';
 import LeftRightLayout from '../../../layouts/left-right-layout';
-import { BackendApi } from '../../../services/backend-api';
 import LearnMore from '../learn-more';
 import LearnMorePanel from '../learn-more-panel';
 
@@ -31,29 +31,26 @@ interface Props {
 }
 
 const SimpleTemplate: FunctionalComponent<Props> = (props) => {
+  const { trace } = useTrace();
+
   useEffect(() => {
     (async (): Promise<void> => {
       if ('name' in props.step) {
-        await BackendApi.command({
-          offerName: props.step.name!,
-          eventType: 'OfferViewed',
-          data: {
-            ...props.step.metadata!
-          }
+        await trace({
+          type: 'offer-viewed',
+          offerName: props.step.name,
+          data: props.step.metadata
         });
       }
     })();
-  }, [props.step]);
+  }, [props.step, trace]);
 
   const handleButtonClick = async (): Promise<void> => {
     if ('name' in props.step) {
-      await BackendApi.command({
+      await trace({
+        type: 'offer-progressed',
         offerName: props.step.name,
-        eventType: 'OfferProgressed',
-        data: {
-          ...props.step.metadata!,
-          template: 'Simple'
-        }
+        data: { ...props.step.metadata, template: 'Simple' }
       });
     }
     props.primaryButton.onClick();
