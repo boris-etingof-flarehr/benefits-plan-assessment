@@ -21,7 +21,9 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
   const { setPhoneNumber, phoneNumber } = usePhoneNumber(prefilledPhoneNumber);
 
   useEffect(() => {
-    trace('sign-up-viewed');
+    (async (): Promise<void> => {
+      await trace('sign-up-viewed');
+    })();
   }, []);
 
   const handleFocusIn = useCallback(() => {
@@ -41,7 +43,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
     }
 
     await onSubmit(phoneNumber)
-      .then(() => trace('sign-up-completed'))
+      .then(async () => await trace('sign-up-completed'))
       .catch(setError);
   }, [phoneNumber, onSubmit, trace]);
 

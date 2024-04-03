@@ -103,11 +103,13 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
   const { trace } = useTrace();
 
   useEffect(() => {
-    trace({
-      type: 'offer-viewed',
-      offerName: props.step.name,
-      data: props.step.metadata
-    });
+    (async (): Promise<void> => {
+      await trace({
+        type: 'offer-viewed',
+        offerName: props.step.name,
+        data: props.step.metadata
+      });
+    })();
   }, []);
 
   useEffect(() => {
@@ -154,7 +156,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
 
   const handlePrimaryButtonClick = useCallback(async (): Promise<void> => {
     if (currentSlide === Slide.BriefIntroduction) {
-      trace({
+      await trace({
         type: 'offer-accepted',
         offerName: props.step.name,
         data: {
@@ -186,7 +188,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
 
   const handleSecondaryButtonClick = useCallback(async (): Promise<void> => {
     if (currentSlide === Slide.BriefIntroduction) {
-      trace({
+      await trace({
         type: 'offer-declined',
         offerName: props.step.name,
         data: {
