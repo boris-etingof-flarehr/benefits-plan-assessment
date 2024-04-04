@@ -69,6 +69,7 @@ const VerifyOtp: FunctionalComponent<Props> = ({
               maxLength={OTP_LENGTH}
               className="mt-1 mb-1 w-full"
               label="Enter your verification code"
+              iconElement={false}
               onChange={setOtp}
             />
             {error && <span className="text-xs text-rose-500">{error}</span>}

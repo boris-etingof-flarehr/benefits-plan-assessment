@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'preact/hooks';
+import { useContext, useMemo, useState } from 'preact/hooks';
+
+import { AppContext } from '../../context/app-context';
 
 const mask = '#### ### ### ### ### ### ###';
 const trim = (str: string): string => str.replace(/ /g, '');
@@ -7,16 +9,21 @@ const maskString = (str: string): string => {
   return mask.replace(/#/g, () => str[i++] ?? '').trim();
 };
 
-const usePhoneNumber = (initialPhoneNumber?: string): {
+const usePhoneNumber = (
+  initialPhoneNumber?: string
+): {
   phoneNumber: {
     valid: boolean;
     original: string;
     formatted: string;
     masked: string;
+    isVerified: boolean;
   };
   setPhoneNumber: (_phoneNumber: string) => void;
 } => {
-  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber??'');
+  const { identity } = useContext(AppContext);
+
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? '');
 
   const trimmed = useMemo(() => trim(phoneNumber), [phoneNumber]);
 
@@ -41,13 +48,19 @@ const usePhoneNumber = (initialPhoneNumber?: string): {
 
   const masked = useMemo(() => maskString(trimmed), [trimmed]);
 
+  const isVerified = useMemo(
+    () => formatted === identity.verifiedPhoneNumber,
+    [formatted, identity.verifiedPhoneNumber]
+  );
+
   return {
     setPhoneNumber,
     phoneNumber: {
       valid,
       original: phoneNumber,
       formatted,
-      masked
+      masked,
+      isVerified
     }
   };
 };

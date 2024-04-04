@@ -1,7 +1,9 @@
 import { FunctionalComponent } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 
+import VerifiedIcon from '../../../assets/icons/verified.svg';
 import Button from '../../../components/button';
+import TextButton from '../../../components/text-button';
 import TextField from '../../../components/text-field';
 import Heading from '../../../components/typography/heading';
 import Title from '../../../components/typography/title';
@@ -15,10 +17,17 @@ type Props = {
   onDecline: () => void;
 };
 
-const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNumber, onSubmit, onDecline }) => {
+const PhoneNumber: FunctionalComponent<Props> = ({
+  phoneNumber: prefilledPhoneNumber,
+  onSubmit,
+  onDecline
+}) => {
   const { trace } = useTrace();
   const [error, setError] = useState('');
   const { setPhoneNumber, phoneNumber } = usePhoneNumber(prefilledPhoneNumber);
+  const [showVerifiedMobileNumberTextBox, setShowVerifiedNumberTextBox] = useState(
+    phoneNumber.isVerified
+  );
 
   useEffect(() => {
     (async (): Promise<void> => {
@@ -35,7 +44,8 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
       ? ''
       : 'Please enter a valid Australian mobile number beginning with 04.';
     setError(errorString);
-  }, [phoneNumber.valid]);
+    setShowVerifiedNumberTextBox(phoneNumber.isVerified);
+  }, [phoneNumber.isVerified, phoneNumber.valid]);
 
   const handleSubmit = useCallback(async () => {
     if (!phoneNumber.valid) {
@@ -51,13 +61,24 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
     return trace('sign-up-declined').then(onDecline);
   }, [onDecline, trace]);
 
+  const handleChangeNumber = useCallback(async () => {
+    setShowVerifiedNumberTextBox(false);
+  }, []);
+
+  const verifiedIconElement = (
+    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-xs text-green-700 font-bold">
+      Verified <VerifiedIcon />
+    </div>
+  );
+
   return (
     <TopBottomLayout>
       <TopBottomLayout.Top>
         <div className="flex flex-col gap-5">
           <Heading>Join your workplace benefits program</Heading>
           <Title>
-            Enter your <b>personal</b> mobile number to finish setting up your Flare Benefits account linked to your workplace
+            {phoneNumber.isVerified ? 'Confirm ' : 'Enter '} your <b>personal</b> mobile number to
+            finish setting up your Flare Benefits account linked to your workplace
           </Title>
         </div>
       </TopBottomLayout.Top>
@@ -72,14 +93,35 @@ const PhoneNumber: FunctionalComponent<Props> = ({ phoneNumber: prefilledPhoneNu
             onChange={setPhoneNumber}
             onfocusin={handleFocusIn}
             onfocusout={handleFocusOut}
+            iconElement={showVerifiedMobileNumberTextBox && verifiedIconElement}
+            disabled={showVerifiedMobileNumberTextBox}
           />
-          <div className="h-8 leading-none">
-            <span className="text-xs text-rose-500">{error}</span>
-          </div>
+
+          {error.length !== 0 && (
+            <div className="h-8 leading-none">
+              <span className="text-xs text-rose-500">{error}</span>
+            </div>
+          )}
+
+          {showVerifiedMobileNumberTextBox && (
+            <div className="mt-2 ml-2 mb-2 leading-none">
+              <span className="text-xs">
+                Not your personal number?
+                <TextButton class="text-blue-500" onClick={handleChangeNumber}>
+                  Change number
+                </TextButton>
+              </span>
+            </div>
+          )}
+
           <div>
             <span className="font-medium text-sm text-gray-900 text-center">
               By creating your account you confirm you have read and agree to Flare Benefits{' '}
-              <a href="https://www.flarehr.com/flare-app-terms-and-conditions/" target="_blank" rel="noreferrer">
+              <a
+                href="https://www.flarehr.com/flare-app-terms-and-conditions/"
+                target="_blank"
+                rel="noreferrer"
+              >
                 {' Terms of Use '}
               </a>
               and

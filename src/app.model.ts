@@ -28,6 +28,7 @@ export type CustomerRegistrationStatus =
 export type CustomerIdentity = {
   email: string;
   phoneNumber: string;
+  verifiedPhoneNumber: string;
   registrationStatus: CustomerRegistrationStatus;
 };
 

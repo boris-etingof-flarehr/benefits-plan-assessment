@@ -11,6 +11,7 @@ export type InitResponse = {
   identity: {
     email: string;
     phoneNumber?: string;
+    verifiedPhoneNumber?: string;
     isRegistered: boolean;
   };
   workplace: {

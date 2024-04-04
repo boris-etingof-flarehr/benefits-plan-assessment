@@ -66,6 +66,7 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
               inputMode="numeric"
               className="mt-1 mb-1 w-full"
               label="Enter your verification code"
+              iconElement={false}
               onChange={setOtp}
             />
             {error && <span className="text-xs text-rose-500">{error}</span>}

@@ -5,15 +5,21 @@ const source = 'Onboarding';
 const channel = 'onboarding';
 
 const useFlareAppIdentity = (): {
-  signUp: (mobileNumber: string) => Promise<void>;
+  signUp: (mobileNumber: string) => Promise<{ isVerificationRequired: boolean }>;
   verifyOtp: (otp: string) => Promise<void>;
   resendOtp: () => Promise<void>;
 } => {
-  const signUp = async (mobileNumber: string): Promise<void> => {
-    await benefitsOnboardingApi.backend
+  const signUp = async (mobileNumber: string): Promise<{ isVerificationRequired: boolean }> => {
+    return benefitsOnboardingApi.backend
       .getClient()
-      .post('auth/signUp', { mobileNumber, source, channel })
-      .catch(handleError);
+      .post<{ isVerificationRequired: boolean | undefined }>('v2.0/auth/signUp', {
+        mobileNumber,
+        source,
+        channel
+      })
+      .then((response) => ({
+        isVerificationRequired: response.data.isVerificationRequired ?? true
+      }));
   };
 
   const verifyOtp = async (otp: string): Promise<void> => {

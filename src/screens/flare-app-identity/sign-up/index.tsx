@@ -1,14 +1,14 @@
 import { FunctionalComponent } from 'preact';
 import { useCallback, useState } from 'preact/hooks';
 
-import useStep from '../use-step';
+import useStep, { StepName } from '../use-step';
 import PhoneNumber from './phone-number';
 import Success from './success';
 import VerifyOtp from './verify-otp';
 
 type Props = {
   phoneNumber?: string;
-  onSignUp: (_phoneNumber: string) => Promise<void>;
+  onSignUp: (_phoneNumber: string) => Promise<{ isVerificationRequired: boolean }>;
   onVerify: (_otp: string) => Promise<void>;
   onResendOtp: () => Promise<void>;
   onSuccess: () => void;
@@ -24,29 +24,35 @@ const Index: FunctionalComponent<Props> = ({
   onDecline
 }) => {
   const [phoneNumber, setPhoneNumber] = useState(prefilledPhoneNumber ?? '');
-  const { step, goBack, goNext } = useStep(3);
+  const { step, goBack, goToStep } = useStep();
 
   const handleSubmitPhoneNumber = useCallback(
     (phoneNumber: { formatted: string; masked: string }) =>
-      onSignUp(phoneNumber.formatted).then(() => {
+      onSignUp(phoneNumber.formatted).then((res) => {
         setPhoneNumber(phoneNumber.masked);
-        goNext();
+        goToStep(res.isVerificationRequired ? StepName.OTP : StepName.SUCCESS);
       }),
-    [goNext, onSignUp]
+    [goToStep, onSignUp]
   );
 
   const handleVerifyOtp = useCallback(
     (otp: string) =>
       onVerify(otp).then(() => {
-        goNext();
+        goToStep(StepName.SUCCESS);
       }),
-    [goNext, onVerify]
+    [goToStep, onVerify]
   );
 
   return (
     <>
-      {step === 1 && <PhoneNumber phoneNumber={phoneNumber} onSubmit={handleSubmitPhoneNumber} onDecline={onDecline} />}
-      {step === 2 && (
+      {step === StepName.PHONE_NUMBER && (
+        <PhoneNumber
+          phoneNumber={phoneNumber}
+          onSubmit={handleSubmitPhoneNumber}
+          onDecline={onDecline}
+        />
+      )}
+      {step === StepName.OTP && (
         <VerifyOtp
           phoneNumber={phoneNumber}
           onVerify={handleVerifyOtp}
@@ -54,7 +60,7 @@ const Index: FunctionalComponent<Props> = ({
           onGoBack={goBack}
         />
       )}
-      {step === 3 && <Success onContinue={onSuccess} />}
+      {step === StepName.SUCCESS && <Success onContinue={onSuccess} />}
     </>
   );
 };

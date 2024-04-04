@@ -9,6 +9,7 @@ export const defaultAppContext: AppContextData = {
   identity: {
     email: '',
     phoneNumber: '',
+    verifiedPhoneNumber: '',
     registrationStatus: 'Unregistered'
   },
   workplace:{

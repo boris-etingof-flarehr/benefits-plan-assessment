@@ -112,6 +112,7 @@ const getAppContextFromInitResponse = (initResponse: InitResponse): AppContextDa
   const identity: CustomerIdentity = {
     email: initResponse.identity.email,
     phoneNumber: initResponse.identity.phoneNumber ?? '',
+    verifiedPhoneNumber: initResponse.identity.verifiedPhoneNumber ?? '',
     registrationStatus
   };
 
