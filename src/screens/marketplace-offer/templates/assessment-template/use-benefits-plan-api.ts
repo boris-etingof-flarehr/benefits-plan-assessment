@@ -14,10 +14,13 @@ type StepDto = {
   stepType: 'Consent' | 'Question' | 'Completion';
   description?: string;
   nextStepId?: string;
-  template?: 'SingleSelect';
+  template?: 'SingleSelect' | 'Currency';
   options?: OptionDto[];
   defaultValue?: string;
   customerAttribute?: string;
+  invalidMessage?: string;
+  maximumValue?: number;
+  minimumValue?: number;
 };
 
 type OptionDto = {

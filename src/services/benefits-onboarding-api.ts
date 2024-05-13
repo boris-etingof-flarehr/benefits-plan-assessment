@@ -141,7 +141,6 @@ class WorkplaceBackend extends WorkplaceBackendApiBase {
       console.log(`Segment event name: ${(req.data as Record<string, unknown>)?.event}`);
       console.log(`Segment event properties:`);
       console.table((req.data as Record<string, unknown>)?.properties);
-
       req.signal = this.canceledSignal;
     }
 

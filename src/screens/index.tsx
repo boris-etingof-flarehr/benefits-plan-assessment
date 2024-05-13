@@ -10,15 +10,8 @@ import SummaryApp from './summary-app';
 import SummaryGeneric from './summary-generic';
 
 const Screen: FunctionalComponent = () => {
-  const {
-    offers,
-    isComplete,
-    isAppEnabled,
-    identity,
-    workplace,
-    featureFlags,
-    updateIdentity
-  } = useContext(AppContext);
+  const { offers, isComplete, isAppEnabled, identity, workplace, featureFlags, updateIdentity } =
+    useContext(AppContext);
   const { current, goNext } = useNavigation(
     offers,
     isComplete,

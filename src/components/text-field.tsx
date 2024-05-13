@@ -4,18 +4,19 @@ import { useCallback } from 'preact/hooks';
 type Props = Omit<ComponentProps<'input'>, 'onChange' | 'value'> & {
   allowedKeyPattern: RegExp;
   value?: string;
-  iconElement: JSX.Element | false;
+  leadingIconElement?: JSX.Element;
+  trailingIconElement: JSX.Element | false;
   // eslint-disable-next-line no-unused-vars
   onChange: (value: string) => void;
 };
 
 const TextField: FunctionalComponent<Props> = ({
   className,
-  label,
   allowedKeyPattern,
   onChange,
   value,
-  iconElement,
+  leadingIconElement,
+  trailingIconElement,
   ...props
 }) => {
   const handleOnKeyPress = useCallback(
@@ -29,19 +30,17 @@ const TextField: FunctionalComponent<Props> = ({
 
   return (
     <>
-      <label class="font-medium text-sm text-gray-900 text-left">
-        <span>{label}</span>
-      </label>
       <div class="relative">
+        {leadingIconElement}
         <input
           type="text"
-          className={`p-2 border-0 ring-2 ring-gray-200 focus:outline-none focus-visible:ring-gray-500 text-base font-medium rounded-md shadow-sm w-full ${className}`}
+          className={`border-0 ring-2 ring-gray-200 focus:outline-none text-base font-medium rounded-md shadow-sm ${className}`}
           value={value}
           onKeyPress={handleOnKeyPress}
           onChange={(ev): void => onChange(ev.currentTarget.value)}
           {...props}
         />
-        {iconElement}
+        {trailingIconElement}
       </div>
     </>
   );

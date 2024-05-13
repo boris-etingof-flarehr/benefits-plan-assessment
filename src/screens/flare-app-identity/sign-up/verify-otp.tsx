@@ -1,6 +1,7 @@
 import { FunctionalComponent } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 
+import FormLabel from '../../../../src/components/typography/form-label';
 import LeftArrow from '../../../assets/icons/left-arrow.svg';
 import Button from '../../../components/button';
 import TextButton from '../../../components/text-button';
@@ -62,14 +63,16 @@ const VerifyOtp: FunctionalComponent<Props> = ({
         </TopBottomLayout.Top>
         <TopBottomLayout.Bottom>
           <div className="mt-5 md:w-[300px] text-left">
+            <FormLabel className={`font-medium text-sm text-gray-900 text-left`}>
+              Enter your verification code
+            </FormLabel>
             <TextField
               allowedKeyPattern={/[0-9]/}
               inputMode="numeric"
               minLength={OTP_LENGTH}
               maxLength={OTP_LENGTH}
-              className="mt-1 mb-1 w-full"
-              label="Enter your verification code"
-              iconElement={false}
+              className="mt-1 mb-1 w-full p-2 focus-visible:ring-gray-500"
+              trailingIconElement={false}
               onChange={setOtp}
             />
             {error && <span className="text-xs text-rose-500">{error}</span>}

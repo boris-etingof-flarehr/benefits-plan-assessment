@@ -1,22 +1,20 @@
 import equal from 'fast-deep-equal';
 import { useCallback, useRef, useState } from 'preact/hooks';
 
-import {
-  AssessmentAnswers,
-  Question,
-  QuestionAnswer,
-  QuestionId,
-  SingleSelectQuestion
-} from './models';
+import { AssessmentAnswers, Question, QuestionAnswer, QuestionId } from '../models';
 
 type InternalQuestions = ReadonlyArray<Question & { selectedValue?: string }>;
 
 const getInternalQuestions = (question: ReadonlyArray<Question>): InternalQuestions =>
   question.reduce((previous, current) => {
-    let selectedValue = current.defaultValue;
+    let selectedValue;
 
-    if (!selectedValue && current.template === 'SingleSelect' && current.options.length === 2) {
-      selectedValue = current.options[0].value;
+    if (current.template === 'SingleSelect') {
+      selectedValue = current.defaultValue;
+
+      if (current.options.length === 2) {
+        selectedValue = current.options[0].value;
+      }
     }
 
     return [...previous, { ...current, selectedValue }];
@@ -27,7 +25,10 @@ const getNextQuestionId = (
 ): QuestionId | undefined => {
   return (
     currentQuestion?.nextStepId ??
-    currentQuestion?.options?.find((o) => o.value === currentQuestion.selectedValue)?.nextStepId
+    ('options' in currentQuestion
+      ? currentQuestion?.options.find((o) => o.value === currentQuestion.selectedValue)?.nextStepId
+      : undefined) ??
+    undefined
   );
 };
 
@@ -70,7 +71,7 @@ const applyAnswersToQuestions = (
 const useQuestions = (
   initialQuestions: ReadonlyArray<Question>
 ): {
-  questions: ReadonlyArray<SingleSelectQuestion>;
+  questions: ReadonlyArray<Question>;
   answerQuestion: (_answer: QuestionAnswer) => void;
   answers: AssessmentAnswers;
 } => {

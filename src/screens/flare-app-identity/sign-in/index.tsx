@@ -1,3 +1,4 @@
+import FormLabel from '@app/components/typography/form-label';
 import { FunctionalComponent } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 
@@ -59,14 +60,16 @@ const SignIn: FunctionalComponent<Props> = ({ phoneNumber, onVerify, onResendOtp
         </TopBottomLayout.Top>
         <TopBottomLayout.Bottom>
           <div className="mt-5 md:w-[300px] text-left">
+            <FormLabel className={`font-medium text-sm text-gray-900 text-left`}>
+              Enter your verification code
+            </FormLabel>
             <TextField
               allowedKeyPattern={/[0-9]/}
               minLength={OTP_LENGTH}
               maxLength={OTP_LENGTH}
               inputMode="numeric"
-              className="mt-1 mb-1 w-full"
-              label="Enter your verification code"
-              iconElement={false}
+              className="mt-1 mb-1 w-full p-2 focus-visible:ring-gray-500"
+              trailingIconElement={false}
               onChange={setOtp}
             />
             {error && <span className="text-xs text-rose-500">{error}</span>}

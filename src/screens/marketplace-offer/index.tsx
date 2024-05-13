@@ -45,6 +45,7 @@ const Index: FunctionalComponent<Props> = (props) => {
     case 'Assessment':
       return (
         <AssessmentTemplate
+          key={props.marketPlaceOffer.name}
           stepNumber={props.stepNumber}
           step={props.marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}
           acceptButton={{
