@@ -44,7 +44,7 @@ const Dropdown = <T,>({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute z-10 flex flex-col gap-0.5 mt-1 max-h-60 w-full overflow-auto rounded-md border-2 bg-white py-1 text-base ring-none focus:outline-none focus-visible:border-gray-700">
+          <Listbox.Options className="absolute z-20 flex flex-col gap-0.5 mt-1 max-h-60 w-full overflow-auto rounded-md border-2 bg-white py-1 text-base ring-none focus:outline-none focus-visible:border-gray-700">
             {options.map((option) => (
               <Listbox.Option
                 key={option.value}
