@@ -14,7 +14,7 @@ export abstract class WorkplaceBackendApiBase {
     }
 
     req.headers.Authorization = `Bearer ${accessToken}`;
-    req.params = { ...(req.params ?? {}), client: 'onboarding' };
+    req.params = { ...(req.params ?? {}), client: 'onboarding', source: 'Onboarding', channel: 'onboarding' };
 
     return req;
   };
