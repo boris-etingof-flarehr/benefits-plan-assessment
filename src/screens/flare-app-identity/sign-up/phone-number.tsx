@@ -34,7 +34,7 @@ const PhoneNumber: FunctionalComponent<Props> = ({
     (async (): Promise<void> => {
       await trace('sign-up-viewed');
     })();
-  }, []);
+  }, [trace]);
 
   const handleFocusIn = useCallback(() => {
     setError('');

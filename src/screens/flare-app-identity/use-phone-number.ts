@@ -8,6 +8,15 @@ const maskString = (str: string): string => {
   let i = 0;
   return mask.replace(/#/g, () => str[i++] ?? '').trim();
 };
+const isValidPhoneNumber = (phoneNumber: string): boolean => {
+  const trimmed = trim(phoneNumber);
+  return (
+    (trimmed.startsWith('04') && trimmed.length === 10) ||
+    (trimmed.startsWith('614') && trimmed.length === 11) ||
+    (trimmed.startsWith('+614') && trimmed.length === 12) ||
+    /^\+642\d{7,9}$/.test(trimmed)
+  );
+};
 
 const usePhoneNumber = (
   initialPhoneNumber?: string
@@ -23,18 +32,13 @@ const usePhoneNumber = (
 } => {
   const { identity } = useContext(AppContext);
 
-  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? '');
+  const [phoneNumber, setPhoneNumber] = useState(() => {
+    return initialPhoneNumber && isValidPhoneNumber(initialPhoneNumber) ? initialPhoneNumber : '';
+  });
+
+  const valid = useMemo(() => isValidPhoneNumber(phoneNumber), [phoneNumber]);
 
   const trimmed = useMemo(() => trim(phoneNumber), [phoneNumber]);
-
-  const valid = useMemo(
-    (): boolean =>
-      (trimmed.startsWith('04') && trimmed.length === 10) ||
-      (trimmed.startsWith('614') && trimmed.length === 11) ||
-      (trimmed.startsWith('+614') && trimmed.length === 12) ||
-      /^\+642\d{7,9}$/.test(trimmed),
-    [trimmed]
-  );
 
   const formatted = useMemo(() => {
     if (trimmed.startsWith('04')) {
@@ -49,7 +53,9 @@ const usePhoneNumber = (
   const masked = useMemo(() => maskString(trimmed), [trimmed]);
 
   const isVerified = useMemo(
-    () => formatted === identity.verifiedPhoneNumber,
+    () =>
+      isValidPhoneNumber(identity.verifiedPhoneNumber) &&
+      formatted === identity.verifiedPhoneNumber,
     [formatted, identity.verifiedPhoneNumber]
   );
 
