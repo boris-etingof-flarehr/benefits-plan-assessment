@@ -85,7 +85,7 @@ const getContentTitleAndDescription = (
     case 'RegistrationAbandoned':
       return {
         title: 'Join your workplace',
-        description: `We’ve sent an email to ${identity.email} with instructions on how join your workplace. This will enable you to access all your workplace benefits through the Flare app in the future.`
+        description: `We’ve sent an email to ${identity.email} with instructions on how to join your workplace. This will enable you to access all your workplace benefits through the Flare app in the future.`
       };
     case 'NewlyRegistered':
       return {
