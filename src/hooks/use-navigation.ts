@@ -105,9 +105,7 @@ function getScreenNames(
     case identity.registrationStatus === 'PreviouslyRegistered' &&
       workplace.linkingStatus === 'Unlinked':
       return ['Introduction', 'FlareAppIdentity'];
-    case identity.registrationStatus === 'PreviouslyRegistered' &&
-      workplace.linkingStatus === 'NewlyLinked':
-      return [finalScreen];
+    case identity.registrationStatus === 'PreviouslyRegistered':
     case identity.registrationStatus === 'NewlyRegistered':
       return [...offers.map((o) => o.name), finalScreen];
     case identity.registrationStatus === 'RegistrationAbandoned':
