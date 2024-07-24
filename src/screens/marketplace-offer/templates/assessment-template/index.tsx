@@ -98,7 +98,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     calculateUpdatedAnswers,
     updateAnswers,
     submissionResult
-  } = useTemplate(props.step, props.acceptButton.text, props.declineButton.text);
+  } = useTemplate(props.step, props.acceptButton.text, props.declineButton.text, props.step.content.declineButtonHidden);
 
   const { trace } = useTrace();
 

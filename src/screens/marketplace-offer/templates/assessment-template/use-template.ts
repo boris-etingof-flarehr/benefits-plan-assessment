@@ -13,9 +13,10 @@ export enum Slide {
 const useTemplate = (
   offer: MarketplaceOfferT<AssessmentContent>,
   acceptButtonText: string | undefined,
-  declineButtonText: string | undefined
+  declineButtonText: string | undefined,
+  declineButtonHidden: boolean
 ): {
-  title: string | undefined;
+  title: string | undefined; 
   description: string | undefined;
   primaryButtonEnabled: boolean;
   primaryButtonText: string | undefined;
@@ -136,6 +137,11 @@ const useTemplate = (
       case Slide.BriefIntroduction:
         return declineButtonText;
       case Slide.Questions:
+        if(declineButtonHidden)
+        {
+          return undefined;
+        }
+
         return 'Skip for now';
       case Slide.SubmissionResult:
         return undefined;
