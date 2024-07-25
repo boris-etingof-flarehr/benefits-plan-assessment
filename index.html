@@ -1,0 +1,43 @@
+<!-- This file is used for dev only. Does not get included in built files. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Benefits Onboarding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --fl-color-primary: #1890ff;
+        --fl-color-primary-light: #74c0ff;
+        --fl-color-primary-dark: #006bce;
+        --fl-color-primary-disabled: #f5f5f5;
+        --fl-color-primary-hover: #40a9ff;
+        --fl-color-primary-focus: #40a9ff;
+        --fl-color-primary-text: white;
+        --fl-color-secondary: #d3d3d3;
+        --fl-color-secondary-light: #e1e1e1;
+        --fl-color-secondary-dark: #cecece;
+        --fl-color-secondary-disabled: #f5f5f5;
+        --fl-color-secondary-hover: #ebebeb;
+        --fl-color-secondary-focus: #ebebeb;
+        --fl-color-secondary-text: #262626;
+      }
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <benefits-onboarding
+      backend-url="http://localhost:7077"
+      access-token="eyJhbGciOiJSUzI1NiIsImtpZCI6IkVDNzM5RDcyRjBBREE1Q0IxNUVFMTYzMDE4QzJDMkRGQkIxQzEyM0UiLCJ4NXQiOiI3SE9kY3ZDdHBjc1Y3aFl3R01MQzM3c2NFajQiLCJ0eXAiOiJhdCtqd3QifQ.eyJpc3MiOiJodHRwczovL3Rlc3QtaWRlbnRpdHkuZmxhcmVoci5jb20iLCJuYmYiOjE3MTA4OTUyNTAsImlhdCI6MTcxMDg5NTI1MCwiZXhwIjoxNzEwOTAwNjUwLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwib2ZmbGluZV9hY2Nlc3MiXSwiYW1yIjpbInB3ZCJdLCJjbGllbnRfaWQiOiJhcG9sbG8td29ya2Zsb3dzLWFwcCIsInN1YiI6IkFQLUI2RkI3MEVELTRDMjEtNDQ1MC04Njg1LTVBQUJEODQwRTUwNCIsImF1dGhfdGltZSI6MTcxMDg5NTI1MCwiaWRwIjoibG9jYWwiLCJuYW1lIjoiQVAtQjZGQjcwRUQtNEMyMS00NDUwLTg2ODUtNUFBQkQ4NDBFNTA0Iiwic2Vzc2lvbl9pZCI6ImQ5ZTE0YjU0LWEzYTMtNDAwNS1iN2ZlLTc5Y2ExNTY1NTZlOCIsIndvcmtmbG93Ijp7Imluc3RhbmNlSWQiOjEsIm90cFZlcmlmaWVkTW9iaWxlIjoiKzYxNDg5OTIxMDE4In0sInNpZCI6IjExNUQ2MjI3NzM5ODlERjhGNDMyRUEwRjUwNjlFNEEyIiwianRpIjoiOTZCMTNCNjYyMTdGMUZCM0U0MTM3QTQ0MDA3QTQwOUQifQ.BsOWmWpoSnZgSMneFBvOzqDhpwTI4o3Ngx54Y-KIhM51RqYwxia4QpRDHtwArI4AlLGoF8p3rbrZrykGQr5UktAnfLwaGkYjpin20ZMqgVjh3Blven9IG7DUJPF30AQpQJHaukRNcbMtU8Yp-rhmlovfODBPdKQghI3Ed8wGBC2wXzHdI4jjUIegg-YkHxZFwKnW6C57wLtsICBwt2O8LVFmr6RHyF9B6V2x2I6eJHO-aOPPgzWeitbxgCtsjH0aPIPfGzujieZ2omY2FQ2moMrU8FRvf9d7k8MOskVMsCJgfZldR8D-wQo9zA7PSAXHlG1yu24PINXrX9lXR_XU4w"
+      workflows-instance-id="1"
+    />
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>

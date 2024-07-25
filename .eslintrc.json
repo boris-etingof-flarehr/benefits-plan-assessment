@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "simple-import-sort"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "preact",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+  }
+}
