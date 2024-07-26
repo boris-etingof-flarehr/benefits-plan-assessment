@@ -13,7 +13,7 @@ interface Props {
 }
 
 const App: FunctionalComponent<Props> = (props) => {
-  const accessToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjBjYjQyNzQyYWU1OGY0ZGE0NjdiY2RhZWE0Yjk1YTI5ZmJhMGM1ZjkiLCJ0eXAiOiJKV1QifQ.eyJleHRlbnNpb25fQXBvbGxvUHJvZmlsZXMiOiJBUC1DNDlFRDMwNy0xRTU5LTQzMUUtOEE5My1GOTJGNzg2QkI1MjkiLCJleHRlbnNpb25fVW5lc3RhYmxpc2hlZEFwb2xsb1Byb2ZpbGVzIjoiIiwiY3VzdG9tZXJJZCI6IjMzY2FhNGVhLTNiNmItNDJlYy1hODc5LWI2YjNkNjFkYWRkMCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9mbGFyZS1hcHAtYXV0b2RldiIsImF1ZCI6ImZsYXJlLWFwcC1hdXRvZGV2IiwiYXV0aF90aW1lIjoxNzIxNzEyODgwLCJ1c2VyX2lkIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwic3ViIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwiaWF0IjoxNzIxODgzMzk5LCJleHAiOjE3MjE4ODY5OTksInBob25lX251bWJlciI6Iis2MTQwNjEzNTc2NCIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsicGhvbmUiOlsiKzYxNDA2MTM1NzY0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiY3VzdG9tIn19.NJFST9Q4jX5neHyGRglWPPuNqblx9cJxmPC6jdRJmyCJbXqJ0uOJwzXsECmokXwm_vlrqZE74wQynlM5M3EbCpapeGVCK2wln9pIYZepqhCFrXSfwd4zoclfzZX_AyhccTi1I20l9bGAWQq6y0MCTh2eekKaXiIEePowueGnKMPIgdfocOyFoIi1Nx9oAOKkRN3zccaqfPQ778w_k8eh9p-JFXLqambQlvhaAAOHYoS5LOZg38MXe4HviMNOfsb2RPUjreUos3shaAW50lmOrmSlzTUKGEX2cM3t3kI1iL-cWMUJHNrwfr8np3M9ZgJdCwZGkCSz0kdI6qTHTKdJag';
+  const accessToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjBjYjQyNzQyYWU1OGY0ZGE0NjdiY2RhZWE0Yjk1YTI5ZmJhMGM1ZjkiLCJ0eXAiOiJKV1QifQ.eyJleHRlbnNpb25fQXBvbGxvUHJvZmlsZXMiOiJBUC1DNDlFRDMwNy0xRTU5LTQzMUUtOEE5My1GOTJGNzg2QkI1MjkiLCJleHRlbnNpb25fVW5lc3RhYmxpc2hlZEFwb2xsb1Byb2ZpbGVzIjoiIiwiY3VzdG9tZXJJZCI6IjMzY2FhNGVhLTNiNmItNDJlYy1hODc5LWI2YjNkNjFkYWRkMCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9mbGFyZS1hcHAtYXV0b2RldiIsImF1ZCI6ImZsYXJlLWFwcC1hdXRvZGV2IiwiYXV0aF90aW1lIjoxNzIxNzEyODgwLCJ1c2VyX2lkIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwic3ViIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwiaWF0IjoxNzIxOTE1NjAzLCJleHAiOjE3MjE5MTkyMDMsInBob25lX251bWJlciI6Iis2MTQwNjEzNTc2NCIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsicGhvbmUiOlsiKzYxNDA2MTM1NzY0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiY3VzdG9tIn19.kDzrrrL5lsBUblhwLvZdWx_xaZ-1d_XTXLyFkoY5NFsc4duMAshAULU7c-inly456e1YyPaRskpDT5TzPbkOaZP519NYjOdiadjSbn6F2PneOzJHZg3RphOSORuo1NAQr7NI25M17S-aWearJO-gLG-MoGxDjB7sH29M9gLLf5ywEEbu-jOeOlBB6Y5pJdWwonS7aBtNNpx0snfRDSlidtWYZQcaGdoJndolUkdbqFYUEdxk5D2iJQkvulcMoYpzK4K3YbFWD82Lklb-uVr7mVPBH3jIb5VHPA9XV3XGc_e3y74WBRf2xJPl6Cn7mDSsdrY_gkzsasRuDBc2GPn1Og';
 
   useEffect(() => {
     axios.defaults.baseURL = '/benefits-plan';
@@ -43,9 +43,29 @@ const App: FunctionalComponent<Props> = (props) => {
     metadata: { featureName: 'string', treatmentName: 'string' }
   };
 
+  const cssVars = `
+  :host {
+    --fl-color-primary: #1890ff;
+    --fl-color-primary-light: #74c0ff;
+    --fl-color-primary-dark: #006bce;
+    --fl-color-primary-disabled: #f5f5f5;
+    --fl-color-primary-hover: #40a9ff;
+    --fl-color-primary-focus: #40a9ff;
+    --fl-color-primary-text: white;
+    --fl-color-secondary: #d3d3d3;
+    --fl-color-secondary-light: #e1e1e1;
+    --fl-color-secondary-dark: #cecece;
+    --fl-color-secondary-disabled: #f5f5f5;
+    --fl-color-secondary-hover: #ebebeb;
+    --fl-color-secondary-focus: #ebebeb;
+    --fl-color-secondary-text: #262626;
+  }
+`;
+
+
   return (
     <>
-      <style>{css.toString()}</style>
+      <style>{cssVars + css.toString()}</style>
 
       <div class="font-inter pt-6 pb-8 md:py-24 px-px">
         <AssessmentTemplate
