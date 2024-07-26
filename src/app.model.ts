@@ -65,7 +65,7 @@ export interface AssessmentContent extends IContent {
   template: 'Assessment';
   assessmentId: string;
   declineButton: string;
-  declineButtonHidden: boolean;
+  skipButtonHidden: boolean;
 }
 
 export type OfferMetadata = {

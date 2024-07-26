@@ -14,7 +14,7 @@ const useTemplate = (
   offer: MarketplaceOfferT<AssessmentContent>,
   acceptButtonText: string | undefined,
   declineButtonText: string | undefined,
-  declineButtonHidden: boolean
+  skipButtonHidden: boolean
 ): {
   title: string | undefined; 
   description: string | undefined;
@@ -137,7 +137,7 @@ const useTemplate = (
       case Slide.BriefIntroduction:
         return declineButtonText;
       case Slide.Questions:
-        if(declineButtonHidden)
+        if(skipButtonHidden)
         {
           return undefined;
         }

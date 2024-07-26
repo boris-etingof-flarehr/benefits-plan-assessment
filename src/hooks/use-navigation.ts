@@ -98,16 +98,14 @@ function getScreenNames(
   }
 
   switch (true) {
-    case workplace.linkingStatus === 'PreviouslyLinked':
-      return ['Introduction', 'SummaryGeneric'];
     case identity.registrationStatus === 'Unregistered':
       return ['Introduction', 'FlareAppIdentity'];
-    case identity.registrationStatus === 'PreviouslyRegistered' &&
-      workplace.linkingStatus === 'Unlinked':
+    case identity.registrationStatus === 'PreviouslyRegistered' && workplace.linkingStatus === 'Unlinked':
       return ['Introduction', 'FlareAppIdentity'];
-    case identity.registrationStatus === 'PreviouslyRegistered':
+    case identity.registrationStatus === 'PreviouslyRegistered' && workplace.linkingStatus == "NewlyLinked":
     case identity.registrationStatus === 'NewlyRegistered':
       return [...offers.map((o) => o.name), finalScreen];
+    case identity.registrationStatus === 'PreviouslyRegistered' && workplace.linkingStatus == "PreviouslyLinked" :
     case identity.registrationStatus === 'RegistrationAbandoned':
       return [finalScreen];
     default:
