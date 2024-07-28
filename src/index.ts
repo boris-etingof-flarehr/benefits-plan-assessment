@@ -4,6 +4,6 @@ import App from './app';
 
 export const BenefitsOnboardingCustomElementName = 'benefits-plan-assessment';
 
-register(App, BenefitsOnboardingCustomElementName, [], {
+register(App, BenefitsOnboardingCustomElementName, ['offer'], {
   shadow: true
 });

@@ -28,23 +28,21 @@ const cssVars = `
 interface Props {
   ['backend-url']: string;
   ['access-token']: string;
-  ['profile-id']: string;
   ['client']: string;
   ['source']: string;
   ['channel']: string;
+  ['offer']: MarketplaceOfferT<AssessmentContent>;
 }
 
 const App: FunctionalComponent<Props> = (props) => {
-  const accessToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjBjYjQyNzQyYWU1OGY0ZGE0NjdiY2RhZWE0Yjk1YTI5ZmJhMGM1ZjkiLCJ0eXAiOiJKV1QifQ.eyJleHRlbnNpb25fQXBvbGxvUHJvZmlsZXMiOiJBUC1DNDlFRDMwNy0xRTU5LTQzMUUtOEE5My1GOTJGNzg2QkI1MjkiLCJleHRlbnNpb25fVW5lc3RhYmxpc2hlZEFwb2xsb1Byb2ZpbGVzIjoiIiwiY3VzdG9tZXJJZCI6IjMzY2FhNGVhLTNiNmItNDJlYy1hODc5LWI2YjNkNjFkYWRkMCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9mbGFyZS1hcHAtYXV0b2RldiIsImF1ZCI6ImZsYXJlLWFwcC1hdXRvZGV2IiwiYXV0aF90aW1lIjoxNzIxNzEyODgwLCJ1c2VyX2lkIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwic3ViIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwiaWF0IjoxNzIyMTE5OTg5LCJleHAiOjE3MjIxMjM1ODksInBob25lX251bWJlciI6Iis2MTQwNjEzNTc2NCIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsicGhvbmUiOlsiKzYxNDA2MTM1NzY0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiY3VzdG9tIn19.LuH7-KeUR1XORYcGC3w_q5oo-U6wsTuLudQWPMi6VcsTGyY2uKoq7ZN9X-L8bqKCm8DFqKlygXrGpt86G7cvEusCLNFIh-XSd8pOnKT3rIrCUXOSN-2Orev_IrotWlTzpSdM6wQ5ZBSeDsasH12KVmZeSIPsJCCOUYq1A2KfU0tMwK3i78vrSBlcPPvHSwwR9B9RXKt51ocgm66h5e7ZWCAp7Twc5duHBBOTKk1aZWQVbziid9Tea2NhSRH7i6DjW2JrY4ltOOcwBXsvbKoSabmGuDHRCjF-_W1hvYZvzMpFhmxXwrv7WEn96Jmo_lRRXTiowY5WHxz5IBdSpnL85Q';
-
   useEffect(() => {
-    axios.defaults.baseURL = props['backend-url'];
-    axios.defaults.headers.common['X-PROFILE-ID'] = props['profile-id'];
-    axios.defaults.headers.Authorization = `Bearer ${props['access-token']}`;
-    axios.defaults.params = { client: props['client'], source: props['source'], channel: props['channel'] };
+    axios.defaults.baseURL = '/benefits-plan';
+    axios.defaults.headers.common['X-PROFILE-ID'] = 'AP-C49ED307-1E59-431E-8A93-F92F786BB529';
+    axios.defaults.headers.Authorization = `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjBjYjQyNzQyYWU1OGY0ZGE0NjdiY2RhZWE0Yjk1YTI5ZmJhMGM1ZjkiLCJ0eXAiOiJKV1QifQ.eyJleHRlbnNpb25fQXBvbGxvUHJvZmlsZXMiOiJBUC1DNDlFRDMwNy0xRTU5LTQzMUUtOEE5My1GOTJGNzg2QkI1MjkiLCJleHRlbnNpb25fVW5lc3RhYmxpc2hlZEFwb2xsb1Byb2ZpbGVzIjoiIiwiY3VzdG9tZXJJZCI6IjMzY2FhNGVhLTNiNmItNDJlYy1hODc5LWI2YjNkNjFkYWRkMCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9mbGFyZS1hcHAtYXV0b2RldiIsImF1ZCI6ImZsYXJlLWFwcC1hdXRvZGV2IiwiYXV0aF90aW1lIjoxNzIxNzEyODgwLCJ1c2VyX2lkIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwic3ViIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwiaWF0IjoxNzIyMTkzMzk0LCJleHAiOjE3MjIxOTY5OTQsInBob25lX251bWJlciI6Iis2MTQwNjEzNTc2NCIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsicGhvbmUiOlsiKzYxNDA2MTM1NzY0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiY3VzdG9tIn19.UOHnl4l0jewAyp2QSCGboC5DxeNuBuUsahZR_wXDCyDbdHFxV3KlDHnlsIEr-33RQo3cdJENKhN7RStGDaVr88TL-DrYJuXthXTGwgqRl5K2y9WzZfmh13BbS38vSfCeVRZ7y4PDkHpPEP4Zg4RvLOMEk1avhkXvB0qLylx7qX-3huA4uY7wc0sW5TXtyG-Yzjx6eIpJo4-yZWRnsYpuHDYejwYw29Uj-bAKLaZ7wnP2xW9JeX2qpj4HDtqmTxsHRswk2YoqmQzrc1in09ju3lqfbHsbcgqoqZgJczEl3VmvGC_xX-_fOtHproSjzYAI_peLHN074_VAlO4saC3hUQ`;
+    // axios.defaults.params = { client: 'onboarding', source: 'Onboarding', channel: 'onboarding' };
   }, []);
 
-  const stepNumber = { current: 1, total: 5 };
+  const stepNumber = { current: 1, total: 2 };
   const onDeclineButtonPress = () => {};
   const onComplete = () => {};
 
@@ -69,7 +67,9 @@ const App: FunctionalComponent<Props> = (props) => {
     <>
       <style>{cssVars + css.toString()}</style>
 
-      <div class="font-inter pt-6 pb-8 md:py-24 px-px">
+      ++ {props.offer}
+
+      <div class="font-inter">
         <AssessmentTemplate
           stepNumber={stepNumber}
           step={marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}

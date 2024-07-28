@@ -5,7 +5,7 @@ import LeftRightLayout from '@app/layouts/left-right-layout';
 import { Transition } from '@headlessui/react';
 import DOMPurify from 'dompurify';
 import { FunctionalComponent } from 'preact';
-import { FC, useCallback, useEffect } from 'preact/compat';
+import { FC, useCallback, useEffect, useState } from 'preact/compat';
 
 import LearnMorePanel from '../../learn-more-panel';
 import type { Question, QuestionAnswer, SubmissionResult } from './models';
@@ -223,16 +223,29 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     trace
   ]);
 
+  const showSteps = false;
+  const skipBriefIntroduction = true;
+  const [loading, setLoading] = useState(skipBriefIntroduction);
+  useEffect(() => {
+    skipBriefIntroduction && handlePrimaryButtonClick().then(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <LeftRightLayout>
       <LeftRightLayout.Left>
         <div>
-          <div class="flex justify-between md:block text-xs tracking-wide">
-            <span class="relative px-3 py-0.5 text-primary-base font-semibold">
-              {props.stepNumber.current} OF {props.stepNumber.total}
-              <span class="absolute left-0 rounded-xl bg-primary-base opacity-10 w-full h-[90%]" />
-            </span>
-          </div>
+          {showSteps ? (
+            <div class="flex justify-between md:block text-xs tracking-wide">
+              <span class="relative px-3 py-0.5 text-primary-base font-semibold">
+                {props.stepNumber.current} OF {props.stepNumber.total}
+                <span class="absolute left-0 rounded-xl bg-primary-base opacity-10 w-full h-[90%]" />
+              </span>
+            </div>
+          ) : null}
           <Transition
             appear={true}
             show={true}
