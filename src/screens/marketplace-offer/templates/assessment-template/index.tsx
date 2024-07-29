@@ -13,7 +13,7 @@ import Questions from './questions';
 import useTemplate, { Slide } from './use-template';
 
 type Props = {
-  stepNumber: {
+  stepNumber?: {
     current: number;
     total: number;
   };
@@ -98,7 +98,12 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     calculateUpdatedAnswers,
     updateAnswers,
     submissionResult
-  } = useTemplate(props.step, props.acceptButton?.text, props.declineButton?.text, props.onComplete);
+  } = useTemplate(
+    props.step,
+    props.acceptButton?.text,
+    props.declineButton?.text,
+    props.onComplete
+  );
 
   const { trace } = useTrace();
 
@@ -257,7 +262,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
               <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
                 {title}
               </h3>
-              
+
               {description && (
                 <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
                   {description}
@@ -273,25 +278,29 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
                   submissionResult={submissionResult}
                 />
               </div>
-              <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
-                {primaryButtonText && (
-                  <Button
-                    class=""
-                    disabled={!primaryButtonEnabled}
-                    onClickPromise={handlePrimaryButtonClick}
-                  >
-                    {primaryButtonText}
-                  </Button>
-                )}
-                {showSteps && secondaryButtonText && (
-                  <Button
-                    class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300"
-                    onClickPromise={handleSecondaryButtonClick}
-                  >
-                    {secondaryButtonText}
-                  </Button>
-                )}
-              </div>
+
+              {(primaryButtonText || (showSteps && secondaryButtonText)) && (
+                <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
+                  {primaryButtonText && (
+                    <Button
+                      class=""
+                      disabled={!primaryButtonEnabled}
+                      onClickPromise={handlePrimaryButtonClick}
+                    >
+                      {primaryButtonText}
+                    </Button>
+                  )}
+                  {showSteps && secondaryButtonText && (
+                    <Button
+                      class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300"
+                      onClickPromise={handleSecondaryButtonClick}
+                    >
+                      {secondaryButtonText}
+                    </Button>
+                  )}
+                </div>
+              )}
+
               <div
                 className={`flex flex-col gap-3 mt-6 text-gray-600 text-xs ${getSlidingTransitionCssClasses(Slide.BriefIntroduction, currentSlide)}`}
               >

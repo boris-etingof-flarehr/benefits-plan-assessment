@@ -26,45 +26,86 @@ const cssVars = `
 `;
 
 interface Props {
-  data: {
-    baseURL: string;
-    profileId: string;
-    accessToken: string;
-    marketPlaceOffer: MarketplaceOfferT<AssessmentContent>;
-    params: { client: string; source: string; channel: string };
-    stepNumber: { current: number; total: number };
-    onDeclineButtonPress: () => void;
-    onComplete: () => void;
-  };
+  'base-url': string;
+  'profile-id': string;
+  'access-token': string;
+  title: string;
+  'image-url': string;
+  'assessment-id': string;
+  'track-client': string;
+  'track-source': string;
+  'track-channel': string;
+  'metadata-feature-name': string;
+  'metadata-treatment-name': string;
+
+  description?: string;
+  'accept-button'?: string;
+  'decline-button'?: string;
+  'step-number-current'?: string;
+  'step-number-total'?: string;
+  terms?: string[];
+  details?: string[];
+  onDeclineButtonPress?: () => any;
+  onComplete?: () => any;
 }
+
 const App: FunctionalComponent<Props> = (props) => {
   useEffect(() => {
-    if (props.data) {
-      axios.defaults.baseURL = props.data?.baseURL;
-      axios.defaults.headers.common['X-PROFILE-ID'] = props.data?.profileId;
-      axios.defaults.headers.Authorization = `Bearer ${props.data?.accessToken}`;
-      axios.defaults.params = props.data?.params;
+    axios.defaults.baseURL = props['base-url'];
+    axios.defaults.headers.common['X-PROFILE-ID'] = props['profile-id'];
+    axios.defaults.headers.Authorization = `Bearer ${props['access-token']}`;
+    axios.defaults.params = {
+      client: props['track-client'],
+      source: props['track-source'],
+      channel: props['track-channel']
+    };
+  }, []);
+
+  const marketPlaceOffer = {
+    content: {
+      title: props.title,
+      description: props.description,
+      imageUrl: props['image-url'],
+      acceptButton: props['accept-button'],
+      assessmentId: props['assessment-id'],
+      declineButton: props['decline-button'],
+      template: 'Assessment',
+      terms: props.terms,
+      details: props.details
+    },
+    metadata: {
+      featureName: props['metadata-feature-name'],
+      treatmentName: props['metadata-treatment-name']
     }
-  }, [props.data]);
+  };
+
+  const stepNumber =
+    props['step-number-current'] && props['step-number-total']
+      ? {
+          current: parseInt(props['step-number-current']),
+          total: parseInt(props['step-number-total'])
+        }
+      : undefined;
 
   return (
     <>
       <style>{cssVars + css.toString()}</style>
-
-      {props.data ? (
-        <div class="font-inter">
-          <AssessmentTemplate
-            stepNumber={props.data.stepNumber}
-            step={props.data.marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}
-            acceptButton={{ text: props.data.marketPlaceOffer.content.acceptButton }}
-            declineButton={{
-              text: props.data.marketPlaceOffer.content.declineButton,
-              onClick: props.data.onDeclineButtonPress
-            }}
-            onComplete={props.data.onComplete}
-          />
-        </div>
-      ) : null}
+      <div class="font-inter">
+        <AssessmentTemplate
+          stepNumber={stepNumber}
+          step={marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}
+          acceptButton={{ text: marketPlaceOffer.content.acceptButton }}
+          declineButton={
+            props.onDeclineButtonPress
+              ? {
+                  text: marketPlaceOffer.content.declineButton,
+                  onClick: props.onDeclineButtonPress
+                }
+              : undefined
+          }
+          onComplete={props.onComplete}
+        />
+      </div>
     </>
   );
 };
