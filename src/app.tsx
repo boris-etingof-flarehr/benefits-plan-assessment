@@ -1,10 +1,10 @@
+import axios from 'axios';
 import { FunctionalComponent } from 'preact';
+import { useEffect } from 'preact/hooks';
 
 import { AssessmentContent, MarketplaceOfferT } from './app.model';
 import css from './index.css?inline';
 import AssessmentTemplate from './screens/marketplace-offer/templates/assessment-template';
-import { useEffect } from 'preact/hooks';
-import axios from 'axios';
 
 const cssVars = `
   :host {
@@ -29,7 +29,6 @@ interface Props {
   'base-url': string;
   'profile-id': string;
   'access-token': string;
-  title: string;
   'image-url': string;
   'assessment-id': string;
   'track-client': string;
@@ -38,11 +37,14 @@ interface Props {
   'metadata-feature-name': string;
   'metadata-treatment-name': string;
 
+  title?: string;
   description?: string;
   'accept-button'?: string;
   'decline-button'?: string;
   'step-number-current'?: string;
   'step-number-total'?: string;
+  'vertical-alignment'?: string;
+
   terms?: string[];
   details?: string[];
   onDeclineButtonPress?: () => any;
@@ -93,6 +95,7 @@ const App: FunctionalComponent<Props> = (props) => {
       <div class="font-inter">
         <AssessmentTemplate
           stepNumber={stepNumber}
+          verticalAlignment={props['vertical-alignment']}
           step={marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}
           acceptButton={{ text: marketPlaceOffer.content.acceptButton }}
           declineButton={

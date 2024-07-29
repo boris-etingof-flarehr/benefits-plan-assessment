@@ -10,10 +10,10 @@ export type MarketplaceOfferT<TContent extends AssessmentContent> = {
 export type MarketplaceOffer = MarketplaceOfferT<AssessmentContent>;
 
 interface IContent {
-  title: string;
+  imageUrl: string;
+  title?: string;
   description?: string;
   details?: string[];
-  imageUrl: string;
   acceptButton?: string;
   terms?: string[];
 }

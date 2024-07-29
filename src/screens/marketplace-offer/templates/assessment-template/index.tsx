@@ -21,6 +21,8 @@ type Props = {
   acceptButton?: { text?: string; class?: string };
   declineButton?: { text?: string; class?: string; onClick: () => void };
   onComplete?: () => void;
+  verticalAlignment?: string;
+  skipIntro?: boolean;
 };
 
 const slideIndexes = Object.values(Slide).filter((v) => !isNaN(Number(v)));
@@ -102,7 +104,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     props.step,
     props.acceptButton?.text,
     props.declineButton?.text,
-    props.onComplete
+    props.onComplete,
   );
 
   const { trace } = useTrace();
@@ -228,19 +230,17 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     trace
   ]);
 
-  const showSteps = false;
-  const skipBriefIntroduction = true;
-  const [loading, setLoading] = useState(skipBriefIntroduction);
+  const [skippingIntro, setSkippingIntro] = useState(props.skipIntro);
   useEffect(() => {
-    skipBriefIntroduction && handlePrimaryButtonClick().then(() => setLoading(false));
+    props.skipIntro && handlePrimaryButtonClick().then(() => setSkippingIntro(false));
   }, []);
 
-  if (loading) {
+  if (skippingIntro) {
     return null;
   }
 
   return (
-    <LeftRightLayout>
+    <LeftRightLayout verticalAlignment={props.verticalAlignment}>
       <LeftRightLayout.Left>
         <div>
           {props.stepNumber ? (
@@ -259,9 +259,11 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
             enterTo="translate-y-0"
           >
             <div class="flex flex-col justify-stretch md:max-w-[27.5rem]">
-              <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
-                {title}
-              </h3>
+              {title && (
+                <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
+                  {title}
+                </h3>
+              )}
 
               {description && (
                 <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
@@ -279,27 +281,26 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
                 />
               </div>
 
-              {(primaryButtonText || (showSteps && secondaryButtonText)) && (
-                <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
-                  {primaryButtonText && (
-                    <Button
-                      class=""
-                      disabled={!primaryButtonEnabled}
-                      onClickPromise={handlePrimaryButtonClick}
-                    >
-                      {primaryButtonText}
-                    </Button>
-                  )}
-                  {showSteps && secondaryButtonText && (
-                    <Button
-                      class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300"
-                      onClickPromise={handleSecondaryButtonClick}
-                    >
-                      {secondaryButtonText}
-                    </Button>
-                  )}
-                </div>
-              )}
+              <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem]">
+                {primaryButtonText && (
+                  <Button
+                    class="mt-6 md:mt-11"
+                    disabled={!primaryButtonEnabled}
+                    onClickPromise={handlePrimaryButtonClick}
+                  >
+                    {primaryButtonText}
+                  </Button>
+                )}
+
+                {secondaryButtonText && (
+                  <Button
+                    class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300 mt-6 md:mt-11"
+                    onClickPromise={handleSecondaryButtonClick}
+                  >
+                    {secondaryButtonText}
+                  </Button>
+                )}
+              </div>
 
               <div
                 className={`flex flex-col gap-3 mt-6 text-gray-600 text-xs ${getSlidingTransitionCssClasses(Slide.BriefIntroduction, currentSlide)}`}
