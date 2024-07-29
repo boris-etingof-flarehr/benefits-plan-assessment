@@ -12,16 +12,41 @@
     />
   </head>
   <body>
-    <benefits-plan-assessment offer="test" id="blah" />
-    
+    <benefits-plan-assessment offer="test" id="benefitsPlanAssessment" />
+
     <script type="module" src="/src/index.ts"></script>
 
     <script>
-      window.onload = function() {
-        const el = document.getElementById('blah');
-        el.offer = 'over'
-      }
-    </script>
+      const data = {
+        baseURL: '/benefits-plan',
+        profileId: 'AP-C49ED307-1E59-431E-8A93-F92F786BB529',
+        accessToken:
+          'eyJhbGciOiJSUzI1NiIsImtpZCI6IjBjYjQyNzQyYWU1OGY0ZGE0NjdiY2RhZWE0Yjk1YTI5ZmJhMGM1ZjkiLCJ0eXAiOiJKV1QifQ.eyJleHRlbnNpb25fQXBvbGxvUHJvZmlsZXMiOiJBUC1DNDlFRDMwNy0xRTU5LTQzMUUtOEE5My1GOTJGNzg2QkI1MjkiLCJleHRlbnNpb25fVW5lc3RhYmxpc2hlZEFwb2xsb1Byb2ZpbGVzIjoiIiwiY3VzdG9tZXJJZCI6IjMzY2FhNGVhLTNiNmItNDJlYy1hODc5LWI2YjNkNjFkYWRkMCIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9mbGFyZS1hcHAtYXV0b2RldiIsImF1ZCI6ImZsYXJlLWFwcC1hdXRvZGV2IiwiYXV0aF90aW1lIjoxNzIxNzEyODgwLCJ1c2VyX2lkIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwic3ViIjoiMzNjYWE0ZWEtM2I2Yi00MmVjLWE4NzktYjZiM2Q2MWRhZGQwIiwiaWF0IjoxNzIyMjA5NzYxLCJleHAiOjE3MjIyMTMzNjEsInBob25lX251bWJlciI6Iis2MTQwNjEzNTc2NCIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsicGhvbmUiOlsiKzYxNDA2MTM1NzY0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiY3VzdG9tIn19.eHfy_sz0GkfX2vEyHahT-jrlxYnZmidevlg_rtMKnrjYH4s-fJONjRSdAsH5j6S0IUHwKwUSZ6oEpWDd-EnG4AWzgTQWAGXd9D1T2zwJyt1uz06mf0p9iyhq3A6hHQTucNtd9OpbQpbWk83kUUF1PjybAovvEw6F2h1Df0xk7qen4VZMOzclM6mg3zOd2eGzRhH1wG8LIs3XBoJw8sN86GtSp-3s7BcISKQykchqArmIjWwLs5eE6Ax7fO9E_UBWE0Ih_Qe88pKb39QAwcb70fqV16LLAW6_vD5tyeGRDtGZypi_M4WO9OoncxZTF6dvdA5eaGpvAxpCPsv5YxvlbA',
+        params: { client: 'onboarding', source: 'Onboarding', channel: 'onboarding' },
+        marketPlaceOffer: {
+          // name: 'Offer name',
+          content: {
+            title: 'Offer title',
+            description: 'Offer description',
+            imageUrl: 'imageUrl',
+            // acceptButton: 'Accept Button',
+            // terms: ['terms'],
+            // details: ['details1', 'details2'],
+            template: 'Assessment',
+            assessmentId: '78c71582-18f4-4f47-8b92-5a0dfc14d127',
+            // declineButton: 'Decline Button'
+          },
+          metadata: { featureName: 'string', treatmentName: 'string' },
+          onDeclineButtonPress: () => {},
+          // stepNumber: { current: 1, total: 2 },
+          // onComplete: () => {},
+        }
+      };
 
+      window.onload = function () {
+        const el = document.getElementById('benefitsPlanAssessment');
+        el.data = data;
+      };
+    </script>
   </body>
 </html>

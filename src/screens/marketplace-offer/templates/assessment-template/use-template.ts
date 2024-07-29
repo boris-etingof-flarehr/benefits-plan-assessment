@@ -13,7 +13,8 @@ export enum Slide {
 const useTemplate = (
   offer: MarketplaceOfferT<AssessmentContent>,
   acceptButtonText: string | undefined,
-  declineButtonText: string | undefined
+  declineButtonText: string | undefined,
+  onComplete?: () => void,
 ): {
   title: string | undefined;
   description: string | undefined;
@@ -119,12 +120,12 @@ const useTemplate = (
   const [primaryButtonEnabled, setPrimaryButtonEnabled] = useState(true);
 
   const primaryButtonText = useMemo(() => {
-    switch (currentSlide) {
-      case Slide.BriefIntroduction:
+    switch (true) {
+      case currentSlide === Slide.BriefIntroduction:
         return acceptButtonText;
-      case Slide.Questions:
+      case currentSlide === Slide.Questions:
         return 'Submit';
-      case Slide.SubmissionResult:
+      case currentSlide === Slide.SubmissionResult && !!onComplete:
         return 'Next';
       default:
         return undefined;

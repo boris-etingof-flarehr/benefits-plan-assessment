@@ -18,9 +18,9 @@ type Props = {
     total: number;
   };
   step: MarketplaceOfferT<AssessmentContent>;
-  acceptButton: { text?: string; class?: string };
-  declineButton: { text?: string; class?: string; onClick: () => void };
-  onComplete: () => void;
+  acceptButton?: { text?: string; class?: string };
+  declineButton?: { text?: string; class?: string; onClick: () => void };
+  onComplete?: () => void;
 };
 
 const slideIndexes = Object.values(Slide).filter((v) => !isNaN(Number(v)));
@@ -98,7 +98,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     calculateUpdatedAnswers,
     updateAnswers,
     submissionResult
-  } = useTemplate(props.step, props.acceptButton.text, props.declineButton.text);
+  } = useTemplate(props.step, props.acceptButton?.text, props.declineButton?.text, props.onComplete);
 
   const { trace } = useTrace();
 
@@ -184,7 +184,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     }
 
     if (currentSlide === Slide.SubmissionResult) {
-      props.onComplete();
+      props.onComplete?.();
     }
   }, [assessmentId, assessmentTitle, currentSlide, goToNextSlide, props, trace]);
 
@@ -211,7 +211,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
       });
     }
 
-    props.declineButton.onClick();
+    props.declineButton?.onClick();
   }, [
     assessmentId,
     assessmentTitle,
@@ -238,7 +238,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     <LeftRightLayout>
       <LeftRightLayout.Left>
         <div>
-          {showSteps ? (
+          {props.stepNumber ? (
             <div class="flex justify-between md:block text-xs tracking-wide">
               <span class="relative px-3 py-0.5 text-primary-base font-semibold">
                 {props.stepNumber.current} OF {props.stepNumber.total}
@@ -257,6 +257,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
               <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
                 {title}
               </h3>
+              
               {description && (
                 <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
                   {description}
@@ -282,7 +283,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
                     {primaryButtonText}
                   </Button>
                 )}
-                {secondaryButtonText && (
+                {showSteps && secondaryButtonText && (
                   <Button
                     class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300"
                     onClickPromise={handleSecondaryButtonClick}
@@ -294,7 +295,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
               <div
                 className={`flex flex-col gap-3 mt-6 text-gray-600 text-xs ${getSlidingTransitionCssClasses(Slide.BriefIntroduction, currentSlide)}`}
               >
-                {props.step.content.terms.map((term, index) => (
+                {props.step.content.terms?.map((term, index) => (
                   <span
                     key={index}
                     dangerouslySetInnerHTML={{
