@@ -10,6 +10,7 @@
   "scripts": {
     "start": "vite --open index.html",
     "build": "tsc && vite build",
+    "blah": "./node_modules/.bin/tsc",
     "test": "",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --ext .js,.jsx,.ts,.tsx --ignore-pattern '!*.{js,jsx,ts,tsx}'"
   },
