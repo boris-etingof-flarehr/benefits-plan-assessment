@@ -33,10 +33,10 @@ interface Props {
   'assessment-id': string;
   'track-client': string;
   'track-source': string;
+  'track-source-id': string;
   'track-channel': string;
   'metadata-feature-name': string;
   'metadata-treatment-name': string;
-
   title?: string;
   description?: string;
   'accept-button'?: string;
@@ -44,11 +44,10 @@ interface Props {
   'step-number-current'?: string;
   'step-number-total'?: string;
   'vertical-alignment'?: string;
-
   terms?: string[];
   details?: string[];
-  onDeclineButtonPress?: () => any;
-  onComplete?: () => any;
+  onDeclineButtonPress?: () => void;
+  onComplete?: () => void;
 }
 
 const App: FunctionalComponent<Props> = (props) => {
@@ -61,7 +60,7 @@ const App: FunctionalComponent<Props> = (props) => {
       source: props['track-source'],
       channel: props['track-channel']
     };
-  }, []);
+  }, [props]);
 
   const marketPlaceOffer = {
     content: {
@@ -84,8 +83,8 @@ const App: FunctionalComponent<Props> = (props) => {
   const stepNumber =
     props['step-number-current'] && props['step-number-total']
       ? {
-          current: parseInt(props['step-number-current']),
-          total: parseInt(props['step-number-total'])
+          current: parseInt(props['step-number-current'], 10),
+          total: parseInt(props['step-number-total'], 10)
         }
       : undefined;
 
@@ -94,6 +93,8 @@ const App: FunctionalComponent<Props> = (props) => {
       <style>{cssVars + css.toString()}</style>
       <div class="font-inter">
         <AssessmentTemplate
+          source="track-source-id"
+          sourceId="track-source-id"
           stepNumber={stepNumber}
           verticalAlignment={props['vertical-alignment']}
           step={marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}

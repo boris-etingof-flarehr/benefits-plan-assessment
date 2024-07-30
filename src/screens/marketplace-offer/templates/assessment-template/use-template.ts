@@ -130,7 +130,7 @@ const useTemplate = (
       default:
         return undefined;
     }
-  }, [acceptButtonText, currentSlide]);
+  }, [acceptButtonText, currentSlide, onComplete]);
 
   const secondaryButtonText = useMemo(() => {
     switch (currentSlide) {

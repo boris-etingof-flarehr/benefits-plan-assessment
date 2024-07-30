@@ -1,7 +1,7 @@
+import axios from 'axios';
 import { useState } from 'preact/hooks';
 
 import { AssessmentAnswers, Question } from './models';
-import axios from 'axios';
 
 type GetActivityStepsResponse = {
   firstStepId: string;
