@@ -1,5 +1,5 @@
 {
-  "name": "@flarehr/apollo-benefits-onboarding",
+  "name": "benefits-plan-assessment",
   "version": "0.0.1",
   "license": "MIT",
   "main": "dist/benefits-plan-assessment.js",
