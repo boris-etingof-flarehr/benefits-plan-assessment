@@ -5,6 +5,10 @@ on:
     branches:
       - 'release/*'
 
+permissions:
+  contents: read  # Necessary for actions/checkout to clone the repository
+  packages: write  # Required to publish to GitHub Packages
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,7 +40,7 @@ jobs:
     - name: Publish to GitHub Packages
       run: npm publish
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Ensure you have the GitHub token set in secrets
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Uses GITHUB_TOKEN for authentication
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
