@@ -44,6 +44,7 @@ interface Props {
   'step-number-current'?: string;
   'step-number-total'?: string;
   'vertical-alignment'?: string;
+  'skip-intro'?: string;
   terms?: string[];
   details?: string[];
   onDeclineButtonPress?: () => void;
@@ -93,8 +94,9 @@ const App: FunctionalComponent<Props> = (props) => {
       <style>{cssVars + css.toString()}</style>
       <div class="font-inter">
         <AssessmentTemplate
-          source="track-source-id"
-          sourceId="track-source-id"
+          source={props['track-source']}
+          sourceId={props['track-source-id']}
+          skipIntro={props['skip-intro'] === 'true'}
           stepNumber={stepNumber}
           verticalAlignment={props['vertical-alignment']}
           step={marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}

@@ -308,7 +308,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
                   </Button>
                 )}
 
-                {secondaryButtonText && (
+                {props.declineButton && secondaryButtonText && (
                   <Button
                     class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300 mt-6 md:mt-11"
                     onClickPromise={handleSecondaryButtonClick}
