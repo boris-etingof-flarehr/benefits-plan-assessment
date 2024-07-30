@@ -2,6 +2,7 @@
   "name": "@flarehr/apollo-benefits-onboarding",
   "version": "0.0.1",
   "license": "MIT",
+  "main": "dist/benefits-pan-assessment.js",
   "files": [
     "dist/"
   ],
