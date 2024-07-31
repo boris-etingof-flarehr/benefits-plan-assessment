@@ -1,136 +1,119 @@
+import axios from 'axios';
 import { FunctionalComponent } from 'preact';
-import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 
-import {
-  AppContextData,
-  CustomerIdentity,
-  CustomerRegistrationStatus,
-  Workplace,
-  WorkplaceLinkingStatus
-} from './app.model';
-import Loader from './components/loader';
-import { AppContext, defaultAppContext } from './context/app-context';
+import { AssessmentContent, MarketplaceOfferT } from './app.model';
 import css from './index.css?inline';
-import Screen from './screens';
-import {benefitsOnboardingApi, initApi, InitResponse} from './services';
-import reloadHelper from './utils/reload-event';
+import AssessmentTemplate from './screens/marketplace-offer/templates/assessment-template';
+
+const cssVars = `
+  :host {
+    --fl-color-primary: #1890ff;
+    --fl-color-primary-light: #74c0ff;
+    --fl-color-primary-dark: #006bce;
+    --fl-color-primary-disabled: #f5f5f5;
+    --fl-color-primary-hover: #40a9ff;
+    --fl-color-primary-focus: #40a9ff;
+    --fl-color-primary-text: white;
+    --fl-color-secondary: #d3d3d3;
+    --fl-color-secondary-light: #e1e1e1;
+    --fl-color-secondary-dark: #cecece;
+    --fl-color-secondary-disabled: #f5f5f5;
+    --fl-color-secondary-hover: #ebebeb;
+    --fl-color-secondary-focus: #ebebeb;
+    --fl-color-secondary-text: #262626;
+  }
+`;
 
 interface Props {
-  ['backend-url']: string;
-  ['access-token']: string;
-  ['workflows-instance-id']: string;
+  'base-url': string;
+  'profile-id': string;
+  'access-token': string;
+  'image-url': string;
+  'assessment-id': string;
+  'track-client': string;
+  'track-source': string;
+  'track-source-id': string;
+  'track-channel': string;
+  'metadata-feature-name': string;
+  'metadata-treatment-name': string;
+  title?: string;
+  description?: string;
+  'accept-button'?: string;
+  'decline-button'?: string;
+  'step-number-current'?: string;
+  'step-number-total'?: string;
+  'vertical-alignment'?: string;
+  'skip-intro'?: string;
+  terms?: string[];
+  details?: string[];
+  onDeclineButtonPress?: () => void;
+  onComplete?: () => void;
 }
 
 const App: FunctionalComponent<Props> = (props) => {
-  const [appContext, setAppContext] = useState<AppContextData>();
-  const [renderKey, setRenderKey] = useState(0);
-
   useEffect(() => {
-    const unsubscribe = reloadHelper.subscribe(() => {
-      init().then(() => setRenderKey(renderKey + 1));
-    });
-    return unsubscribe;
-  }, [renderKey]);
-
-  useEffect(() => {
-    init();
-  }, []);
-
-  const init = async (): Promise<void> => {
-    const config = {
-      backendUrl: props['backend-url'],
-      accessToken: props['access-token'],
-      workflowsInstanceId: props['workflows-instance-id']
+    axios.defaults.baseURL = props['base-url'];
+    axios.defaults.headers.common['X-PROFILE-ID'] = props['profile-id'];
+    axios.defaults.headers.Authorization = `Bearer ${props['access-token']}`;
+    axios.defaults.params = {
+      client: props['track-client'],
+      source: props['track-source'],
+      channel: props['track-channel']
     };
-    initApi(config.backendUrl, config.accessToken, config.workflowsInstanceId);
-    const response = await benefitsOnboardingApi.backend.init();
-    setAppContext(getAppContextFromInitResponse(response));
+  }, [props]);
+
+  const marketPlaceOffer = {
+    content: {
+      title: props.title,
+      description: props.description,
+      imageUrl: props['image-url'],
+      acceptButton: props['accept-button'],
+      assessmentId: props['assessment-id'],
+      declineButton: props['decline-button'],
+      template: 'Assessment',
+      terms: props.terms,
+      details: props.details
+    },
+    metadata: {
+      featureName: props['metadata-feature-name'],
+      treatmentName: props['metadata-treatment-name']
+    }
   };
 
-  const updateIdentity = useCallback(
-    (authenticated: boolean): void => {
-      if (!appContext) {
-        return;
-      }
-
-      const { identity, workplace } = appContext;
-
-      const newRegistrationStatus = authenticated
-        ? identity.registrationStatus === 'Unregistered'
-          ? 'NewlyRegistered'
-          : identity.registrationStatus
-        : 'RegistrationAbandoned';
-
-      const newWorkplaceLinkingStatus = authenticated
-        ? workplace.linkingStatus === 'Unlinked'
-          ? 'NewlyLinked'
-          : workplace.linkingStatus
-        : 'Unlinked';
-
-      setAppContext({
-        ...appContext,
-        identity: {
-          ...identity,
-          registrationStatus: newRegistrationStatus
-        },
-        workplace: {
-          ...workplace,
-          linkingStatus: newWorkplaceLinkingStatus
+  const stepNumber =
+    props['step-number-current'] && props['step-number-total']
+      ? {
+          current: parseInt(props['step-number-current'], 10),
+          total: parseInt(props['step-number-total'], 10)
         }
-      });
-    },
-    [appContext]
-  );
+      : undefined;
 
   return (
     <>
-      <style>{css.toString()}</style>
-      <div key={renderKey} class="font-inter pt-6 pb-8 md:py-24 px-px">
-        {appContext ? (
-          <AppContext.Provider value={{ ...appContext, updateIdentity }}>
-            <Screen />
-          </AppContext.Provider>
-        ) : (
-          <div class="flex justify-center">
-            <span class="animate-spin">
-              <Loader size="lg" />
-            </span>
-          </div>
-        )}
+      <style>{cssVars + css.toString()}</style>
+      <div class="font-inter">
+        <AssessmentTemplate
+          source={props['track-source']}
+          sourceId={props['track-source-id']}
+          skipIntro={props['skip-intro'] === 'true'}
+          stepNumber={stepNumber}
+          verticalAlignment={props['vertical-alignment']}
+          step={marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}
+          acceptButton={{ text: marketPlaceOffer.content.acceptButton }}
+          declineButton={
+            props.onDeclineButtonPress
+              ? {
+                  text: marketPlaceOffer.content.declineButton,
+                  onClick: props.onDeclineButtonPress
+                }
+              : undefined
+          }
+          onComplete={props.onComplete}
+        />
       </div>
     </>
   );
-};
-
-const getAppContextFromInitResponse = (initResponse: InitResponse): AppContextData => {
-  const isAppEnabled = initResponse.offers.some((offer) => offer.name === 'Perks');
-
-  const registrationStatus: CustomerRegistrationStatus = initResponse.identity.isRegistered
-    ? 'PreviouslyRegistered'
-    : 'Unregistered';
-
-  const identity: CustomerIdentity = {
-    email: initResponse.identity.email,
-    phoneNumber: initResponse.identity.phoneNumber ?? '',
-    verifiedPhoneNumber: initResponse.identity.verifiedPhoneNumber ?? '',
-    registrationStatus
-  };
-
-  const workplaceLinkingStatus: WorkplaceLinkingStatus = initResponse.workplace.isLinkedWithIdentity
-    ? 'PreviouslyLinked'
-    : 'Unlinked';
-
-  const workplace: Workplace = {
-    employerName: initResponse.workplace.employerName,
-    linkingStatus: workplaceLinkingStatus
-  };
-  return {
-    ...defaultAppContext,
-    ...initResponse,
-    isAppEnabled,
-    identity,
-    workplace
-  };
 };
 
 export default App;

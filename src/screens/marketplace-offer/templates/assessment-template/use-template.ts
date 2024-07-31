@@ -14,9 +14,9 @@ const useTemplate = (
   offer: MarketplaceOfferT<AssessmentContent>,
   acceptButtonText: string | undefined,
   declineButtonText: string | undefined,
-  skipButtonHidden: boolean
+  onComplete?: () => void,
 ): {
-  title: string | undefined; 
+  title: string | undefined;
   description: string | undefined;
   primaryButtonEnabled: boolean;
   primaryButtonText: string | undefined;
@@ -120,28 +120,23 @@ const useTemplate = (
   const [primaryButtonEnabled, setPrimaryButtonEnabled] = useState(true);
 
   const primaryButtonText = useMemo(() => {
-    switch (currentSlide) {
-      case Slide.BriefIntroduction:
+    switch (true) {
+      case currentSlide === Slide.BriefIntroduction:
         return acceptButtonText;
-      case Slide.Questions:
+      case currentSlide === Slide.Questions:
         return 'Submit';
-      case Slide.SubmissionResult:
+      case currentSlide === Slide.SubmissionResult && !!onComplete:
         return 'Next';
       default:
         return undefined;
     }
-  }, [acceptButtonText, currentSlide]);
+  }, [acceptButtonText, currentSlide, onComplete]);
 
   const secondaryButtonText = useMemo(() => {
     switch (currentSlide) {
       case Slide.BriefIntroduction:
         return declineButtonText;
       case Slide.Questions:
-        if(skipButtonHidden)
-        {
-          return undefined;
-        }
-
         return 'Skip for now';
       case Slide.SubmissionResult:
         return undefined;

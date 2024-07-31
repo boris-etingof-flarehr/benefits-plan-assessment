@@ -1,12 +1,18 @@
 import preact from '@preact/preset-vite';
 import path, { resolve } from 'path';
-import { defineConfig } from 'vite';
-import svgr from "vite-plugin-svgr";
+import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
   server: {
+    proxy: {
+      '/benefits-plan': {
+        target: 'https://autodev-partner.flarehr.com/benefits-plan/workplace-backend',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/benefits-plan/, '')
+      }
+    },
     port: 8090
   },
   plugins: [
@@ -24,10 +30,11 @@ export default defineConfig({
     rollupOptions: {
       input: resolve(__dirname, 'src/index.ts'),
       output: {
-        format: 'umd',
         dir: 'dist',
-        entryFileNames: 'benefits-onboarding.js'
+        entryFileNames: 'benefits-plan-assessment.js'
       }
     }
   }
 });
+
+import { defineConfig } from 'vite';

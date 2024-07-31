@@ -1,0 +1,49 @@
+name: Bundle Code on Release Branches
+
+on:
+  push:
+    branches:
+      - 'release/*'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.20.2'
+        cache: 'npm'
+        registry-url: 'https://npm.pkg.github.com/'
+        scope: '@simple-financial-choices'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Print TypeScript version
+      run: npx tsc --version
+
+    - name: Bundle the code
+      run: npm run build
+
+    - name: List output files
+      run: ls -l ./dist
+
+    - name: Publish to GitHub Packages
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: benefits-plan-assessment
+        path: ./dist/**/*

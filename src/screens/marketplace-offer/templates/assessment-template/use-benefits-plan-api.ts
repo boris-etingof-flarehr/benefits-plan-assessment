@@ -1,4 +1,4 @@
-import { benefitsPlanApi } from '@app/services';
+import axios from 'axios';
 import { useState } from 'preact/hooks';
 
 import { AssessmentAnswers, Question } from './models';
@@ -94,12 +94,9 @@ const useBenefitsPlanApi = (
   const [calculationResponse, setCalculationResponse] = useState<GetCalculationResponse>();
 
   const getActivity = (): Promise<void> =>
-    benefitsPlanApi.workplaceBackend
-      .getClient()
-      .get<GetActivityStepsResponse>(`v2.0/activities/${activityId}/steps`)
-      .then((res) => {
-        setStepsResponse(res.data);
-      });
+    axios.get<GetActivityStepsResponse>(`v2.0/activities/${activityId}/steps`).then((res) => {
+      setStepsResponse(res.data);
+    });
 
   const progressActivity = (answers: AssessmentAnswers): Promise<void> => {
     const data = {
@@ -107,14 +104,11 @@ const useBenefitsPlanApi = (
       progressEvents: Object.entries(answers).map(([key, value]) => ({ stepId: key, value }))
     };
 
-    return benefitsPlanApi.workplaceBackend
-      .getClient()
-      .put(`v1.0/customer/activities/${activityId}`, data);
+    return axios.put(`v1.0/customer/activities/${activityId}`, data);
   };
 
   const getCalculation = async (): Promise<void> =>
-    benefitsPlanApi.workplaceBackend
-      .getClient()
+    axios
       .get<GetCalculationResponse>(`v1.0/activities/${activityId}/calculate`)
       .then((res) => setCalculationResponse(res.data));
 

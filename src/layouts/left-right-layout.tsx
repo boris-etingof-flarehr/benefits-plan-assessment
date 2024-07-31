@@ -2,10 +2,10 @@ import { Transition } from '@headlessui/react';
 import { ComponentProps, FunctionalComponent } from 'preact';
 import React from 'preact/compat';
 
-type Props = ComponentProps<'div'>;
+type Props = ComponentProps<'div'> & {verticalAlignment?: string};
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const LeftRightLayout = ({ children }: Props) => {
+const LeftRightLayout = ({ children, verticalAlignment = 'items-center' }: Props) => {
   const childrenComponents = React.Children.toArray(children);
   const left = childrenComponents.find((o) => o.type === Left);
   const right = childrenComponents.find((o) => o.type === Right);
@@ -26,7 +26,7 @@ const LeftRightLayout = ({ children }: Props) => {
           enterFrom="-translate-y-6"
           enterTo="translate-y-0"
         >
-          {left && <div class="flex items-center h-full">{left}</div>}
+          {left && <div class={`flex h-full ${verticalAlignment}`}>{left}</div>}
         </Transition>
         <Transition
           appear={true}
@@ -35,7 +35,7 @@ const LeftRightLayout = ({ children }: Props) => {
           enterFrom="opacity-0 -translate-y-6"
           enterTo="opacity-100 translate-y-0"
         >
-          {right && <div class="flex items-center h-full">{right}</div>}
+          {right && <div class={`flex h-full ${verticalAlignment}`}>{right}</div>}
         </Transition>
       </div>
     </Transition>

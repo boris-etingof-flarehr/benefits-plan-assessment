@@ -1,4 +1,4 @@
-# apollo-benefits-onboarding web component
+# benefits-plan-assessment web component
 
 ## CLI Commands
 

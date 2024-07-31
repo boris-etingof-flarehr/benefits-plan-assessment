@@ -5,7 +5,7 @@ import LeftRightLayout from '@app/layouts/left-right-layout';
 import { Transition } from '@headlessui/react';
 import DOMPurify from 'dompurify';
 import { FunctionalComponent } from 'preact';
-import { FC, useCallback, useEffect } from 'preact/compat';
+import { FC, useCallback, useEffect, useState } from 'preact/compat';
 
 import LearnMorePanel from '../../learn-more-panel';
 import type { Question, QuestionAnswer, SubmissionResult } from './models';
@@ -13,14 +13,18 @@ import Questions from './questions';
 import useTemplate, { Slide } from './use-template';
 
 type Props = {
-  stepNumber: {
+  stepNumber?: {
     current: number;
     total: number;
   };
   step: MarketplaceOfferT<AssessmentContent>;
-  acceptButton: { text?: string; class?: string };
-  declineButton: { text?: string; class?: string; onClick: () => void };
-  onComplete: () => void;
+  acceptButton?: { text?: string; class?: string };
+  declineButton?: { text?: string; class?: string; onClick: () => void };
+  onComplete?: () => void;
+  verticalAlignment?: string;
+  skipIntro?: boolean;
+  source: string;
+  sourceId: string;
 };
 
 const slideIndexes = Object.values(Slide).filter((v) => !isNaN(Number(v)));
@@ -98,19 +102,28 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     calculateUpdatedAnswers,
     updateAnswers,
     submissionResult
-  } = useTemplate(props.step, props.acceptButton.text, props.declineButton.text, props.step.content.skipButtonHidden);
+  } = useTemplate(
+    props.step,
+    props.acceptButton?.text,
+    props.declineButton?.text,
+    props.onComplete
+  );
 
   const { trace } = useTrace();
 
   useEffect(() => {
     (async (): Promise<void> => {
-      await trace({
-        type: 'offer-viewed',
-        offerName: props.step.name,
-        data: props.step.metadata
-      });
+      await trace(
+        {
+          type: 'offer-viewed',
+          offerName: props.step.name,
+          data: props.step.metadata
+        },
+        props.source,
+        props.sourceId
+      );
     })();
-  }, []);
+  }, [props.source, props.sourceId, props.step.metadata, props.step.name, trace]);
 
   useEffect(() => {
     if (currentSlide === Slide.Questions) {
@@ -155,16 +168,22 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
   );
 
   const handlePrimaryButtonClick = useCallback(async (): Promise<void> => {
+    console.log('currentSlide', currentSlide);
+
     if (currentSlide === Slide.BriefIntroduction) {
-      await trace({
-        type: 'offer-accepted',
-        offerName: props.step.name,
-        data: {
-          ...props.step.metadata,
-          template: props.step.content.template,
-          assessmentId
-        }
-      });
+      await trace(
+        {
+          type: 'offer-accepted',
+          offerName: props.step.name,
+          data: {
+            ...props.step.metadata,
+            template: props.step.content.template,
+            assessmentId
+          }
+        },
+        props.source,
+        props.sourceId
+      );
 
       await goToNextSlide();
     }
@@ -182,21 +201,25 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     }
 
     if (currentSlide === Slide.SubmissionResult) {
-      props.onComplete();
+      props.onComplete?.();
     }
   }, [assessmentId, assessmentTitle, currentSlide, goToNextSlide, props, trace]);
 
   const handleSecondaryButtonClick = useCallback(async (): Promise<void> => {
     if (currentSlide === Slide.BriefIntroduction) {
-      await trace({
-        type: 'offer-declined',
-        offerName: props.step.name,
-        data: {
-          ...props.step.metadata,
-          template: props.step.content.template,
-          assessmentId
-        }
-      });
+      await trace(
+        {
+          type: 'offer-declined',
+          offerName: props.step.name,
+          data: {
+            ...props.step.metadata,
+            template: props.step.content.template,
+            assessmentId
+          }
+        },
+        props.source,
+        props.sourceId
+      );
     }
 
     if (currentSlide === Slide.Questions) {
@@ -209,28 +232,41 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
       });
     }
 
-    props.declineButton.onClick();
+    props.declineButton?.onClick();
   }, [
     assessmentId,
     assessmentTitle,
     currentSlide,
     props.declineButton,
+    trace,
+    props.source,
+    props.sourceId,
     props.step.content.template,
     props.step.metadata,
-    props.step.name,
-    trace
+    props.step.name
   ]);
 
+  const [skippingIntro, setSkippingIntro] = useState(props.skipIntro);
+  useEffect(() => {
+    props.skipIntro && handlePrimaryButtonClick().then(() => setSkippingIntro(false));
+  }, [handlePrimaryButtonClick, props.skipIntro]);
+
+  if (skippingIntro) {
+    return null;
+  }
+
   return (
-    <LeftRightLayout>
+    <LeftRightLayout verticalAlignment={props.verticalAlignment}>
       <LeftRightLayout.Left>
         <div>
-          <div class="flex justify-between md:block text-xs tracking-wide">
-            <span class="relative px-3 py-0.5 text-primary-base font-semibold">
-              {props.stepNumber.current} OF {props.stepNumber.total}
-              <span class="absolute left-0 rounded-xl bg-primary-base opacity-10 w-full h-[90%]" />
-            </span>
-          </div>
+          {props.stepNumber ? (
+            <div class="flex justify-between md:block text-xs tracking-wide">
+              <span class="relative px-3 py-0.5 text-primary-base font-semibold">
+                {props.stepNumber.current} OF {props.stepNumber.total}
+                <span class="absolute left-0 rounded-xl bg-primary-base opacity-10 w-full h-[90%]" />
+              </span>
+            </div>
+          ) : null}
           <Transition
             appear={true}
             show={true}
@@ -239,9 +275,12 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
             enterTo="translate-y-0"
           >
             <div class="flex flex-col justify-stretch md:max-w-[27.5rem]">
-              <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
-                {title}
-              </h3>
+              {title && (
+                <h3 class="mt-8 md:mt-3 text-2xl md:text-3xl leading-8 md:leading-9 font-bold">
+                  {title}
+                </h3>
+              )}
+
               {description && (
                 <p class="mt-2 text-base md:text-lg leading-6 md:leading-7 text-gray-600 break-words">
                   {description}
@@ -257,31 +296,35 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
                   submissionResult={submissionResult}
                 />
               </div>
-              <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem] mt-6 md:mt-11">
+
+              <div class="flex flex-col md:flex-row md:justify-between gap-4 md:max-w-[27.5rem]">
                 {primaryButtonText && (
                   <Button
-                    class=""
+                    class="mt-6 md:mt-11"
                     disabled={!primaryButtonEnabled}
                     onClickPromise={handlePrimaryButtonClick}
                   >
                     {primaryButtonText}
                   </Button>
                 )}
-                {secondaryButtonText && (
+
+                {props.declineButton && secondaryButtonText && (
                   <Button
-                    class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300"
+                    class="bg-white hover:!bg-gray-100 focus:!ring-gray-200 !border-0 !shadow-none !text-gray-700 !border-gray-300 mt-6 md:mt-11"
                     onClickPromise={handleSecondaryButtonClick}
                   >
                     {secondaryButtonText}
                   </Button>
                 )}
               </div>
+
               <div
                 className={`flex flex-col gap-3 mt-6 text-gray-600 text-xs ${getSlidingTransitionCssClasses(Slide.BriefIntroduction, currentSlide)}`}
               >
-                {props.step.content.terms.map((term, index) => (
+                {props.step.content.terms?.map((term, index) => (
                   <span
                     key={index}
+                    // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(term, { ADD_ATTR: ['target'] })
                     }}
