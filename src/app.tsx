@@ -47,13 +47,14 @@ interface Props {
   'skip-intro'?: string;
   terms?: string[];
   details?: string[];
-  onDeclineButtonPress?: () => void;
+  onAccepted?: () => Promise<void>;
+  onDeclined?: () => Promise<void>;
   onComplete?: () => void;
 }
 
 const App: FunctionalComponent<Props> = (props) => {
   useEffect(() => {
-    axios.defaults.baseURL = props['base-url'];
+    axios.defaults.baseURL = `${props['base-url']}/benefits-plan/workplace-backend`;
     axios.defaults.headers.common['X-PROFILE-ID'] = props['profile-id'];
     axios.defaults.headers.Authorization = `Bearer ${props['access-token']}`;
     axios.defaults.params = {
@@ -94,21 +95,14 @@ const App: FunctionalComponent<Props> = (props) => {
       <style>{cssVars + css.toString()}</style>
       <div class="font-inter">
         <AssessmentTemplate
-          source={props['track-source']}
-          sourceId={props['track-source-id']}
           skipIntro={props['skip-intro'] === 'true'}
           stepNumber={stepNumber}
           verticalAlignment={props['vertical-alignment']}
           step={marketPlaceOffer as MarketplaceOfferT<AssessmentContent>}
           acceptButton={{ text: marketPlaceOffer.content.acceptButton }}
-          declineButton={
-            props.onDeclineButtonPress
-              ? {
-                  text: marketPlaceOffer.content.declineButton,
-                  onClick: props.onDeclineButtonPress
-                }
-              : undefined
-          }
+          declineButton={{ text: marketPlaceOffer.content.declineButton }}
+          onAccepted={props.onAccepted}
+          onDeclined={props.onDeclined}
           onComplete={props.onComplete}
         />
       </div>

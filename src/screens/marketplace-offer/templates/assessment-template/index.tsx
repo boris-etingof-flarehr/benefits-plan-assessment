@@ -19,12 +19,12 @@ type Props = {
   };
   step: MarketplaceOfferT<AssessmentContent>;
   acceptButton?: { text?: string; class?: string };
-  declineButton?: { text?: string; class?: string; onClick: () => void };
+  declineButton?: { text?: string; class?: string; };
+  onAccepted?: (assessmentId: string) => Promise<void>;
+  onDeclined?: (assessmentId: string) => Promise<void>;
   onComplete?: () => void;
   verticalAlignment?: string;
   skipIntro?: boolean;
-  source: string;
-  sourceId: string;
 };
 
 const slideIndexes = Object.values(Slide).filter((v) => !isNaN(Number(v)));
@@ -112,20 +112,6 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
   const { trace } = useTrace();
 
   useEffect(() => {
-    (async (): Promise<void> => {
-      await trace(
-        {
-          type: 'offer-viewed',
-          offerName: props.step.name,
-          data: props.step.metadata
-        },
-        props.source,
-        props.sourceId
-      );
-    })();
-  }, [props.source, props.sourceId, props.step.metadata, props.step.name, trace]);
-
-  useEffect(() => {
     if (currentSlide === Slide.Questions) {
       trace({
         type: 'assessment-viewed',
@@ -171,19 +157,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
     console.log('currentSlide', currentSlide);
 
     if (currentSlide === Slide.BriefIntroduction) {
-      await trace(
-        {
-          type: 'offer-accepted',
-          offerName: props.step.name,
-          data: {
-            ...props.step.metadata,
-            template: props.step.content.template,
-            assessmentId
-          }
-        },
-        props.source,
-        props.sourceId
-      );
+      await props.onAccepted?.(assessmentId);
 
       await goToNextSlide();
     }
@@ -207,19 +181,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
 
   const handleSecondaryButtonClick = useCallback(async (): Promise<void> => {
     if (currentSlide === Slide.BriefIntroduction) {
-      await trace(
-        {
-          type: 'offer-declined',
-          offerName: props.step.name,
-          data: {
-            ...props.step.metadata,
-            template: props.step.content.template,
-            assessmentId
-          }
-        },
-        props.source,
-        props.sourceId
-      );
+      await props.onDeclined?.(assessmentId);
     }
 
     if (currentSlide === Slide.Questions) {
@@ -231,20 +193,7 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
         }
       });
     }
-
-    props.declineButton?.onClick();
-  }, [
-    assessmentId,
-    assessmentTitle,
-    currentSlide,
-    props.declineButton,
-    trace,
-    props.source,
-    props.sourceId,
-    props.step.content.template,
-    props.step.metadata,
-    props.step.name
-  ]);
+  }, [currentSlide, props, assessmentId, trace, assessmentTitle]);
 
   const [skippingIntro, setSkippingIntro] = useState(props.skipIntro);
   useEffect(() => {
