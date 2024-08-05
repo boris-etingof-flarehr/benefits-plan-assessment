@@ -2,7 +2,7 @@ import { FC, useCallback, useState } from 'preact/compat';
 
 import TextField from '../../../../../components/text-field.tsx';
 import FormLabel from '../../../../../components/typography/form-label.tsx';
-import type { DateQuestion,QuestionAnswer } from '../models.ts';
+import type { DateQuestion, QuestionAnswer } from '../models.ts';
 
 type Props = DateQuestion & {
   onChange: (_answer: QuestionAnswer) => void;
@@ -53,6 +53,11 @@ const DateStep: FC<Props> = ({
   return (
     <div className="flex flex-col gap-1">
       <FormLabel>{title}</FormLabel>
+
+      <input
+        type="date"
+        className={`border-0 ring-2 ring-gray-200 focus:outline-none text-base font-medium rounded-md shadow-sm ${className}`}
+      />
 
       <TextField
         value={defaultValue}
