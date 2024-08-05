@@ -2,7 +2,9 @@ import { FC, useEffect } from 'preact/compat';
 
 import type { AssessmentAnswers, Question, QuestionAnswer } from '../models';
 import CurrencyStep from './currency-question';
+import DateStep from './date-question';
 import SingleSelectStep from './single-select-question';
+import TextStep from './text-question';
 import useQuestions from './use-questions';
 
 const QuestionIndex: FC<Question & { onChange: (_answer: QuestionAnswer) => void }> = (
@@ -13,6 +15,10 @@ const QuestionIndex: FC<Question & { onChange: (_answer: QuestionAnswer) => void
       return <SingleSelectStep {...question} />;
     case 'Currency':
       return <CurrencyStep {...question} />;
+    case 'Text':
+      return <TextStep {...question} />;
+    case 'Date':
+      return <DateStep {...question} />;
     default:
       return <></>;
   }

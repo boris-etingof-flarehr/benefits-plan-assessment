@@ -35,7 +35,32 @@ export type CurrencyQuestion = {
   title: string;
 };
 
-export type Question = SingleSelectQuestion | CurrencyQuestion;
+export type TextQuestion = {
+  customerAttribute: string;
+  id: QuestionId;
+  stepType: 'Question';
+  invalidMessage: string;
+  nextStepId: QuestionId;
+  template: 'Text';
+  title: string;
+  matchExpression: string;
+  defaultValue: string;
+};
+
+export type DateQuestion = {
+  customerAttribute: string;
+  id: QuestionId;
+  stepType: 'Question';
+  invalidMessage: string;
+  nextStepId: QuestionId;
+  template: 'Date';
+  title: string;
+  matchExpression: string;
+  defaultValue: string;
+};
+
+
+export type Question = SingleSelectQuestion | CurrencyQuestion | TextQuestion | DateQuestion;
 
 export type SubmissionResult = {
   imageUrl: string;

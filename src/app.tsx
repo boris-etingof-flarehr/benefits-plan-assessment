@@ -54,7 +54,7 @@ interface Props {
 
 const App: FunctionalComponent<Props> = (props) => {
   useEffect(() => {
-    axios.defaults.baseURL = `${props['base-url']}/benefits-plan/workplace-backend`;
+    axios.defaults.baseURL = `${props['base-url']}`;
     axios.defaults.headers.common['X-PROFILE-ID'] = props['profile-id'];
     axios.defaults.headers.Authorization = `Bearer ${props['access-token']}`;
     axios.defaults.params = {

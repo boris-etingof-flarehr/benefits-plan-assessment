@@ -2,7 +2,7 @@ import { ComponentProps, FunctionalComponent, JSX } from 'preact';
 import { useCallback } from 'preact/hooks';
 
 type Props = Omit<ComponentProps<'input'>, 'onChange' | 'value'> & {
-  allowedKeyPattern: RegExp;
+  allowedKeyPattern?: RegExp;
   value?: string;
   leadingIconElement?: JSX.Element;
   trailingIconElement: JSX.Element | false;
@@ -21,7 +21,7 @@ const TextField: FunctionalComponent<Props> = ({
 }) => {
   const handleOnKeyPress = useCallback(
     (e: KeyboardEvent) => {
-      if (!allowedKeyPattern.test(e.key)) {
+      if (allowedKeyPattern && !allowedKeyPattern.test(e.key)) {
         e.preventDefault();
       }
     },
