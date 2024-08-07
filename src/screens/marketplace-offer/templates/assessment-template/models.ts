@@ -48,17 +48,26 @@ export type TextQuestion = {
 };
 
 export type DateQuestion = {
-  customerAttribute: string;
-  id: QuestionId;
-  stepType: 'Question';
-  invalidMessage: string;
-  nextStepId: QuestionId;
-  template: 'Date';
+  id: string;
   title: string;
-  matchExpression: string;
-  defaultValue: string;
+  description: string;
+  buttonText: string;
+  progress: number;
+  template: 'Date';
+  defaultValue?: string;
+  nextStepId: string;
+  hint?: string;
+  minimumValue?: string; // "today" or "2021-06-06"
+  minimumValueAddDays?: number; // only present if minimumValue = 'today', can be negative
+  maximumValue?: string;
+  invalidMessage?: string;
+  invalidDays?: DateQuestionInvalidDays[];
 };
 
+export enum DateQuestionInvalidDays {
+  Weekends = 'Weekends',
+  PublicHolidays = 'PublicHolidays',
+}
 
 export type Question = SingleSelectQuestion | CurrencyQuestion | TextQuestion | DateQuestion;
 

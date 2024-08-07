@@ -1,78 +1,72 @@
-import { FC, useCallback, useState } from 'preact/compat';
+import FormLabel from '@app/components/typography/form-label.tsx';
+import { FC, useEffect, useState } from 'preact/compat';
 
-import TextField from '../../../../../components/text-field.tsx';
-import FormLabel from '../../../../../components/typography/form-label.tsx';
-import type { DateQuestion, QuestionAnswer } from '../models.ts';
+import { type DateQuestion, DateQuestionInvalidDays, type QuestionAnswer } from '../models.ts';
 
 type Props = DateQuestion & {
-  onChange: (_answer: QuestionAnswer) => void;
+  onChange: (value: QuestionAnswer) => void;
 };
 
-const DateStep: FC<Props> = ({
-  id,
-  title,
-  matchExpression,
-  invalidMessage,
-  defaultValue,
-  onChange
-}) => {
-  const [error, setError] = useState('');
-  const [isValidAnswer, setIsValidAnswer] = useState(false);
+const validate = (value: string, step: DateQuestion): string | undefined => {
+  const date = new Date(value);
+  date.setHours(0, 0, 0, 0);
 
-  const isValidAnswerRange = useCallback(
-    (answer: string) => {
-      const isValid = RegExp(matchExpression).test(answer);
-      setIsValidAnswer(isValid);
-      return isValid;
-    },
-    [matchExpression]
-  );
+  const excludeWeekends = step.invalidDays?.includes(DateQuestionInvalidDays.Weekends);
+  const dayOfWeek = date.getDay();
+  if (excludeWeekends && (dayOfWeek === 0 || dayOfWeek === 6)) {
+    // 0 is Sunday, 6 is Saturday
+    return step.invalidMessage;
+  }
 
-  const handleChange = (value: string): void => {
-    const answer = isValidAnswerRange(value) ? value : '';
-    onChange({ [id]: answer });
-  };
-
-  const handleFocusIn = useCallback(() => {
-    setError('');
-  }, []);
-
-  const handleFocusOut = useCallback(() => {
-    if (!isValidAnswer) {
-      setError(invalidMessage);
+  let maxDate: Date | undefined;
+  if (step.maximumValue) {
+    maxDate = new Date(step.maximumValue);
+    maxDate.setHours(0, 0, 0, 0);
+    if (date > maxDate) {
+      return step.invalidMessage;
     }
-  }, [isValidAnswer, invalidMessage]);
+  }
 
-  const getClassName = (): string => {
-    if (error.length !== 0) {
-      return 'h-8 pl-3 text-red-900 ring-1 ring-inset ring-red-300 placeholder:text-red-300 focus:ring-red-500';
+  let minDate: Date | undefined;
+  if (step.minimumValue) {
+    if (step.minimumValue.toLowerCase() === 'today') {
+      minDate = new Date();
+      minDate.setDate(minDate.getDate() + (step.minimumValueAddDays || 0));
+      minDate.setHours(0, 0, 0, 0);
+    } else {
+      minDate = new Date(step.minimumValue);
+      minDate.setHours(0, 0, 0, 0);
     }
-    return 'h-8 pl-3';
-  };
+    if (date < minDate) {
+      return step.invalidMessage;
+    }
+  }
+};
+
+const DateStep: FC<Props> = ({ onChange, ...step }) => {
+  const [value, setValue] = useState(step.defaultValue);
+  const [error, setError] = useState<string>();
+
+  useEffect(() => {
+    const invalidMessage = value ? validate(value, step) : undefined;
+
+    invalidMessage ? setError(invalidMessage) : setError(undefined);
+
+    onChange({ [step.id]: value });
+  }, [step, onChange, value]);
 
   return (
-    <div className="flex flex-col gap-1">
-      <FormLabel>{title}</FormLabel>
+    <div className="flex flex-col gap-2">
+      <FormLabel>{step.title}</FormLabel>
 
       <input
         type="date"
-        className={`border-0 ring-2 ring-gray-200 focus:outline-none text-base font-medium rounded-md shadow-sm ${className}`}
+        className={`self-start px-3 py-1 ring-2 ring-gray-200 focus:outline-none focus-visible:border-gray-700 rounded-md shadow-sm ${error ? 'text-red-900 ring-red-300' : ''}`}
+        value={value}
+        onChange={({ currentTarget: { value } }): void => setValue(value)}
       />
 
-      <TextField
-        value={defaultValue}
-        className={getClassName()}
-        onfocusin={handleFocusIn}
-        onfocusout={handleFocusOut}
-        trailingIconElement={false}
-        onChange={handleChange}
-      />
-
-      {error.length !== 0 && (
-        <div className="leading-none">
-          <span className="text-xs text-rose-500">{error}</span>
-        </div>
-      )}
+      {error && <span className="text-xs text-rose-500">{error}</span>}
     </div>
   );
 };

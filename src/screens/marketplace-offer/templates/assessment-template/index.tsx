@@ -198,7 +198,8 @@ const AssessmentTemplate: FunctionalComponent<Props> = (props) => {
   const [skippingIntro, setSkippingIntro] = useState(props.skipIntro);
   useEffect(() => {
     props.skipIntro && handlePrimaryButtonClick().then(() => setSkippingIntro(false));
-  }, [handlePrimaryButtonClick, props.skipIntro]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.skipIntro]);
 
   if (skippingIntro) {
     return null;
