@@ -61,7 +61,7 @@ const DateStep: FC<Props> = ({ onChange, ...step }) => {
 
       <input
         type="date"
-        className={`self-start px-3 py-1 ring-2 ring-gray-200 focus:outline-none focus-visible:border-gray-700 rounded-md shadow-sm ${error ? 'text-red-900 ring-red-300' : ''}`}
+        className={`${blurredStyle} ${focusedStyle} ${error ? invalidStyle : '' }`}
         value={value}
         onChange={({ currentTarget: { value } }): void => setValue(value)}
       />
@@ -70,5 +70,9 @@ const DateStep: FC<Props> = ({ onChange, ...step }) => {
     </div>
   );
 };
+
+const blurredStyle = 'self-start px-3 py-1 rounded-md shadow-sm ring-2 ring-gray-200';
+const focusedStyle = 'focus:outline-none focus-visible:ring-gray-700';
+const invalidStyle = 'text-red-900 ring-red-300 focus-visible:ring-red-600';
 
 export default DateStep;
